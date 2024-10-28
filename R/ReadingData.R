@@ -1,7 +1,7 @@
 library(dplyr)
 library(tidyr)
-Worldbank1_raw <- readxl::read_excel("Data/Worldbank1.xlsx")
-Worldbank2_raw <- readxl::read_excel("Data/Worldbank2.xlsx")
+Worldbank1_raw <- readxl::read_excel("Data/raw/Worldbank1.xlsx")
+Worldbank2_raw <- readxl::read_excel("Data/raw/Worldbank2.xlsx")
 
 Worldbank1 <- Worldbank1_raw[1:208,] %>%
   mutate(across(`2023 [YR2023]`:average, as.numeric)) %>%
@@ -23,4 +23,4 @@ Worldbank <- Worldbank1 %>%
   mutate(across(c(`Country Name`, `Country Code`), ~as.factor(.x))) %>%
   mutate(Year = as.ordered(Year))
 
-readr::write_rds(Worldbank, "Data/Worldbank.RDS")
+readr::write_rds(Worldbank, "Data/cleaned/Worldbank.RDS")
