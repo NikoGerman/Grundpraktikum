@@ -1,43 +1,42 @@
-### Question 2
-### Education
-### Do countries with higher central government debt as a percentage of GDP
-### spend less on education relative to GDP?
-
-
 library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(readxl)
+library(ggrepel)
+library(viridis)
 
+source("C:/Users/thomas/Desktop/git/Stat_GrundPraktikum/Grundpraktikum/R/ReadingData.R")
+
+### Question 2
+### Education
+### Do countries with higher central government debt as a percentage of GDP
+### spend less on education relative to GDP?
+#Answer: No. It's the other way around.
 
 data_full <- Worldbank
-data_full$`Current education expenditure, total (% of total expenditure in public institutions)`
-data_full$`Government expenditure on education, total (% of GDP)`
-
-data_trim <- data_full[ , c("Country Name",
+data_clean_q2 <- na.omit(data_full[ , c("Country Name",
+                            "Year",
                             "Central government debt, total (% of GDP)",
-                            "Current education expenditure, total (% of total expenditure in public institutions)",
-                            "Government expenditure on education, total (% of GDP)")]
+                            #"Current education expenditure, total (% of total expenditure in public institutions)",
+                            "Government expenditure on education, total (% of GDP)")])
 
-data_avg <- data_full %>%
-  group_by(`Country Name`) %>%
-  summarize(
-    mean_debt = mean(`Central government debt, total (% of GDP)`, na.rm = TRUE),
-    mean_education_expenditure = mean(`Current education expenditure, total (% of total expenditure in public institutions)`, na.rm = TRUE)
-  )
 
-summary(data_full$`Central government debt, total (% of GDP)`)
-summary(data_full$`Current education expenditure, total (% of total expenditure in public institutions)`)
-summary(data_full$`Government expenditure on education, total (% of GDP)`)
 
-# Scatter plot of both variables
-ggplot(data = data_full, aes(x = `Central government debt, total (% of GDP)`, 
-                             y = `Current education expenditure, total (% of total expenditure in public institutions)`)) +
-  geom_point(color = "blue", size = 2) +  # Scatter plot with blue points
-  labs(title = "Debt (% of GDP) vs. Education Expenditure (% of total expenditure in public institutions)",
+# Create the scatterplot with a trend line, uniform color points, and no legend
+ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`, 
+                 y = `Government expenditure on education, total (% of GDP)`,
+                 color = `Country Name`)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +
+  scale_color_viridis(discrete = TRUE, option = "D") +
+  labs(title = "Central Government Debt vs. Education Expenditure, (% of GDP)",
        x = "Central Government Debt",
-       y = "Education expenditure") +
-  theme_minimal()  # Clean theme for aesthetics
+       y = "Government Expenditure on Education",
+       color = "Country") +
+  scale_x_continuous(limits = c(10, 75)) +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
 
 
 
