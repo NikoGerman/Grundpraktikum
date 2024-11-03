@@ -17,7 +17,6 @@ data_full <- Worldbank
 data_clean_q2 <- na.omit(data_full[ , c("Country Name",
                             "Year",
                             "Central government debt, total (% of GDP)",
-                            #"Current education expenditure, total (% of total expenditure in public institutions)",
                             "Government expenditure on education, total (% of GDP)")])
 
 
@@ -30,27 +29,50 @@ ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`,
   geom_smooth(method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +
   scale_color_viridis(discrete = TRUE, option = "D") +
   labs(title = "Central Government Debt vs. Education Expenditure, (% of GDP)",
-       x = "Central Government Debt",
-       y = "Government Expenditure on Education",
+       x = "Central Government Debt (in %)",
+       y = "Government Expenditure on Education (in %)",
        color = "Country") +
   scale_x_continuous(limits = c(10, 75)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
-
-
-q1_reg <- lm(formula = `Central government debt, total (% of GDP)` ~ `Current education expenditure, total (% of total expenditure in public institutions)`,
-                  data = data_full)
-
-ggplot(data = data_full, aes(x = `Current education expenditure, total (% of total expenditure in public institutions)`, 
-                             y = `Central government debt, total (% of GDP)`)) +
-  geom_point(color = "blue", size = 2) +                  # Scatter plot of data points
-  geom_smooth(method = "lm", color = "red", se = TRUE) +  # Linear regression line with confidence interval
-  labs(title = "Linear Regression: Debt vs. Education Expenditure",
-       x = "Current Education Expenditure (% of total in public institutions)",
-       y = "Central Government Debt (% of GDP)") +
-  theme_minimal()
-
 ### Are countries with higher education spending able to maintain lower pupil
 ### teacher ratios, and what impact might this have on education quality?
+
+data_clean_q2_1 <- na.omit(data_full[ , c("Country Name",
+                                          "Year",
+                                          "Pupil-teacher ratio, primary",
+                                          "Government expenditure on education, total (% of GDP)")])
+
+
+# Step 1: Calculate the average government expenditure per country
+avg_expenditure_per_country <- aggregate(data_clean_q2_1$`Government expenditure on education, total (% of GDP)`,
+                                         by = list(Country = data_clean_q2_1$`Country Name`),
+                                         FUN = mean, na.rm = TRUE)
+
+# Rename the column for clarity
+colnames(avg_expenditure_per_country)[2] <- "Avg_Gov_Expenditure"
+
+# Step 2: Determine the mean of average expenditures
+mean_avg_expenditure <- mean(avg_expenditure_per_country$Avg_Gov_Expenditure, na.rm = TRUE)
+
+# Step 3: Select the countries
+top_countries <- avg_expenditure_per_country[avg_expenditure_per_country$Avg_Gov_Expenditure > mean_avg_expenditure, "Country"]
+
+# Step 4: Filter the original dataset to include only the selected top countries
+data_top50pc_edu_spend <- data_clean_q2_1[data_clean_q2_1$`Country Name` %in% top_countries, ]
+
+# Create the ggplot with points and lines
+ggplot(data_top50pc_edu_spend, aes(x = Year, y = `Pupil-teacher ratio, primary`, color = `Country Name`)) +
+  geom_line() +  # Connect the points with lines
+  geom_point() +  # Add points at each data point
+  labs(title = "Pupil-Teacher Ratio Over Time \n for countries with higher than average education spending",
+       x = "Year",
+       y = "Pupil-Teacher Ratio",
+       color = "Country") +
+  scale_x_continuous(breaks = 2014:2018) +  # Ensure the x-axis only shows the years 2014 to 2018
+  theme_minimal() +
+  theme(legend.position = "right")
+
+
