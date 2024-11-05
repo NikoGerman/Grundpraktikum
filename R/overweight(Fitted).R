@@ -1,4 +1,4 @@
-data <- read.csv("D:\\git\\Grundpraktikum\\Data\\Worldbank.csv", header = TRUE)
+data <- read.csv("Data\\Worldbank.csv", header = TRUE)
 
 library(dplyr)
 library(ggplot2)
