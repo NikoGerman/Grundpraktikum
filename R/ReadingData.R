@@ -1,21 +1,19 @@
 library(dplyr)
 library(tidyr)
 Worldbank1_raw <- readxl::read_excel("Data/raw/Worldbank1.xlsx")
-Worldbank2_raw <- readxl::read_excel("Data/raw/Worldbank2.xlsx")
+Worldbank2_raw <- readr::read_csv("Data/raw/Worldbank2.csv")
 
-Worldbank1 <- Worldbank1_raw[1:208,] %>%
-  mutate(across(`2023 [YR2023]`:average, as.numeric)) %>%
+Worldbank1 <- Worldbank1_raw[1:350,] %>%
+  mutate(across(`2000 [YR2000]`:average, as.numeric)) %>%
   select(-average, -`Series Code`) %>%
-  pivot_longer(`2023 [YR2023]`:`2014 [YR2014]`, names_to = "Year", values_to = "data") %>%
+  pivot_longer(`2000 [YR2000]`:`2021 [YR2021]`, names_to = "Year", values_to = "data") %>%
   mutate(Year = as.numeric(substr(Year, start = 1, stop = 4))) %>%
   pivot_wider(names_from = "Series Name", values_from = "data")
-  
-Worldbank2 <- Worldbank2_raw[1:39,] %>%
-  mutate(`2022 [YR2022]` = as.numeric(`2022 [YR2022]`),
-         `2023 [YR2023]` = as.numeric(`2023 [YR2023]`)) %>%
-  pivot_longer(`2014 [YR2014]`:`2023 [YR2023]`, names_to = "Year", values_to = "data") %>%
+
+Worldbank2 <- Worldbank2_raw[1:75,] %>%
+  select(-average, -`Series Code`) %>%
+  pivot_longer(`2000 [YR2000]`:`2021 [YR2021]`, names_to = "Year", values_to = "data") %>%
   mutate(Year = as.numeric(substr(Year, start = 1, stop = 4))) %>%
-  select(-`Series Code`) %>%
   pivot_wider(names_from = "Series Name", values_from = "data")
 
 Worldbank <- Worldbank1 %>%
