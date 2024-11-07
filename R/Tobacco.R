@@ -13,10 +13,12 @@ filtered_data <- data %>%
          GDP = `GDP per capita, PPP (constant 2021 international $)`)
 
 filtered_data <- filtered_data %>%
-  filter(!is.na(Tobacco) & !is.na(GDP))
+  filter(!is.na(Tobacco) & !is.na(GDP)& Country != "Qatar")
 
 plot1 <- ggplot(filtered_data, aes(x = Tobacco, y = GDP, color = Country)) +
-  geom_point(size = 1) +
+  geom_point(size = 2) +
+  geom_smooth(aes(group = Country, color = Country), method = "lm", se = FALSE, size = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.8) +
   labs(x = "Prevalence of current tobacco use (% of adults)",
        y = "GDP per capita, PPP (constant 2021 international $)",
        title = "GDP vs Adult tobacco use rates") +
@@ -25,3 +27,5 @@ plot1 <- ggplot(filtered_data, aes(x = Tobacco, y = GDP, color = Country)) +
   
 
 print(plot1)
+
+
