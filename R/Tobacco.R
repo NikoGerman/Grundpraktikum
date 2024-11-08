@@ -1,4 +1,4 @@
-data <- readRDS("~/Grundpraktikum/Data/cleaned/Worldbank.RDS")
+data <- readRDS("Data/cleaned/Worldbank.RDS")
 
 library(dplyr)
 library(ggplot2)
