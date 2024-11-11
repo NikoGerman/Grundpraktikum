@@ -40,11 +40,24 @@ ggplot(result1, aes(x = `Total alcohol consumption per capita (liters of pure al
   theme(plot.title = element_text(size = 10))
   
 
-plot(`Prevalence of HIV, total (% of population ages 15-49)`, `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, 
-     main="Relationship between Alcohol Consumption and HIV Prevalence in Population Aged 15-49", 
-     xlab="HIV Prevalence (%)", 
-     ylab="Alcohol Consumption per Capita",
-     pch=19, col=rgb(0, 0, 1, 0.5))
-
 #Do countries with higher percentage of labor force with basic education 
 #have lower HIV prevalence rates in the 15-49 population?
+colnames(Worldbank)
+
+result2 <- Worldbank %>% 
+  filter(!is.na(`Labor force with basic education (% of total working-age population with basic education)`) & !is.na(`Prevalence of HIV, total (% of population ages 15-49)`)) %>%
+  select(`Country Name`, `Year`, `Labor force with basic education (% of total working-age population with basic education)`, `Prevalence of HIV, total (% of population ages 15-49)`,
+  )                                                                                                       
+result2
+
+ggplot(result2, aes(x = `Labor force with basic education (% of total working-age population with basic education)`, 
+                    y = `Prevalence of HIV, total (% of population ages 15-49)`, 
+                    color = `Country Name`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
+  facet_wrap(~ Year) +
+  labs(title = "Do ountries with higher percentage of labor force with basic education have lower HIV prevalence rates?",
+       x = "Labor force with basic education (%)",
+       y = "Prevalence of HIV (% of population ages 15-49)") +
+  theme(plot.title = element_text(size = 8))
+
