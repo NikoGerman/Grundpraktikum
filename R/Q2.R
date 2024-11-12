@@ -5,34 +5,31 @@ library(readxl)
 library(ggrepel)
 library(viridis)
 
-source("C:/Users/thomas/Desktop/git/Stat_GrundPraktikum/Grundpraktikum/R/ReadingData.R")
-
 ### Question 2
 ### Education
 ### Do countries with higher central government debt as a percentage of GDP
 ### spend less on education relative to GDP?
 #Answer: No. It's the other way around.
 
-data_full <- Worldbank
-data_clean_q2 <- na.omit(data_full[ , c("Country Name",
-                            "Year",
-                            "Central government debt, total (% of GDP)",
-                            "Government expenditure on education, total (% of GDP)")])
-
+data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
+data_clean_q2 <- data_full %>%
+  select("Country Name", "Year", "Central government debt, total (% of GDP)",
+         "Labor force with basic education (% of total working-age population with basic education)") %>%
+  drop_na()
 
 
 # Create the scatterplot with a trend line, uniform color points, and no legend
 ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`, 
-                 y = `Government expenditure on education, total (% of GDP)`,
+                 y = `Labor force with basic education (% of total working-age population with basic education)`,
                  color = `Country Name`)) +
   geom_point(size = 2) +
   geom_smooth(method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +
   scale_color_viridis(discrete = TRUE, option = "D") +
-  labs(title = "Central Government Debt vs. Education Expenditure, (% of GDP)",
+  labs(title = "Central Government Debt vs. Labor force with basic education",
        x = "Central Government Debt (in %)",
-       y = "Government Expenditure on Education (in %)",
+       y = "Labor force with basic education (% of total working-age population)",
        color = "Country") +
-  scale_x_continuous(limits = c(10, 75)) +
+  #scale_x_continuous(limits = c(0, 100)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
 

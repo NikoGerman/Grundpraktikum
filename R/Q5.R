@@ -6,12 +6,11 @@ library(ggrepel)
 library(viridis)
 library(scales)
 
-source("C:/Users/thomas/Desktop/git/Stat_GrundPraktikum/Grundpraktikum/R/ReadingData.R")
 
 ## Is there a relationship between the percentage of agricultural land and CO2
 ## emissions per capita across countries?
 
-data_full <- Worldbank
+data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
 data_clean_q5 <- na.omit(data_full[ , c("Country Name",
                                         "Year",
                                         "Agricultural land (% of land area)",
