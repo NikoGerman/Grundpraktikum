@@ -1,9 +1,11 @@
 library(dplyr)
 library(viridis)
-library(magma)
 library(ggplot2)
+library(forcats)
 
-unique_countries <- unique(data_full$`Country Name`)
+data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
+
+unique_countries <- sort(unique(data_full$`Country Name`))
 num_countries <- length(unique_countries)
 color_palette <- viridis(num_countries, option = "D")
 country_colors <- data.frame(
@@ -11,10 +13,10 @@ country_colors <- data.frame(
   ColorHex = color_palette,
   stringsAsFactors = FALSE
 )
-#saveRDS(country_colors, file = "Data/cleaned/Country_Colors.rds")
+saveRDS(country_colors, file = "Data/cleaned/Country_Colors.rds")
 
-
-ggplot(country_colors, aes(x = reorder(Country, ColorHex), y = 1, fill = ColorHex)) +
+#Showcasing all country & color combinations:
+ggplot(country_colors, aes(x = fct_rev(reorder(Country, Country)), y = 1, fill = ColorHex)) +
   geom_bar(stat = "identity") +
   scale_fill_identity() +
   coord_flip() +
@@ -22,4 +24,5 @@ ggplot(country_colors, aes(x = reorder(Country, ColorHex), y = 1, fill = ColorHe
   labs(title = "Unique Colors Assigned to Each Country",
        x = "Country",
        y = "",
-       fill = "Color") 
+       fill = "Color")
+
