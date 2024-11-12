@@ -12,26 +12,33 @@ library(viridis)
 #Answer: No. It's the other way around.
 
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
+color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
+
 data_clean_q2 <- data_full %>%
   select("Country Name", "Year", "Central government debt, total (% of GDP)",
          "Labor force with basic education (% of total working-age population with basic education)") %>%
   drop_na()
 
+data_clean_q2 <- data_clean_q2 %>%
+  left_join(color_assigns, by = c("Country Name" = "Country"))
 
-# Create the scatterplot with a trend line, uniform color points, and no legend
+
 ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`, 
-                 y = `Labor force with basic education (% of total working-age population with basic education)`,
-                 color = `Country Name`)) +
+                          y = `Labor force with basic education (% of total working-age population with basic education)`,
+                          color = ColorHex)) +
   geom_point(size = 2) +
   geom_smooth(method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +
-  scale_color_viridis(discrete = TRUE, option = "D") +
+  scale_color_identity(guide = "none") +
+  geom_text_repel(data = data_clean_q2 %>% distinct(`Country Name`, ColorHex, .keep_all = TRUE),
+                  aes(label = `Country Name`, color = ColorHex),  # Set text color to match dot color
+                  size = 3,
+                  max.overlaps = 10) +  
   labs(title = "Central Government Debt vs. Labor force with basic education",
        x = "Central Government Debt (in %)",
-       y = "Labor force with basic education (% of total working-age population)",
-       color = "Country") +
-  #scale_x_continuous(limits = c(0, 100)) +
+       y = "Labor force with basic education (% of total working-age population)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
+
 
 
 ### Are countries with higher education spending able to maintain lower pupil
