@@ -5,19 +5,18 @@ library(readxl)
 library(ggrepel)
 library(viridis)
 
-### Question 2
-### Education
-### Do countries with higher central government debt as a percentage of GDP
-### spend less on education relative to GDP?
-#Answer: No. It's the other way around.
-
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
 color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
 
-data_clean_q2 <- data_full %>%
-  select("Country Name", "Year", "Central government debt, total (% of GDP)",
-         "Labor force with basic education (% of total working-age population with basic education)") %>%
-  drop_na()
+### Question 2
+### Do countries with higher central government debt as a percentage of GDP
+### have a lower percentage of labor force with basic education?
+#Answer: No. It's the other way around.
+
+data_clean_q2 <- na.omit(data_full[ , c("Country Name",
+                                          "Year",
+                                          "Central government debt, total (% of GDP)",
+                                          "Labor force with basic education (% of total working-age population with basic education)")])
 
 data_clean_q2 <- data_clean_q2 %>%
   left_join(color_assigns, by = c("Country Name" = "Country"))
@@ -34,49 +33,74 @@ ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`,
                   size = 3,
                   max.overlaps = 10) +  
   labs(title = "Central Government Debt vs. Labor force with basic education",
-       x = "Central Government Debt (in %)",
+       x = "Central Government Debt (in % of GDP)",
        y = "Labor force with basic education (% of total working-age population)") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
 
-### Are countries with higher education spending able to maintain lower pupil
-### teacher ratios, and what impact might this have on education quality?
+# Are countries with higher percentage of labor force with basic education
+# able to maintain lower pupil-teacher ratios, and what impact might this have
+# on education quality? 
 
 data_clean_q2_1 <- na.omit(data_full[ , c("Country Name",
                                           "Year",
-                                          "Pupil-teacher ratio, primary",
-                                          "Government expenditure on education, total (% of GDP)")])
+                                          "Pupil-teacher ratio, tertiary",
+                                          "Labor force with basic education (% of total working-age population with basic education)")])
+data_clean_q2_1 <- data_clean_q2_1 %>%
+  left_join(color_assigns, by = c("Country Name" = "Country"))
 
-
-# Step 1: Calculate the average government expenditure per country
-avg_expenditure_per_country <- aggregate(data_clean_q2_1$`Government expenditure on education, total (% of GDP)`,
+# Step 1: Calculate the average % of labor force with basic education
+avg_laborforce_w_basic_edu <- aggregate(data_clean_q2_1$`Labor force with basic education (% of total working-age population with basic education)`,
                                          by = list(Country = data_clean_q2_1$`Country Name`),
                                          FUN = mean, na.rm = TRUE)
 
 # Rename the column for clarity
-colnames(avg_expenditure_per_country)[2] <- "Avg_Gov_Expenditure"
+colnames(avg_laborforce_w_basic_edu)[2] <- "Avg_LabFor_w_bEdu"
 
 # Step 2: Determine the mean of average expenditures
-mean_avg_expenditure <- mean(avg_expenditure_per_country$Avg_Gov_Expenditure, na.rm = TRUE)
+mean_avg_edu <- mean(avg_laborforce_w_basic_edu$Avg_LabFor_w_bEdu, na.rm = TRUE)
 
 # Step 3: Select the countries
-top_countries <- avg_expenditure_per_country[avg_expenditure_per_country$Avg_Gov_Expenditure > mean_avg_expenditure, "Country"]
+top_countries <- avg_laborforce_w_basic_edu[avg_laborforce_w_basic_edu$Avg_LabFor_w_bEdu > mean_avg_edu, "Country"]
 
 # Step 4: Filter the original dataset to include only the selected top countries
-data_top50pc_edu_spend <- data_clean_q2_1[data_clean_q2_1$`Country Name` %in% top_countries, ]
+data_top50pc_bEdu <- data_clean_q2_1[data_clean_q2_1$`Country Name` %in% top_countries, ]
 
-# Create the ggplot with points and lines
-ggplot(data_top50pc_edu_spend, aes(x = Year, y = `Pupil-teacher ratio, primary`, color = `Country Name`)) +
-  geom_line() +  # Connect the points with lines
-  geom_point() +  # Add points at each data point
-  labs(title = "Pupil-Teacher Ratio Over Time \n for countries with higher than average education spending",
-       x = "Year",
-       y = "Pupil-Teacher Ratio",
-       color = "Country") +
-  scale_x_continuous(breaks = 2014:2018) +  # Ensure the x-axis only shows the years 2014 to 2018
-  theme_minimal() +
-  theme(legend.position = "right")
+drawQ2_1Plot <- function(df){
+  
+  first_year_data <- df %>%
+    group_by(`Country Name`) %>%
+    slice_min(order_by = Year)  # Select the earliest year for each country
+  
+  ggplot(df, aes(x = Year, y = `Pupil-teacher ratio, tertiary`, color = ColorHex, group = `Country Name`)) +
+    geom_line(linewidth = 0.7) +  # Make lines slightly thicker
+    geom_point(size = 1.2) +  # Increase point size
+    geom_smooth(aes(group = 1), method = "lm", color = "grey", se = FALSE, linewidth = 0.6) +  # Add single regression line
+    geom_text_repel(data = first_year_data,
+                    aes(label = `Country Name`, color = ColorHex),  # Use ColorHex for text color
+                    vjust = 1,
+                    nudge_x = -0.2,  # Slight nudge to the left
+                    size = 3,
+                    max.overlaps = 10) +  
+    labs(title = "Pupil-Teacher (Tertiary Edu.) Ratio Over Time \nfor countries with higher than average basic edu (as % of working age population)",
+         x = "Year",
+         y = "Pupil-Teacher Ratio",
+         color = "Country") +
+    scale_color_identity(guide = "none") +  # Use hex colors directly and hide legend
+    theme_minimal() +
+    theme(plot.title = element_text(hjust = 0.5),  # Center title
+          legend.position = "none")  # Remove legend if using text labels
+}
+
+drawQ2_1Plot(data_top50pc_bEdu)
+
+data_top50pc_bEdu_filtered <- data_top50pc_bEdu %>%
+  group_by(`Country Name`) %>%
+  filter(n() > 3) %>%
+  ungroup()
+
+drawQ2_1Plot(data_top50pc_bEdu_filtered)
 
 
