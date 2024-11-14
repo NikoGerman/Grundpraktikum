@@ -3,7 +3,6 @@ library(tidyr)
 Worldbank1_raw <- readxl::read_excel("Data/raw/Worldbank1.xlsx")
 Worldbank2_raw <- readr::read_csv("Data/raw/Worldbank2.csv")
 
-
 # no usefull data after row 350
 Worldbank1 <- Worldbank1_raw[1:350,] %>%
   mutate(across(`2000 [YR2000]`:average, as.numeric)) %>%
