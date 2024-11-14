@@ -25,7 +25,6 @@ CO2 <- CO2_raw[1:25, ] %>%
   mutate(Year = as.numeric(substr(Year, start = 2, stop = 5))) %>%
   pivot_wider(names_from = "Series.Name", values_from = "data")
   
-
 Worldbank <- Worldbank1 %>%
   full_join(Worldbank2, by = c("Country Name" = "Country Name", "Country Code" = "Country Code", "Year" = "Year")) %>%
   full_join(CO2, by = c("Country Name" = "Country.Name", "Country Code" = "Country.Code", "Year" = "Year")) %>%
