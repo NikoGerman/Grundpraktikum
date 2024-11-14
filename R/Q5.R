@@ -35,8 +35,3 @@ p2 + facet_wrap(vars(`Country Name`), scale = "free_x")  +
   guides(color = "none")
 p2 + facet_wrap(vars(`Country Name`), scale = "fixed") +
   guides(color = "none")
-
-
-
-
-
