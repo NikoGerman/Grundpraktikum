@@ -22,7 +22,13 @@ Worldbank2 <- Worldbank2_raw[1:75,] %>%
 CO2 <- CO2_raw[1:25, ] %>%
   select(-average, - Series.Code) %>%
   pivot_longer(`X2000..YR2000.`:`X2021..YR2021.`, names_to = "Year", values_to = "data") %>%
-  mutate(Year = as.numeric(substr(Year, start = 2, stop = 5))) %>%
+  mutate(Year = as.numeric(substr(Year, start = 2, stop = 5))) 
+
+CO2$data <- gsub(pattern = "\\.", replacement = "", CO2$data)
+CO2$data <- gsub(pattern = "^0", replacement = "0.", CO2$data)
+CO2$data <- round(as.numeric(CO2$data), 2)
+
+CO2 <- CO2 %>%
   pivot_wider(names_from = "Series.Name", values_from = "data")
   
 Worldbank <- Worldbank1 %>%
