@@ -61,3 +61,21 @@ ggplot(result2, aes(x = `Labor force with basic education (% of total working-ag
        y = "Prevalence of HIV (% of population ages 15-49)") +
   theme(plot.title = element_text(size = 8))
 
+#Has healthcare per capita spending increased over time for each country, 
+#and has it resulted in lower HIV infection rates?
+result3 <- Worldbank %>%
+  filter(!is.na(`Current health expenditure per capita (current US$)`) & !is.na(`Prevalence of HIV, total (% of population ages 15-49)`)) %>%
+  select(`Country Name`, `Year`, `Current health expenditure per capita (current US$)`, `Prevalence of HIV, total (% of population ages 15-49)`)                                                                                                       
+result3
+
+ggplot(result3, aes(x = `Current health expenditure per capita (current US$)`, 
+                    y = `Prevalence of HIV, total (% of population ages 15-49)`, 
+                    color = `Country Name`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
+  facet_wrap(~ Year) +
+  labs(title = "Healthcare spending increased resulted in lower HIV infection rates?",
+       x = "Current health expenditure(US$)",
+       y = "Prevalence of HIV (% of population ages 15-49)") +
+  theme(plot.title = element_text(size = 10))
+
