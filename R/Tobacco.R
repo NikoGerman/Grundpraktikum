@@ -7,7 +7,7 @@ data <- readRDS("Data/cleaned/Worldbank.RDS")
 colors <- readRDS("Data/cleaned/Country_Colors.RDS")
 colors_named <- setNames(colors$ColorHex, colors$Country)
 
-# 选择目标数据
+# Selecting the target data
 filtered_data <- data %>%
   select(`Country Name`, Year, 
          `Prevalence of current tobacco use (% of adults)`,
@@ -16,29 +16,52 @@ filtered_data <- data %>%
          Tobacco = `Prevalence of current tobacco use (% of adults)`,
          GDP = `GDP per capita, PPP (constant 2021 international $)`)
 
-#清理数据，去掉卡塔尔
+# Cleaning the data and removing Qatar.
 filtered_data <- filtered_data %>%
   filter(!is.na(Tobacco) & !is.na(GDP) &  Country != "Qatar")
 
-#按照GDP是否超过20000分组
+# Grouping by whether the GDP per capita exceeds 20,000
 filtered_data <- filtered_data %>%
   mutate(GDP_group = ifelse(GDP > 20000, "GDP Above 20000", "GDP Below 20000"))
 
-#画图
-plot1 <- ggplot(filtered_data, aes(x = Tobacco, y = GDP, color = Country)) +
+# Plot over 20000
+plot_high_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP Above 20000"),
+                        aes(x = Tobacco, y = GDP, color = Country)) +
   geom_point(size = 2) +
   geom_smooth(aes(group = Country, color = Country), method = "lm", se = FALSE, linewidth = 0.5) +
-  geom_smooth(method = "lm", se = FALSE, color = "black", size = 0.8) +
-  scale_color_manual(values = colors_named) +  # 应用命名向量
+  geom_smooth(method = "lm", se = FALSE, color = "red", size = 0.8) +
+  scale_color_manual(values = colors_named) +
   labs(x = "Prevalence of current tobacco use (% of adults)",
        y = "GDP per capita, PPP (constant 2021 international $)",
-       title = "GDP vs Adult tobacco use rates") +
+       title = "GDP Above 20000") +
   theme_minimal() +
-  theme(legend.title = element_text()) +
-  facet_wrap(~ GDP_group)
-  
+  theme(legend.position = "bottom",  
+        legend.text = element_text(size = 8), 
+        legend.title = element_blank(),
+        legend.key.size = unit(0.2, "cm"),
+        legend.spacing.x = unit(0.1, "cm"))
 
-print(plot1)
+# Plot under 20000
+plot_low_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP Below 20000"),
+                       aes(x = Tobacco, y = GDP, color = Country)) +
+  geom_point(size = 2) +
+  geom_smooth(aes(group = Country, color = Country), method = "lm", se = FALSE, linewidth = 0.5) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", size = 0.8) +
+  scale_color_manual(values = colors_named) +
+  labs(x = "Prevalence of current tobacco use (% of adults)",
+       y = "GDP per capita, PPP (constant 2021 international $)",
+       title = "GDP Below 20000") +
+  theme_minimal() +
+  theme(legend.position = "bottom",  
+        legend.text = element_text(size = 8),
+        legend.title = element_blank(),
+        legend.key.size = unit(0.2, "cm"),  
+        legend.spacing.x = unit(0.1, "cm"))
+
+final_plot <- (plot_high_gdp | plot_low_gdp) +
+  plot_annotation(title = "Relationship Between GDP Per Capita and Tobacco Usage Prevalence") 
+
+print(final_plot)
 
 
 
