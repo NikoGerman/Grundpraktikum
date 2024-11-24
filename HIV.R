@@ -8,6 +8,11 @@ install.packages("tidyr")
 library(tidyr)
 
 color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
+
+colo <- country_colors$ColorHex
+names(colo) <- country_colors$Country
+colo
+
 #How does the HIV prevalence in the population aged 15-49 
 #relate to the total alcohol consumption per capita?
 colnames(Worldbank)
@@ -21,52 +26,56 @@ Alcohol_C <- Worldbank %>%
   drop_na()
 Alcohol_C
 
+Worldbank
 result1 <- Worldbank %>% 
-  filter(!is.na(`Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`) & !is.na(`Prevalence of HIV, total (% of population ages 15-49)`)) %>%
-  select(`Country Name`, `Year`, `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, `Prevalence of HIV, total (% of population ages 15-49)`,
-         )                                                                                                       
+  filter(!is.na(`Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`) & !is.na(`Prevalence of HIV, total (% of population ages 15-49)`)) %>% 
+  select(`Country Name`, `Year`, `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, `Prevalence of HIV, total (% of population ages 15-49)`)
 result1
 
-
 #keine facet
-
 ggplot(result1, aes(x = `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, 
                       y = `Prevalence of HIV, total (% of population ages 15-49)`, 
                       color = `Country Name`)) +
   geom_point() +
-
-  labs(title = "Relationship between Alcohol Consumption and HIV Prevalence in Population Aged 15-49",
+  geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
+  labs(title = "Alcohol Consumption vs. HIV Prevalence",
        x = "Total alcohol consumption ($)",
        y = "Prevalence of HIV (% of population ages 15-49)") +
-  theme(plot.title = element_text(size = 10)) +
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) +
+  scale_color_manual(values = colo) +
+  scale_y_log10()
+
+#Eine Gesamtrücklinie hinzufügen
+ggplot(result1, aes(x = `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, 
+                    y = `Prevalence of HIV, total (% of population ages 15-49)`, 
+                    color = `Country Name`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, aes(group = 1), color = "black", linetype = "dashed") +
+  labs(title = "Alcohol Consumption vs. HIV Prevalence",
+       x = "Total alcohol consumption ($)",
+       y = "Prevalence of HIV (% of population ages 15-49)") +
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) +
+  scale_color_manual(values = colo) +
   scale_y_log10()
 
 #facet nach Contry name
 ggplot(result1, aes(x = `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, 
                     y = `Prevalence of HIV, total (% of population ages 15-49)`, 
                     color = `Country Name`)) +
-  geom_point() +
+  geom_point(size = 1) +
   geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
-  facet_wrap(~ `Country Name`, scales = "free") +
-
-  labs(title = "Relationship between Alcohol Consumption and HIV Prevalence in Population Aged 15-49",
+  facet_wrap(~ `Country Name`, scales = "free") +  
+  labs(title = "Alcohol Consumption vs. HIV Prevalence",
        x = "Total alcohol consumption ($)",
        y = "Prevalence of HIV (% of population ages 15-49)") +
-  theme(plot.title = element_text(size = 10))
-  
-
-#facet nach year
-ggplot(result1, aes(x = `Total alcohol consumption per capita (liters of pure alcohol, projected estimates, 15+ years of age)`, 
-                    y = `Prevalence of HIV, total (% of population ages 15-49)`, 
-                    color = `Country Name`)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
-  facet_wrap(~ Year) +
-  labs(title = "Relationship between Alcohol Consumption and HIV Prevalence in Population Aged 15-49",
-       x = "Total alcohol consumption ($)",
-       y = "Prevalence of HIV (% of population ages 15-49)") +
-  theme(plot.title = element_text(size = 10))
-
+  theme_light() +
+  scale_color_manual(values = colo) +
+  scale_x_continuous(guide = guide_axis(angle = 45)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 14))
 
 #Do countries with higher percentage of labor force with basic education 
 #have lower HIV prevalence rates in the 15-49 population?
@@ -78,33 +87,51 @@ result2 <- Worldbank %>%
   )                                                                                                       
 result2
 
-
-result2 <- result2 %>% 
-  left_join(color_assigns, by = c("Country Name" = "Country"))
-#facet nach year
+#keine facet
 ggplot(result2, aes(x = `Labor force with basic education (% of total working-age population with basic education)`, 
                     y = `Prevalence of HIV, total (% of population ages 15-49)`, 
                     color = `Country Name`)) +
-  geom_point() +
+  geom_point(size = 1) +
   geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
-  facet_wrap(~ Year) +
-  labs(title = "Do ountries with higher percentage of labor force with basic education have lower HIV prevalence rates?",
+  scale_color_manual(values = colo) +
+  labs(title = "Labor force with basic education vs. HIV prevalence",
        x = "Labor force with basic education (%)",
        y = "Prevalence of HIV (% of population ages 15-49)") +
-  theme(plot.title = element_text(size = 8))
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) +
+  scale_y_log10()
 
-
+#Eine Gesamtrücklinie hinzufügen
+ggplot(result2, aes(x = `Labor force with basic education (% of total working-age population with basic education)`, 
+                    y = `Prevalence of HIV, total (% of population ages 15-49)`, 
+                    color = `Country Name`)) +
+  geom_point(size = 1) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, aes(group = 1), color = "black", linetype = "dashed") +
+  scale_color_manual(values = colo) +
+  labs(title = "Labor force with basic education vs. HIV prevalence",
+       x = "Labor force with basic education (%)",
+       y = "Prevalence of HIV (% of population ages 15-49)") +
+  theme_light() +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) +
+  scale_y_log10()
+ 
 #facet nach country name
 ggplot(result2, aes(x = `Labor force with basic education (% of total working-age population with basic education)`, 
                     y = `Prevalence of HIV, total (% of population ages 15-49)`, 
                     color = `Country Name`)) +
-  geom_point() +
+  geom_point(size = 1) +
   geom_smooth(method = "lm", se = FALSE, aes(group = 1)) +
-  facet_wrap(~`Country Name`, scales = "free") +
-  labs(title = "Do countries with higher percentage of labor force with basic education have lower HIV prevalence rates?",
+  facet_wrap(~ `Country Name`, scales = "free") + 
+  scale_color_manual(values = colo) +
+  labs(title = "Labor force with basic education vs. HIV prevalence",
        x = "Labor force with basic education (%)",
        y = "Prevalence of HIV (% of population ages 15-49)") +
-  theme(plot.title = element_text(size = 8))
+  theme_light() +
+  scale_x_continuous(guide = guide_axis(angle = 45)) +
+  theme(plot.title = element_text(hjust = 0.5, size = 14)) 
+  
+
 
 #Has healthcare per capita spending increased over time for each country, 
 #and has it resulted in lower HIV infection rates?
