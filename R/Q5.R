@@ -11,32 +11,33 @@ library(scales)
 ## emissions per capita across countries?
 
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
+color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
+
 data_clean_q5 <- na.omit(data_full[ , c("Country Name",
                                         "Year",
                                         "Agricultural land (% of land area)",
                                         "Surface area (sq. km)",
-                                        "CO2 emissions (metric tons per capita)")])
+                                        "Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)")])
 
-ggplot(data_clean_q5, aes(x = `Agricultural land (% of land area)`, 
-                          y = `CO2 emissions (metric tons per capita)`,
-                          color = `Country Name`)) +
-  geom_point(size = 2) +
-  geom_smooth(method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +
-  scale_color_viridis(discrete = TRUE, option = "D") +
-  labs(title = "Agricultural land vs. CO2 emissions",
-       x = "Agricultural land (% of land area)",
-       y = " CO2 emissions (metric tons per capita)",
-       color = "Country") +
-  scale_x_continuous(limits = c(0, 85)) +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  # Add text labels for country names
-  geom_text_repel(data = data_clean_q5 %>% 
-                    group_by(`Country Name`) %>% 
-                    slice(1), # Choose one point per country
-                  aes(label = `Country Name`),
-                  size = 3, 
-                  show.legend = FALSE)
+data_clean_q5 <- data_clean_q5 %>%
+  left_join(color_assigns, by = c("Country Name" = "Country"))
+
+
+ggplot(data_clean_q5, aes(x = `Agricultural land (% of land area)`, y = `Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)`)) +
+  geom_point(aes(color = `ColorHex`)) +
+  scale_color_identity() +  # Use colors directly from ColorHex column
+  facet_wrap(~ `Country Name`) +
+  labs(
+    x = "Agricultural land (% of land area)",
+    y = "CO2 Emissions (Mt CO2e)",
+    title = "CO2 Emissions vs. Surface Area by Country"
+  ) +
+  theme_light() +
+  theme(
+    strip.text = element_text(size = 8),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
 
 ##Without Qatar:
 
