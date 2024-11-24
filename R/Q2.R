@@ -35,7 +35,7 @@ ggplot(data_clean_q2, aes(x = `Central government debt, total (% of GDP)`,
   labs(title = "Central Government Debt vs. Labor force with basic education",
        x = "Central Government Debt (in % of GDP)",
        y = "Labor force with basic education (% of total working-age population)") +
-  theme_minimal() +
+  theme_light() +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -56,16 +56,10 @@ avg_laborforce_w_basic_edu <- aggregate(data_clean_q2_1$`Labor force with basic 
                                          by = list(Country = data_clean_q2_1$`Country Name`),
                                          FUN = mean, na.rm = TRUE)
 
-# Rename the column for clarity
+
 colnames(avg_laborforce_w_basic_edu)[2] <- "Avg_LabFor_w_bEdu"
-
-# Step 2: Determine the mean of average expenditures
 mean_avg_edu <- mean(avg_laborforce_w_basic_edu$Avg_LabFor_w_bEdu, na.rm = TRUE)
-
-# Step 3: Select the countries
 top_countries <- avg_laborforce_w_basic_edu[avg_laborforce_w_basic_edu$Avg_LabFor_w_bEdu > mean_avg_edu, "Country"]
-
-# Step 4: Filter the original dataset to include only the selected top countries
 data_top50pc_bEdu <- data_clean_q2_1[data_clean_q2_1$`Country Name` %in% top_countries, ]
 
 drawQ2_1Plot <- function(df){
@@ -77,7 +71,7 @@ drawQ2_1Plot <- function(df){
   ggplot(df, aes(x = Year, y = `Pupil-teacher ratio, tertiary`, color = ColorHex, group = `Country Name`)) +
     geom_line(linewidth = 0.7) +  # Make lines slightly thicker
     geom_point(size = 1.2) +  # Increase point size
-    geom_smooth(aes(group = 1), method = "lm", color = "grey", se = FALSE, linewidth = 0.6) +  # Add single regression line
+    geom_smooth(aes(group = 1), method = "lm", color = "grey", se = FALSE, linewidth = 0.75) +  # Add single regression line
     geom_text_repel(data = first_year_data,
                     aes(label = `Country Name`, color = ColorHex),  # Use ColorHex for text color
                     vjust = 1,
@@ -89,18 +83,18 @@ drawQ2_1Plot <- function(df){
          y = "Pupil-Teacher Ratio",
          color = "Country") +
     scale_color_identity(guide = "none") +  # Use hex colors directly and hide legend
-    theme_minimal() +
+    theme_light() +
     theme(plot.title = element_text(hjust = 0.5),  # Center title
           legend.position = "none")  # Remove legend if using text labels
 }
 
-drawQ2_1Plot(data_top50pc_bEdu)
+
 
 data_top50pc_bEdu_filtered <- data_top50pc_bEdu %>%
   group_by(`Country Name`) %>%
   filter(n() > 3) %>%
   ungroup()
 
+drawQ2_1Plot(data_top50pc_bEdu)
 drawQ2_1Plot(data_top50pc_bEdu_filtered)
-
 
