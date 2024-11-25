@@ -11,6 +11,10 @@ library(scales)
 ## emissions per capita across countries?
 
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
+color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
+
+data_full$`Agricultural land (% of land area)`
+data_full$
 data_clean_q5 <- na.omit(data_full[ , c("Country Name",
                                         "Year",
                                         "Agricultural land (% of land area)",
