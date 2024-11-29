@@ -25,15 +25,15 @@ filtered_data <- filtered_data %>%
 filtered_data <- filtered_data %>%
   mutate(GDP_group = ifelse(GDP > 20000, "GDP per capita Over 20000", "GDP per capita Below 20000"))
 
-# Select one point per country for labeling
+# Select oldest point per country for labeling
 labels <- filtered_data %>%
   group_by(Country) %>%
-  slice_max(order_by = Year)  
+  slice_min(order_by = Year)  
 
 # Plot under 20000
 plot_low_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP per capita Below 20000"),
                        aes(x = GDP, y = Tobacco, color = Country)) +
-  geom_point(size = 1) +
+  geom_point(size = 2) +
   geom_smooth(aes(group = Country, color = Country), method = "lm", se = FALSE, linewidth = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "red", size = 0.8) +
   geom_text_repel(data = labels %>% filter(GDP_group == "GDP per capita Below 20000"),
@@ -54,7 +54,7 @@ plot_low_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP per capita Bel
 # Plot over 20000
 plot_high_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP per capita Over 20000"),
                         aes(x = GDP, y = Tobacco, color = Country)) +
-  geom_point(size = 1) +
+  geom_point(size = 2) +
   geom_smooth(aes(group = Country, color = Country), method = "lm", se = FALSE, linewidth = 0.5) +
   geom_smooth(method = "lm", se = FALSE, color = "red", size = 0.8) +
   geom_text_repel(data = labels %>% filter(GDP_group == "GDP per capita Over 20000"),
@@ -72,7 +72,7 @@ plot_high_gdp <- ggplot(filtered_data %>% filter(GDP_group == "GDP per capita Ov
   ) +
   ylim(0, 60)
 
-
+#Print the whole plot
 final_plot <- (plot_low_gdp | plot_high_gdp) +
   plot_annotation(title = "Relationship Between GDP Per Capita and Tobacco Usage Prevalence") 
 
