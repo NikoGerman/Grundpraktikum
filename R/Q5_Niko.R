@@ -8,6 +8,10 @@ library(ggplot2)
 
 Worldbank <- readr::read_rds("Data/cleaned/Worldbank.RDS")
 
+Worldbank %>%
+  group_by(`Country Name`) %>%
+  summarize(median(`Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)`))
+
 colo <- country_colors$ColorHex
 names(colo) <- country_colors$Country
 
@@ -24,11 +28,26 @@ p1  + scale_y_log10()
 p1 + facet_wrap(vars(`Country Name`), scale = "free_x") +
   guides(color = "none") +
   geom_smooth(method = "lm", se = FALSE, color = "grey", linewidth = .85) +
-  scale_y_log10() +
+  #scale_y_log10() +
   labs(x = "Agricultural Land (%)", y = "CO2 Emmissions (megatonnes)", title = "Agricultural Land vs. CO2 Emmissions")
 
+Worldbank %>%
+  ggplot(aes(`Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)`, fill = `Country Name`)) +
+  geom_histogram() +
+  scale_fill_manual(values = colo) +
+  facet_wrap(~`Country Name`, scale = "free_x") +
+  guides(fill = "none")
+
+Worldbank %>%
+  ggplot(aes(x = Year, y = `Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)`, group = `Country Name`, color = `Country Name`)) +
+  geom_line() +
+  scale_color_manual(values = colo) +
+  facet_wrap(~`Country Name`, scale = "free_y") +
+  guides(color = "none")
 
 
+
+#############
 WB_index <- Worldbank %>%
   filter(Year == 2000) %>%
   select(`Country Code`, `Agricultural land (% of land area)`, `Carbon dioxide (CO2) emissions (total) excluding LULUCF (Mt CO2e)`) %>%
