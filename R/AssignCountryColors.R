@@ -1,6 +1,8 @@
 library(dplyr)
+install.packages(viridis)
 library(viridis)
 library(ggplot2)
+install.packages("forcats")
 library(forcats)
 
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
