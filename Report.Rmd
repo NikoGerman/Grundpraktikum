@@ -1,0 +1,28 @@
+---
+title: "Report"
+author: "Group G"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("source_all.R")
+```
+
+# Hier ein Titel
+
+```{r Reading Data, echo = FALSE}
+Worldbank <- suppress_mw(ReadData()) %>%
+  augmentData()
+saveRDS(Worldbank, "Data/cleaned/Worldbank.RDS")
+```
+
+```{r assign country colors}
+country_colors <- assignCountryColors(Worldbank)
+```
+
+```{r}
+
+```
+

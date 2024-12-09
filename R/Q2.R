@@ -1,10 +1,3 @@
-library(ggplot2)
-library(dplyr)
-library(tidyr)
-library(readxl)
-library(ggrepel)
-library(viridis)
-
 data_full <- readr::read_rds("Data/cleaned/Worldbank.RDS")
 color_assigns <- readr::read_rds("Data/cleaned/Country_Colors.RDS")
 
