@@ -23,6 +23,7 @@ country_colors <- assignCountryColors(Worldbank)
 ```
 
 ```{r}
+plots_Q1 <- suppress_mw(Question1())
 
 ```
 

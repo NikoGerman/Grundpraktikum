@@ -47,5 +47,5 @@ ReadData <- function() {
   Worldbank <- Worldbank %>% 
     left_join(Continents, by = "Country_Code", relationship = "many-to-many")
   #
-  return(Worldbank)
+  saveRDS(Worldbank, "Data/raw/Worldbank.RDS")
 }

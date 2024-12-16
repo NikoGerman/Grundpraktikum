@@ -1,0 +1,199 @@
+---
+title: "Worldbank"
+author: "Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao"
+format:
+  revealjs:
+    footer: "Worldbank"
+    theme: white
+    css: styles.css
+editor: visual
+---
+
+## Datensätze
+- [Struktur]{.fragment .highlight-blue fragment-index=1}
+- [Fehlende Daten]{.fragment .semi-fade-out fragment-index=1} 
+
+## Struktur {.smaller}
+:::: {.columns}
+
+::: {.column width="35%"}
+- 3 Datensätze:
+  - Worldbank 1
+  - Worldbank 2
+  - CO2 Emissions
+- identische Struktur
+- 25 unterschiedliche Länder
+- 18 unterschiedliche Merkmale
+
+:::
+
+::: {.column width="65%"}
+|Spaltenname            |Beschreibung                             |
+|-----------------------|-----------------------------------------|
+|Country Name           |Name des Landes                          |
+|Country Code           |3 Buchstaben Abkürzung des Landes        |
+|Series Name            |Name des untersuchten Merkmals           |
+|Series Code            |eindeutiges Kürzel des Merkmals          |
+|2000                   |Ausprägungen der Merkmale in 2000        |
+|...                    |...                                      |
+|2021                   |Ausprägungen der Merkmale in 2021        |
+|average                |durchschnittliche Ausprägung der Merkmale|
+:::
+
+::::
+
+## Datensätze
+- [Struktur]{.fragment .semi-fade-out fragment-index=1} 
+- [Fehlende Daten]{.fragment .highlight-blue fragment-index=1}
+
+## Fehlende Daten {.smaller}
+
+```{r Fehlende Daten 1}
+source("source_all.R")
+ReadData()
+augmentData()
+(NA_plot_country | NA_plot_year) + plot_layout(axes = "collect")
+```
+
+## Fehlende Daten {.smaller}
+
+```{r Fehlende Daten 2}
+NA_plot_Series
+```
+
+## Fehlende Daten {.smaller}
+
+```{r Fehlende Daten 3}
+(NA_plot_Country_vs_Series | NA_plot_Year_vs_Series) + plot_layout(axes = "collect", guides = "collect")
+```
+
+
+## Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .highlight-blue fragment-index=1}
+- [Bildung]{.fragment .semi-fade-out fragment-index=1} 
+- [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
+- [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
+- [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+
+## Elektrizität und Nationaleinkommen
+- [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .highlight-blue fragment-index=1}
+- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1} 
+- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+
+## Elektrizität und Nationaleinkommen {.smaller}
+Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
+
+```{r}
+Q1_plots <- Q1()
+# Q1_plots[[2]]
+Worldbank %>%
+  ggplot(aes(x = `Access_to_electricity_(%_of_population)`,
+             y = `Adjusted_net_national_income_per_capita_(current_US$)`,
+             color = Country_Name)) +
+  geom_point() +
+  scale_color_manual(values = assignCountryColors(Worldbank)) +
+  scale_y_log10() +
+  labs(x = "Zugang zu Elektrizität\n(in % der Gesamtbevölkerung)",
+       y = "Netto-pro-Kopf-Einkommen (bereinigt)",
+       color = "Land")
+
+# cor(Worldbank$`Access_to_electricity_(%_of_population)`, Worldbank$`Adjusted_net_national_income_per_capita_(current_US$)`,
+#     method = "spearman",
+#     use = "complete.obs")
+```
+
+## Elektrizität und Nationaleinkommen {.smaller}
+Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
+
+```{r}
+(Q1_plots[[2]] | Q1_plots[[3]]) + plot_layout(axis = "collect")
+```
+
+## Elektrizität und Nationaleinkommen {.smaller}
+Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität.
+
+```{r}
+knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
+```
+
+## Elektrizität und Nationaleinkommen {.smaller}
+
+Für Länder mit durchschnittlichem Zugang zu Elektrizität < 100 % lässt sich ein
+Korrellationskoeefizienten berechnen. Wir verwenden die  Rangkorrellation nach Spearman:
+<!-- $$ -->
+<!-- r_{E, \!N\!N\!E}^{Spearman} =  -->
+<!-- \frac { -->
+<!-- \sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})} -->
+<!-- {\sqrt{\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2} -->
+<!-- }  -->
+<!-- $$ -->
+
+$$
+r_{E, \!N\!N\!E}^{Spearman} = 
+\frac {
+\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})}
+{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2))^\frac{1}{2}
+} 
+$$
+<p>
+Mit:
+</p>
+
+- $E$ Zugang zu Elektrizität
+- $\!N\!N\!E$ Nettonationaleinkommen
+
+
+
+## Elektrizität und Nationaleinkommen {.smaller}
+
+```{r}
+Q1_plots[[1]]
+```
+
+
+## Elektrizität und Nationaleinkommen
+- [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index=1} 
+- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .highlight-blue fragment-index=1}
+- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+
+
+## Elektrizität und Nationaleinkommen
+```{r}
+(Q1_plots[[4]] / Q1_plots[[5]]) +
+    plot_layout(axes = "collect") +
+    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
+```
+
+## Elektrizität und Nationaleinkommen
+- [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index=1}
+- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1}
+- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .highlight-blue fragment-index=1}
+
+## Elektrizität und Nationaleinkommen
+
+```{r}
+(Q1_plots[[6]] / Q1_plots[[7]]) +
+    plot_layout(axes = "collect") +
+    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
+
+```
+
+
+
+
+
+
+
+
+## Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
+- [Bildung]{.fragment .highlight-blue fragment-index=1}
+- [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
+- [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
+- [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+
+## Bildung
+- Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?
+- Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?
+  -   Welchen Einfluss hat dies auf die Qualität der Bildung?
+

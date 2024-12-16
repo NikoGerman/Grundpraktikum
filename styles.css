@@ -1,0 +1,7 @@
+.reveal .slides {
+    overflow: visible; /* Ensures math is not clipped */
+}
+
+.reveal pre {
+    white-space: pre-wrap; /* Prevents horizontal overflow of formulas */
+}

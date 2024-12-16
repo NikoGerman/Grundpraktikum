@@ -1,4 +1,5 @@
-augmentData <- function(data) {
+augmentData <- function() {
+  data <- readRDS("Data/raw/Worldbank.RDS")
   assertDataFrame(data, col.names = "named")
   assertSubset(c("Access_to_electricity_(%_of_population)",
                  "Surface_area_(sq_km)",
@@ -6,7 +7,7 @@ augmentData <- function(data) {
                names(data)
                )
   ### add features
-  data %>%
+  data <- data %>%
     mutate(
       electricity_binned = cut_interval(`Access_to_electricity_(%_of_population)`,
                                         n = 4, breaks = c(0, 25, 50, 75, 100),
@@ -28,4 +29,7 @@ augmentData <- function(data) {
                                           labels = c("1st_Q", "2nd_Q", "3rd_Q", "4th_Q")
       )
     )
+  saveRDS(data, "Data/cleaned/Worldbank.RDS")
+  country_colors <- assignCountryColors(data)
+  saveRDS(country_colors, "Data/cleaned/Country_Colors.RDS")
 }
