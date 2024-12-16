@@ -31,7 +31,6 @@
     }
   </style>
   <link rel="stylesheet" href="Presentation_files/libs/revealjs/dist/theme/quarto.css">
-  <link rel="stylesheet" href="styles.css">
   <link href="Presentation_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="Presentation_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="Presentation_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -338,8 +337,9 @@ Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao
 </div>
 
 </section>
-<section id="datensätze" class="slide level2">
-<h2>Datensätze</h2>
+<section>
+<section id="datensätze" class="title-slide slide level1 center">
+<h1>Datensätze</h1>
 <ul>
 <li><span class="fragment highlight-blue" data-fragment-index="1">Struktur</span></li>
 <li><span class="fragment semi-fade-out" data-fragment-index="1">Fehlende Daten</span></li>
@@ -404,9 +404,10 @@ Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao
 </tbody>
 </table>
 </div></div>
-</section>
-<section id="datensätze-1" class="slide level2">
-<h2>Datensätze</h2>
+</section></section>
+<section>
+<section id="datensätze-1" class="title-slide slide level1 center">
+<h1>Datensätze</h1>
 <ul>
 <li><span class="fragment semi-fade-out" data-fragment-index="1">Struktur</span></li>
 <li><span class="fragment highlight-blue" data-fragment-index="1">Fehlende Daten</span></li>
@@ -423,9 +424,10 @@ Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao
 <section id="fehlende-daten-2" class="slide level2 smaller">
 <h2>Fehlende Daten</h2>
 
-<img data-src="Presentation_files/figure-revealjs/Fehlende%20Daten%203-1.png" width="960" class="r-stretch"></section>
-<section id="forschungsfragen" class="slide level2">
-<h2>Forschungsfragen</h2>
+<img data-src="Presentation_files/figure-revealjs/Fehlende%20Daten%203-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="forschungsfragen" class="title-slide slide level1 center">
+<h1>Forschungsfragen</h1>
 <ul>
 <li><span class="fragment highlight-blue" data-fragment-index="1">Elektrizität und Nationaleinkommen</span></li>
 <li><span class="fragment semi-fade-out" data-fragment-index="1">Bildung</span></li>
@@ -446,12 +448,12 @@ Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao
 <h2>Elektrizität und Nationaleinkommen</h2>
 <p>Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.</p>
 
-<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<img data-src="Presentation_files/figure-revealjs/Elektrizität%201-1.png" width="960" class="r-stretch"></section>
 <section id="elektrizität-und-nationaleinkommen-2" class="slide level2 smaller">
 <h2>Elektrizität und Nationaleinkommen</h2>
 <p>Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.</p>
 
-<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<img data-src="Presentation_files/figure-revealjs/Elektrizität%202-1.png" width="960" class="r-stretch"></section>
 <section id="elektrizität-und-nationaleinkommen-3" class="slide level2 smaller">
 <h2>Elektrizität und Nationaleinkommen</h2>
 <p>Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität.</p>
@@ -506,12 +508,12 @@ Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao
 </section>
 <section id="elektrizität-und-nationaleinkommen-4" class="slide level2 smaller">
 <h2>Elektrizität und Nationaleinkommen</h2>
-<p>Für Länder mit durchschnittlichem Zugang zu Elektrizität &lt; 100 % lässt sich ein Korrellationskoeefizienten berechnen. Wir verwenden die Rangkorrellation nach Spearman: <!-- $$ --> <!-- r_{E, \!N\!N\!E}^{Spearman} =  --> <!-- \frac { --> <!-- \sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})} --> <!-- {\sqrt{\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2} --> <!-- }  --> <!-- $$ --></p>
+<p>Für Länder mit durchschnittlichem Zugang zu Elektrizität &lt; 100 % lässt sich ein Korrellationskoeefizienten berechnen. Wir verwenden die Rangkorrellation nach Spearman:</p>
 <span class="math display">\[
-r_{E, \!N\!N\!E}^{Spearman} =
+r_{E, Y}^{Spearman} =
 \frac {
-\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})}
-{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2))^\frac{1}{2}
+\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(Y_i) - \bar{rg}_{Y})}
+{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(Y_i) - \bar{rg}_{Y})^2))^\frac{1}{2}
 }
 \]</span>
 <p>
@@ -519,13 +521,13 @@ Mit:
 </p>
 <ul>
 <li><span class="math inline">\(E\)</span> Zugang zu Elektrizität</li>
-<li><span class="math inline">\(\!N\!N\!E\)</span> Nettonationaleinkommen</li>
+<li><span class="math inline">\(Y\)</span> Nettonationaleinkommen</li>
 </ul>
 </section>
 <section id="elektrizität-und-nationaleinkommen-5" class="slide level2 smaller">
 <h2>Elektrizität und Nationaleinkommen</h2>
 
-<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-4-1.png" width="960" class="r-stretch"></section>
+<img data-src="Presentation_files/figure-revealjs/Elektrizität%204-1.png" width="960" class="r-stretch"></section>
 <section id="elektrizität-und-nationaleinkommen-6" class="slide level2">
 <h2>Elektrizität und Nationaleinkommen</h2>
 <ul>
@@ -537,7 +539,7 @@ Mit:
 <section id="elektrizität-und-nationaleinkommen-7" class="slide level2">
 <h2>Elektrizität und Nationaleinkommen</h2>
 
-<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-5-1.png" width="960" class="r-stretch"></section>
+<img data-src="Presentation_files/figure-revealjs/Elektrizität%205-1.png" width="960" class="r-stretch"></section>
 <section id="elektrizität-und-nationaleinkommen-8" class="slide level2">
 <h2>Elektrizität und Nationaleinkommen</h2>
 <ul>
@@ -549,9 +551,10 @@ Mit:
 <section id="elektrizität-und-nationaleinkommen-9" class="slide level2">
 <h2>Elektrizität und Nationaleinkommen</h2>
 
-<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-6-1.png" width="960" class="r-stretch"></section>
-<section id="forschungsfragen-1" class="slide level2">
-<h2>Forschungsfragen</h2>
+<img data-src="Presentation_files/figure-revealjs/Elektrizität%206-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="forschungsfragen-1" class="title-slide slide level1 center">
+<h1>Forschungsfragen</h1>
 <ul>
 <li><span class="fragment semi-fade-out" data-fragment-index="1">Elektrizität und Nationaleinkommen</span></li>
 <li><span class="fragment highlight-blue" data-fragment-index="1">Bildung</span></li>
@@ -563,18 +566,71 @@ Mit:
 <section id="bildung" class="slide level2">
 <h2>Bildung</h2>
 <ul>
-<li>Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?</li>
-<li>Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?
+<li><span class="fragment highlight-blue" data-fragment-index="1">Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?</span></li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?</span>
 <ul>
-<li>Welchen Einfluss hat dies auf die Qualität der Bildung?</li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Welchen Einfluss hat dies auf die Qualität der Bildung?</span></li>
 </ul></li>
 </ul>
+</section>
+<section id="bildung-1" class="slide level2">
+<h2>Bildung</h2>
+
+<img data-src="Presentation_files/figure-revealjs/Bildung%201-1.png" width="960" class="r-stretch"></section>
+<section id="bildung-2" class="slide level2">
+<h2>Bildung</h2>
+<ul>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?</span></li>
+<li><span class="fragment highlight-blue" data-fragment-index="1">Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?</span>
+<ul>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Welchen Einfluss hat dies auf die Qualität der Bildung?</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="bildung-3" class="slide level2">
+<h2>Bildung</h2>
+
+<img data-src="Presentation_files/figure-revealjs/Bildung%202-1.png" width="960" class="r-stretch"></section>
+<section id="bildung-4" class="slide level2">
+<h2>Bildung</h2>
+
+<img data-src="Presentation_files/figure-revealjs/Bildung%203-1.png" width="960" class="r-stretch"></section></section>
+<section>
+<section id="forschungsfragen-2" class="title-slide slide level1 center">
+<h1>Forschungsfragen</h1>
+<ul>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Elektrizität und Nationaleinkommen</span></li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Bildung</span></li>
+<li><span class="fragment highlight-blue" data-fragment-index="1">HIV-Prävalenz</span></li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Tabakkonsum</span></li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Landwirtschaft</span></li>
+</ul>
+</section>
+<section id="hiv-prävalenz" class="slide level2">
+<h2>HIV Prävalenz</h2>
+<ul>
+<li><span class="fragment highlight-blue" data-fragment-index="1">Gibt es eine Beziehung zwischen HIV-Prävalenz<sup>1</sup> und Alkoholkonsum<sup>2</sup> pro Kopf?</span></li>
+<li><span class="fragment semi-fade-out" data-fragment-index="1">Haben Länder, deren erwerbstätige Bevölkerung eine höhere grundlegende Bildungsquote aufweist, eine niedrigere HIV-Prävalenz?</span></li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn4"><p>% der Bevölkerung zwischen 15 und 49</p></li><li id="fn5"><p>umgerechnet in reinen Alkohol</p></li></ol></aside></section>
+<section class="slide level2">
+
+<h3 id="hiv-prävalenz-1">HIV Prävalenz</h3>
+
+<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-1-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
+<h3 id="hiv-prävalenz-2">HIV Prävalenz</h3>
+
+<img data-src="Presentation_files/figure-revealjs/unnamed-chunk-2-1.png" width="960" class="r-stretch"></section>
+<section class="slide level2">
+
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 <p>Worldbank</p>
 </div>
 </div>
-</section>
+</section></section>
 
     </div>
   </div>

@@ -5,11 +5,10 @@ format:
   revealjs:
     footer: "Worldbank"
     theme: white
-    css: styles.css
 editor: visual
 ---
 
-## Datensätze
+# Datensätze
 - [Struktur]{.fragment .highlight-blue fragment-index=1}
 - [Fehlende Daten]{.fragment .semi-fade-out fragment-index=1} 
 
@@ -42,7 +41,7 @@ editor: visual
 
 ::::
 
-## Datensätze
+# Datensätze
 - [Struktur]{.fragment .semi-fade-out fragment-index=1} 
 - [Fehlende Daten]{.fragment .highlight-blue fragment-index=1}
 
@@ -68,7 +67,7 @@ NA_plot_Series
 ```
 
 
-## Forschungsfragen
+# Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .highlight-blue fragment-index=1}
 - [Bildung]{.fragment .semi-fade-out fragment-index=1} 
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
@@ -83,7 +82,7 @@ NA_plot_Series
 ## Elektrizität und Nationaleinkommen {.smaller}
 Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
 
-```{r}
+```{r Elektrizität 1}
 Q1_plots <- Q1()
 # Q1_plots[[2]]
 Worldbank %>%
@@ -105,14 +104,14 @@ Worldbank %>%
 ## Elektrizität und Nationaleinkommen {.smaller}
 Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
 
-```{r}
+```{r Elektrizität 2}
 (Q1_plots[[2]] | Q1_plots[[3]]) + plot_layout(axis = "collect")
 ```
 
 ## Elektrizität und Nationaleinkommen {.smaller}
 Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität.
 
-```{r}
+```{r Elektrizität 3}
 knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 ```
 
@@ -120,19 +119,12 @@ knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 
 Für Länder mit durchschnittlichem Zugang zu Elektrizität < 100 % lässt sich ein
 Korrellationskoeefizienten berechnen. Wir verwenden die  Rangkorrellation nach Spearman:
-<!-- $$ -->
-<!-- r_{E, \!N\!N\!E}^{Spearman} =  -->
-<!-- \frac { -->
-<!-- \sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})} -->
-<!-- {\sqrt{\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2} -->
-<!-- }  -->
-<!-- $$ -->
 
 $$
-r_{E, \!N\!N\!E}^{Spearman} = 
+r_{E, Y}^{Spearman} = 
 \frac {
-\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})}
-{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(\!N\!N\!E_i) - \bar{rg}_{\!N\!N\!E})^2))^\frac{1}{2}
+\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(Y_i) - \bar{rg}_{Y})}
+{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(Y_i) - \bar{rg}_{Y})^2))^\frac{1}{2}
 } 
 $$
 <p>
@@ -140,13 +132,13 @@ Mit:
 </p>
 
 - $E$ Zugang zu Elektrizität
-- $\!N\!N\!E$ Nettonationaleinkommen
+- $Y$ Nettonationaleinkommen
 
 
 
 ## Elektrizität und Nationaleinkommen {.smaller}
 
-```{r}
+```{r Elektrizität 4}
 Q1_plots[[1]]
 ```
 
@@ -158,7 +150,7 @@ Q1_plots[[1]]
 
 
 ## Elektrizität und Nationaleinkommen
-```{r}
+```{r Elektrizität 5}
 (Q1_plots[[4]] / Q1_plots[[5]]) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
@@ -171,21 +163,14 @@ Q1_plots[[1]]
 
 ## Elektrizität und Nationaleinkommen
 
-```{r}
+```{r Elektrizität 6}
 (Q1_plots[[6]] / Q1_plots[[7]]) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
 
 ```
 
-
-
-
-
-
-
-
-## Forschungsfragen
+# Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
 - [Bildung]{.fragment .highlight-blue fragment-index=1}
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
@@ -193,7 +178,60 @@ Q1_plots[[1]]
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
 
 ## Bildung
-- Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?
-- Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?
-  -   Welchen Einfluss hat dies auf die Qualität der Bildung?
+- [Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?]{.fragment .highlight-blue fragment-index=1}
+- [Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .semi-fade-out fragment-index=1} 
+  -   [Welchen Einfluss hat dies auf die Qualität der Bildung?]{.fragment .semi-fade-out fragment-index=1} 
+
+## Bildung
+
+```{r Bildung 1}
+Q2_plots <- Q2()
+Q2_plots[[1]]
+```
+
+## Bildung
+- [Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?]{.fragment .semi-fade-out fragment-index=1}
+- [Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .highlight-blue fragment-index=1}
+  -   [Welchen Einfluss hat dies auf die Qualität der Bildung?]{.fragment .semi-fade-out fragment-index=1} 
+
+## Bildung
+
+```{r Bildung 2}
+Q2_plots[[2]]
+```
+
+## Bildung
+
+```{r Bildung 3}
+Q2_plots[[3]]
+```
+
+# Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
+- [Bildung]{.fragment .semi-fade-out fragment-index=1} 
+- [HIV-Prävalenz]{.fragment .highlight-blue fragment-index=1}
+- [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
+- [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+
+## HIV Prävalenz
+- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[umgerechnet in reinen Alkohol] pro Kopf?]{.fragment .highlight-blue fragment-index=1}
+- [Haben Länder, deren erwerbstätige Bevölkerung eine höhere grundlegende Bildungsquote aufweist, eine  niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index=1}
+
+---
+
+### HIV Prävalenz
+```{r}
+Q3_plots <- Q3()
+Q3_plots[[7]]
+```
+---
+
+### HIV Prävalenz
+```{r}
+Q3_plots[[13]]
+```
+---
+
+
+
 

@@ -32,7 +32,8 @@ ReadData <- function() {
     select(Continent_Name, Three_Letter_Country_Code) %>%
     mutate(Continent = Continent_Name,
            Country_Code = Three_Letter_Country_Code,
-           .keep = "none")
+           .keep = "none") %>%
+    filter(!(Continent == "Europe" & Country_Code %in% c("RUS", "KAZ")))
   # join dataframes
   Worldbank <- Worldbank1 %>%
     full_join(Worldbank2, by = c("Country Name" = "Country Name", "Country Code" = "Country Code", "Year" = "Year")) %>%
