@@ -21,7 +21,8 @@ Q3 <- function() {
          color = "Land")
   
   # view facetted per continent
-  p1.1 <- p1 + facet_wrap(~Continent)
+  p1.1 <- p1 + facet_wrap(~Continent, ncol = 3) + 
+    guides(color = "none")
   
   # view Asia
   p1.2 <- p1 %+% (Worldbank %>% 
@@ -93,6 +94,7 @@ Q3 <- function() {
          x = "Korrelationskoeffizient",
          caption = "Verwendeter Korrellationskoeffizient: Spearman") +
     geom_text_repel(aes(label = sprintf("%.2f", r_spearman), x = sign(r_spearman) * -.10), force = 0) +
+    scale_x_continuous(limits = c(-1, 1)) +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.border = element_blank(),
@@ -156,8 +158,8 @@ Q3 <- function() {
     scale_y_log10() +
     geom_text_repel(aes(label = Country_Name)) +
     guides(color = "none") +
-    labs(title = "durchschnittliche Bildungsquote der Arbeiterschicht und durchschnittliche HIV-Prävalenz",
-         x = "Arbeiterschicht mit grundlegender Bildung (in %)",
+    labs(title = "durchschnittliche Bildungsquote und durchschnittliche HIV-Prävalenz",
+         x = "Bildungsquote (in %)",
          y = "HIV-Prävalenz (in %)")
   
   p2.6 <- Worldbank %>%
@@ -178,6 +180,7 @@ Q3 <- function() {
          x = "Korrelationskoeffizient",
          caption = "Verwendeter Korrellationskoeffizient: Spearman") +
     geom_text_repel(aes(label = sprintf("%.2f", r_spearman), x = sign(r_spearman) * -.10), force = 0) +
+    scale_x_continuous(limits = c(-1, 1)) +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.border = element_blank(),

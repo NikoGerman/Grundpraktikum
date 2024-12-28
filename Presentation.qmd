@@ -3,6 +3,9 @@ title: "Worldbank"
 author: "Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao"
 format:
   revealjs:
+    slide-number: c
+    fig-align: center
+    smaller: true
     footer: "Worldbank"
     theme: white
 editor: visual
@@ -214,24 +217,97 @@ Q2_plots[[3]]
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
 
 ## HIV Prävalenz
-- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[umgerechnet in reinen Alkohol] pro Kopf?]{.fragment .highlight-blue fragment-index=1}
-- [Haben Länder, deren erwerbstätige Bevölkerung eine höhere grundlegende Bildungsquote aufweist, eine  niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index=1}
+- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .highlight-blue fragment-index=1}
+- [Haben Länder, mit höherer Bildungsquote^[% der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index=1}
 
 ---
 
-### HIV Prävalenz
-```{r}
+### Positiver Zusammenhang erkennbar
+Vier hauptsächlich muslimisch geprägte Länder beeinflussen die Trendlinie maßgeblich.
+```{r HIV-Prävalenz 1}
 Q3_plots <- Q3()
+Q3_plots[[6]]
+```
+---
+
+### Trend bleibt erhalten
+Der grundsätzliche Trend findet sich weitestgehend auch auf Kontinent-Ebene wieder.
+```{r HIV-Prävalenz 2}
+Q3_plots[[1]]
+```
+
+---
+
+### Gemischte Ergebnisse auf Länderebene
+Spearman-Rangkorrelation zwischen HIV Prävalenz und Alkoholkonsum je Land, zeigt unterschiedlich gerichtete Zusammenhänge
+```{r HIV-Prävalenz 3}
 Q3_plots[[7]]
 ```
 ---
 
-### HIV Prävalenz
-```{r}
-Q3_plots[[13]]
+## HIV Prävalenz
+- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .semi-fade-out fragment-index=1}
+- [Haben Länder, mit höherer Bildungsquote^[% der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .highlight-blue fragment-index=1}
+---
+
+### Bessere Bildung korreliert mit höherer HIV-Prävalenz?
+Die Bildungsquoten von Neuseeland, Tschechien und den Vereingten Staaten beeinflussen den Trend maßgeblich.
+```{r HIV-Prävalenz 4}
+Q3_plots[[12]]
 ```
 ---
 
+### Uneinheitlicher Trend innerhalb der Länder
+Lediglich diese sieben Länder zeigen eine relevante Änderung in HIV-Prävalenz und Bildungsquote. 
+```{r HIV-Prävalenz 5}
+Q3_plots[[11]]
+```
 
+# Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
+- [Bildung]{.fragment .semi-fade-out fragment-index=1} 
+- [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
+- [Tabakkonsum]{.fragment .highlight-blue fragment-index=1}
+- [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
 
+## Tabakkonsum
+- Wie verhält sich das Bruttosozialprodukt pro Kopf zur Tabaknutzung der volljährigen Bevölkerung?
+---
+
+### Daten nur in 7 Jahren vollständig
+
+- Beobachtungen zum Tabakkonsum für Aruba fehlen durchgängig,
+- für die übrigen Länder liegen sie bis 2018 nur alle fünf Jahre vor. 
+```{r}
+Q4_plots <- Q4()
+Q4_plots[[1]]
+```
+---
+
+### Trend auf allen Kontinenten
+Auf allen Kontinenten korrelieren höhere BIPs mit niedrigerer Prävalenz des Tabakkonsums
+```{r}
+Q4_plots[[2]]
+```
+---
+
+### Kein Trend bei ärmeren Volkswirtschaften
+
+- betrachtet man isoliert die ärmeren Volkswirtschaften scheint der Trend zu verschwinden,
+- auf Länderebene erscheint er wieder.
+
+```{r}
+(Q4_plots[[4]] | Q4_plots[[3]]) + plot_layout(axes = "collect") + 
+  plot_annotation(title = "BIP pro Kopf <= 20 000$")
+```
+---
+
+### Mehr Geld, weniger Tabak
+
+Bei den reicheren Volkswirtscahften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
+```{r}
+(Q4_plots[[6]] | Q4_plots[[5]]) + plot_layout(axes = "collect") + 
+  plot_annotation(title = "BIP pro Kopf > 20 000$")
+```
+---
 

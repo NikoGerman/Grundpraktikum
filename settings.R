@@ -9,7 +9,8 @@ library(checkmate)
 library(readxl)
 library(patchwork)
 # set ggplot theme
-theme_set(theme_light())
+theme_set(theme_light() + 
+            theme(plot.title = element_text(hjust = 0.5, size = 14)))
 # set paths to data
 path_Worldbank1 <- "Data/raw/Worldbank1.xlsx"
 path_Worldbank2 <- "Data/raw/Worldbank2.csv"

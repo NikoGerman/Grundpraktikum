@@ -37,7 +37,7 @@ Q1 <- function() {
   p1.23 <- ggplot(Worldbank,
               aes(y = `Adjusted_net_national_income_per_capita_(current_US$)`)
               )+
-    scale_y_log10() +
+    scale_y_log10(labels = scales::label_number()) +
     labs(y = "Netto-pro-Kopf-Einkommen (bereinigt)") %>%
     suppress_mw()
   # for later use - number of observations per bin
@@ -73,7 +73,7 @@ Q1 <- function() {
   #
   p2.1 <- data_p23 %>%
     ggplot(aes(x = surface, y = r_spearman, color = Country_Name)) +
-    scale_x_log10(limits = c(1e2, 1e8)) +
+    scale_x_log10(limits = c(1e2, 1e8), labels = scales::label_number()) +
     scale_color_manual(values = country_colors) +
     guides(color = "none") +
     geom_point() +
@@ -84,21 +84,25 @@ Q1 <- function() {
     geom_text_repel(aes(label = `Country_Name`), force = 1) +
     ylim(-.5, 1.25) +
     labs(y = "Korrellationskoeffizient") %>%
-    suppress_mw()
+    suppress_mw() +
+    labs(x = "Fläche (in Quadratkilometer)")
   #
   p2.2 <- p2.1 %+%
     (data_p23 %>%
        filter(Country_Name != "Aruba") %>%
        filter(Country_Name != "Afghanistan")) %>%
-    suppress_mw()
+    suppress_mw() +
+    labs(x = "Fläche (in Quadratkilometer)")
   #
-  p3.1 <- p2.1 %+% aes(x = avg_pop) %+%
-    scale_x_log10(limits = c(5e4, 3e9)) %>%
-    suppress_mw()
+  p3.1 <- p2.1 %+% aes(x = avg_pop/100000) %+%
+    scale_x_log10(limits = c(5e-1, 3e4), labels = scales::label_number()) %>%
+    suppress_mw() +
+    labs(x = "Bevölkerung (in Hunderttausend)")
   #
-  p3.2 <- p2.2 %+% aes(x = avg_pop) %+%
-    scale_x_log10(limits = c(5e4, 3e9)) %>%
-    suppress_mw()
+  p3.2 <- p2.2 %+% aes(x = avg_pop/100000) %+%
+    scale_x_log10(limits = c(5e-1, 3e4), labels = scales::label_number()) %>%
+    suppress_mw() +
+    labs(x = "Bevölkerung (in Hunderttausend)")
   
   t1 <- Worldbank %>%
     group_by(Country_Name) %>%
