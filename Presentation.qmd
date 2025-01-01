@@ -309,5 +309,76 @@ Bei den reicheren Volkswirtscahften existiert der Trend sowohl übergreifend, al
 (Q4_plots[[6]] | Q4_plots[[5]]) + plot_layout(axes = "collect") + 
   plot_annotation(title = "BIP pro Kopf > 20 000$")
 ```
+
+# Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
+- [Bildung]{.fragment .semi-fade-out fragment-index=1} 
+- [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
+- [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
+- [Landwirtschaft]{.fragment .highlight-blue fragment-index=1}
+
+## Landwirtschaft
+- [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche^[als prozentualer Anteil der Gesamtfläche] und CO2 Emissionen^[pro Kopf] je Land?]{.fragment .highlight-blue fragment-index=1}
+  - [Hat die Gesamtfläche einen Einfluss?]{.fragment .semi-fade-out fragment-index=1}
+
 ---
+
+### CO2-Daten zeigen Einbrüche
+Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen.
+
+```{r}
+Q5_plots <- Q5()
+p0 <- align_patches(Q5_plots[[1]], Q5_plots[[2]])
+p0[[1]]
+```
+---
+
+### CO2-Daten vermutlich fehlerhaft
+Mit Hinblick auf die Variablilität sind die Einbrüche nicht trivial.
+
+```{r}
+Q5_plots[[3]]
+```
+---
+
+### Kein mehrheitlicher Trend
+- Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend.
+- Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich genutzter Fläche heraus.
+
+```{r}
+Q5_plots[[6]]
+```
+---
+
+### Korrelationskoeffizient uneinheitlich
+Die Korrelation von landwirtschaftlich genutzter Fläche und CO2 Emissionen pro Kopf ist je Land unterschiedlich gerichtet und in der Stärke variierend.
+
+```{r}
+Q5_plots[[4]]
+```
+---
+
+### Kein globaler Trend
+- Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich ebenfalls kein Trend ab.
+- Der Korrelationskoeffizient unterstützt dies.
+
+```{r}
+Q5_plots[[7]]
+```
+---
+
+## Landwirtschaft
+- [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche^[als prozentualer Anteil der Gesamtfläche] und CO2 Emissionen^[pro Kopf] je Land?]{.fragment .semi-fade-out fragment-index=1}
+  - [Hat die Gesamtfläche einen Einfluss?]{.fragment .highlight-blue fragment-index=1}
+  
+---
+
+### Gesamtfläche hat keinen Einfluss
+Es scheint kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient^[bzgl. CO2 Emissionen pro Kopf und Anteil landwirtschaftlich genutzter Fläche] zu existieren.
+```{r}
+Q5_plots[[5]]
+```
+
+
+
 
