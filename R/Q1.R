@@ -8,6 +8,35 @@ Q1 <- function() {
   Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
   country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
   
+  p0 <- Worldbank %>%
+    group_by(Year, Country_Name) %>%
+    summarize(Missing = is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
+    ungroup() %>%
+    mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden"))) %>%
+    ggplot(aes(x = Year, y = Country_Name)) +
+    geom_tile(aes(fill = Missing), alpha = .7) +
+    scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
+    labs(title = "Beobachtungen zum Nettonationaleinkommen pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    scale_x_discrete(guide = guide_axis(angle = 45), 
+                     breaks = seq(2000, 2021, by = 5),
+                     labels = seq(2000, 2021, by = 5)) +
+    theme(#panel.grid.major = element_blank(),
+          #panel.grid.minor = element_blank(),
+          panel.border = element_blank(),
+          axis.line = element_line(color = "grey", linewidth = .25))
+  
+  p1.0 <- Worldbank %>%
+    ggplot(aes(x = `Access_to_electricity_(%_of_population)`,
+               y = `Adjusted_net_national_income_per_capita_(current_US$)`,
+               color = Country_Name)) +
+    geom_point() +
+    scale_x_continuous(label = scales::label_number(suffix = "%")) +
+    scale_y_log10(label = scales::label_number(suffix = "$")) +
+    scale_color_manual(values = country_colors) +
+    labs(x = "Zugang zu Elektrizität\n(Anteil Gesamtbevölkerung)",
+         y = "Netto-pro-Kopf-Einkommen (bereinigt)",
+         color = "Land")
+  
   correlation <- Worldbank %>%
     group_by(Country_Name) %>%
     summarize(r_spearman = cor(x = `Access_to_electricity_(%_of_population)`, 
@@ -21,6 +50,7 @@ Q1 <- function() {
     geom_col(fill = "lightblue") +
     geom_vline(xintercept = 0, color = "red") +
     geom_vline(xintercept = 0.5, color = "red", linetype = "dashed") +
+    geom_vline(xintercept = -0.5, color = "red", linetype = "dashed") +
     guides(fill = "none") +
     labs(y = "",
          x = "Korrelationskoeffizient",
@@ -30,7 +60,8 @@ Q1 <- function() {
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           panel.border = element_blank(),
-          axis.line = element_line(color = "grey", linewidth = .25))
+          axis.line = element_line(color = "grey", linewidth = .25)) +
+    scale_x_continuous(limits = c(-1, 1))
   
   # basic plot
   p1.23 <- ggplot(Worldbank,
@@ -111,5 +142,7 @@ Q1 <- function() {
               p2.2, 
               p3.1, 
               p3.2, 
-              t1)) 
+              t1,
+              p1.0,
+              p0)) 
 }

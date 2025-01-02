@@ -40,7 +40,7 @@ ReadData <- function() {
     full_join(CO2, by = c("Country Name" = "Country.Name", "Country Code" = "Country.Code", "Year" = "Year")) %>%
     mutate(across(c(`Country Name`, `Country Code`), ~as.factor(.x))) %>%
     mutate(Year = as.ordered(Year),
-           Development_status = ifelse(`Country Name` %in% AdvancedEconomies, "developed", "emerging"))
+           Development_status = ifelse(`Country Name` %in% AdvancedEconomies, "Industrieland", "Schwellen-/Entwicklungsland"))
   # clean names
   names(Worldbank) <- gsub(" ", "_", names(Worldbank))
   names(Worldbank) <- gsub("[,\\.]", "", names(Worldbank))

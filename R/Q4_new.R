@@ -17,12 +17,13 @@ Q4 <- function() {
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
     labs(title = "Beobachtungen zum Tabakkonsum", x = "Jahr", y = "Land", fill = "Beobachtung") +
-    scale_x_discrete(guide = guide_axis(angle = 45)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
+    scale_x_discrete(guide = guide_axis(angle = 45), 
+                     breaks = seq(2000, 2021, by = 5),
+                     labels = seq(2000, 2021, by = 5)) +
+    theme(#panel.grid.major = element_blank(),
+          #panel.grid.minor = element_blank(),
           panel.border = element_blank(),
-          axis.line = element_line(color = "grey", linewidth = .25)) %>%
-    suppress_mw()
+          axis.line = element_line(color = "grey", linewidth = .25))
   
   p0.2 <- Worldbank %>%
     group_by(Year, Country_Name) %>%
@@ -33,12 +34,13 @@ Q4 <- function() {
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
     labs(title = "Beobachtungen zum BIP", x = "Jahr", y = "Land", fill = "Beobachtung") +
-    scale_x_discrete(guide = guide_axis(angle = 45)) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
+    scale_x_discrete(guide = guide_axis(angle = 45), 
+                     breaks = seq(2000, 2021, by = 5),
+                     labels = seq(2000, 2021, by = 5)) +
+    theme(#panel.grid.major = element_blank(),
+          #panel.grid.minor = element_blank(),
           panel.border = element_blank(),
-          axis.line = element_line(color = "grey", linewidth = .25)) %>%
-    suppress_mw()
+          axis.line = element_line(color = "grey", linewidth = .25))
   
   p0 <- (p0.1 | p0.2 + guides(fill = "none")) + plot_layout(axes = "collect", guides = "collect")
   
@@ -100,5 +102,5 @@ Q4 <- function() {
   p1.22 <- p1.2 +
     geom_smooth(se = FALSE, color = "grey", method = "lm")
   
-  return(list(p0, p1.0, p1.11, p1.12, p1.21, p1.22))
+  return(list(p0.1, p1.0, p1.11, p1.12, p1.21, p1.22))
 }

@@ -1,21 +1,50 @@
 ---
-title: "Worldbank"
+title: "Worldbank Datensatz"
+subtitle: "verschiedene Fragestellungen"
 author: "Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao"
+institute: "Elisabeth Lucke"
+date: "20. Januar 2025"
+date-format: "DD. MMMM YYYY"
+lang: de
 format:
   revealjs:
     slide-number: c
     fig-align: center
     smaller: true
-    footer: "Worldbank"
+    footer: "Worldbank Datensatz"
     theme: white
+    logo: "Ressources/LMU_Logo.svg"
 editor: visual
 ---
 
-# Datensätze
-- [Struktur]{.fragment .highlight-blue fragment-index=1}
-- [Fehlende Daten]{.fragment .semi-fade-out fragment-index=1} 
+# Agenda
+```{r setup}
+#| output: false
+source("source_all.R")
+ReadData()
+augmentData()
+```
 
-## Struktur {.smaller}
+::: {.fragment .fade-in fragment-index=1}
+::: {.fragment .highlight-blue fragment-index=4}
+1.  Struktur der Daten
+:::
+:::
+
+::: {.fragment .fade-in fragment-index=2}
+::: {.fragment .semi-fade-out fragment-index=4}
+2.  Forschungsfragen
+:::
+:::
+
+::: {.fragment .fade-in fragment-index=3}
+::: {.fragment .semi-fade-out fragment-index=4}
+3.  Zusammenfassung und Diskussion
+:::
+:::
+
+
+## 1. Struktur der Daten
 :::: {.columns}
 
 ::: {.column width="35%"}
@@ -44,127 +73,122 @@ editor: visual
 
 ::::
 
-# Datensätze
-- [Struktur]{.fragment .semi-fade-out fragment-index=1} 
-- [Fehlende Daten]{.fragment .highlight-blue fragment-index=1}
+# Agenda
+::: {.fragment .semi-fade-out fragment-index=1}
+1.  Struktur der Daten
+:::
 
-## Fehlende Daten {.smaller}
+::: {.fragment .highlight-blue fragment-index=1}
+2.  Forschungsfragen
+:::
 
-```{r Fehlende Daten 1}
-source("source_all.R")
-ReadData()
-augmentData()
-(NA_plot_country | NA_plot_year) + plot_layout(axes = "collect")
-```
+::: {.fragment .semi-fade-out fragment-index=1}
+3.  Zusammenfassung und Diskussion
+:::
 
-## Fehlende Daten {.smaller}
-
-```{r Fehlende Daten 2}
-NA_plot_Series
-```
-
-## Fehlende Daten {.smaller}
-
-```{r Fehlende Daten 3}
-(NA_plot_Country_vs_Series | NA_plot_Year_vs_Series) + plot_layout(axes = "collect", guides = "collect")
-```
-
-
-# Forschungsfragen
-- [Elektrizität und Nationaleinkommen]{.fragment .highlight-blue fragment-index=1}
-- [Bildung]{.fragment .semi-fade-out fragment-index=1} 
+## 2. Forschungsfragen
+- [Elektrizität und Nationaleinkommen]{.fragment .highlight-blue fragment-index=1} 
+- [Bildung]{.fragment .semi-fade-out fragment-index=1}
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
 - [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+---
 
-## Elektrizität und Nationaleinkommen
+### Elektrizität und Nationaleinkommen
 - [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .highlight-blue fragment-index=1}
-- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1} 
-- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+  - [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1} 
+  - [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+  
+---
 
-## Elektrizität und Nationaleinkommen {.smaller}
-Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
+#### Kaum fehlende Daten
+Lediglich das Adjustierte Nettonationaleinkommen pro Kopf verfügt bezüglich Afghanistan und dem Vereingten Königreich über fehlende Daten
+```{r Elektrizität 0}
+Q1_plots <- Q1()
+Q1_plots[[10]]
+```
+---
+
+#### Positiver Zusammenhang erkennbar
+Zwischen der Elektrifizierung und dem bereinigten pro-Kopf-Einkommen scheint ein positiver 
+Zusammenhang zu existieren.
 
 ```{r Elektrizität 1}
-Q1_plots <- Q1()
-# Q1_plots[[2]]
-Worldbank %>%
-  ggplot(aes(x = `Access_to_electricity_(%_of_population)`,
-             y = `Adjusted_net_national_income_per_capita_(current_US$)`,
-             color = Country_Name)) +
-  geom_point() +
-  scale_color_manual(values = assignCountryColors(Worldbank)) +
-  scale_y_log10() +
-  labs(x = "Zugang zu Elektrizität\n(in % der Gesamtbevölkerung)",
-       y = "Netto-pro-Kopf-Einkommen (bereinigt)",
-       color = "Land")
-
-# cor(Worldbank$`Access_to_electricity_(%_of_population)`, Worldbank$`Adjusted_net_national_income_per_capita_(current_US$)`,
-#     method = "spearman",
-#     use = "complete.obs")
+Q1_plots[[9]]
 ```
+---
 
-## Elektrizität und Nationaleinkommen {.smaller}
-Ein positiver jedoch nicht unbedingt linearer Zusammenhang ist erkennbar.
+#### Auf allen Kontinenten
+- Der positive Zusammenhang ist auf allen Kontinenten vorhanden
+- Ein Großteil der Länder verfügt bereites über einen Elektrifizierungsgrad > 75%
 
 ```{r Elektrizität 2}
 (Q1_plots[[2]] | Q1_plots[[3]]) + plot_layout(axis = "collect")
 ```
+---
 
-## Elektrizität und Nationaleinkommen {.smaller}
-Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität.
+#### Berechnung der Korrelation 
+- Aufgrund der Nichtlinearität verwenden wir Rangkorrelation
+- Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität, hier lässt sich kein Korrelationskoeffizient berechnen
 
 ```{r Elektrizität 3}
 knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 ```
+---
 
-## Elektrizität und Nationaleinkommen {.smaller}
+<!-- ### Spearman-Korrelation -->
 
-Für Länder mit durchschnittlichem Zugang zu Elektrizität < 100 % lässt sich ein
-Korrellationskoeefizienten berechnen. Wir verwenden die  Rangkorrellation nach Spearman:
+<!-- Für Länder mit durchschnittlichem Zugang zu Elektrizität < 100 % lässt sich ein -->
+<!-- Korrellationskoeefizienten berechnen. Wir verwenden die  Rangkorrellation nach Spearman: -->
 
-$$
-r_{E, Y}^{Spearman} = 
-\frac {
-\sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(Y_i) - \bar{rg}_{Y})}
-{(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(Y_i) - \bar{rg}_{Y})^2))^\frac{1}{2}
-} 
-$$
-<p>
-Mit:
-</p>
+<!-- $$ -->
+<!-- r_{E, Y}^{Spearman} =  -->
+<!-- \frac { -->
+<!-- \sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(Y_i) - \bar{rg}_{Y})} -->
+<!-- {(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(Y_i) - \bar{rg}_{Y})^2))^\frac{1}{2} -->
+<!-- }  -->
+<!-- $$ -->
+<!-- <p> -->
+<!-- Mit: -->
+<!-- </p> -->
 
-- $E$ Zugang zu Elektrizität
-- $Y$ Nettonationaleinkommen
+<!-- - $E$ Zugang zu Elektrizität -->
+<!-- - $Y$ Nettonationaleinkommen -->
+<!-- --- -->
 
-
-
-## Elektrizität und Nationaleinkommen {.smaller}
+#### Korrelationskoeefizient überwiegend positiv
 
 ```{r Elektrizität 4}
 Q1_plots[[1]]
 ```
+---
 
-
-## Elektrizität und Nationaleinkommen
+### Elektrizität und Nationaleinkommen
 - [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index=1} 
-- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .highlight-blue fragment-index=1}
-- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+  - [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .highlight-blue fragment-index=1}
+  - [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index=1} 
+---
 
+#### Landesgröße hat keinen Einfluss
+Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Landesgröße
 
-## Elektrizität und Nationaleinkommen
 ```{r Elektrizität 5}
 (Q1_plots[[4]] / Q1_plots[[5]]) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
 ```
+---
 
-## Elektrizität und Nationaleinkommen
+### Elektrizität und Nationaleinkommen
 - [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen^[pro Kopf, adjustiert] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index=1}
-- [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1}
-- [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .highlight-blue fragment-index=1}
+  - [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index=1}
+  - [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .highlight-blue fragment-index=1}
+  
+---
 
-## Elektrizität und Nationaleinkommen
+#### Bevölkerungsgröße hat wenig Einfluss
+Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zusammenhang
+mit der Stärke und Richtung der Rangkorrelation
 
 ```{r Elektrizität 6}
 (Q1_plots[[6]] / Q1_plots[[7]]) +
@@ -172,213 +196,297 @@ Q1_plots[[1]]
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
 
 ```
+---
 
-# Forschungsfragen
+## 2. Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
 - [Bildung]{.fragment .highlight-blue fragment-index=1}
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
 - [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+---
 
-## Bildung
-- [Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?]{.fragment .highlight-blue fragment-index=1}
-- [Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .semi-fade-out fragment-index=1} 
-  -   [Welchen Einfluss hat dies auf die Qualität der Bildung?]{.fragment .semi-fade-out fragment-index=1} 
+### Bildung
+- [Haben Länder mit hoher Staatsverschuldung geringer gebildete Erwerbspersonen?]{.fragment .highlight-blue fragment-index=1}
+- [Sind Länder mit besser gebildeten Erwerbspersonen in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .semi-fade-out fragment-index=1} 
+  -   [Welchen Einfluss könnte dies auf die Qualität der Bildung haben?]{.fragment .semi-fade-out fragment-index=1} 
 
-## Bildung
+---
+
+#### Daten fehlen großflächig
+Sowohl zur Staatsverschuldung, als auch zum Bildungsgrad der Erwerbspersonen fehlen Daten.
 
 ```{r Bildung 1}
 Q2_plots <- Q2()
 Q2_plots[[1]]
 ```
+---
 
-## Bildung
-- [Haben Länder mit hoher Staatsverschuldung eine geringer gebildete Arbeiterschicht?]{.fragment .semi-fade-out fragment-index=1}
-- [Sind Länder mit einer besser gebildeten Arbeiterschicht in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .highlight-blue fragment-index=1}
-  -   [Welchen Einfluss hat dies auf die Qualität der Bildung?]{.fragment .semi-fade-out fragment-index=1} 
-
-## Bildung
+#### Wenige komplette Paare
+Folglich gibt es nur eine geringe Anzahl an kompletten Paaren von Staatsverschuldung und Bildungsgrad der Erwerbspersonen bezüglich Land und Jahr
 
 ```{r Bildung 2}
 Q2_plots[[2]]
 ```
+---
 
-## Bildung
+#### Kein einheitlicher Trend
+Betrachtet man Staatsverschuldung und Bildungsgrad der Erwerbspersonen je Land,
+zeichnet sich kein einheitlicher Trend ab.
 
 ```{r Bildung 3}
 Q2_plots[[3]]
 ```
+---
 
-# Forschungsfragen
+#### Korrelationskoeffizient uneinheitlich
+Berechnet man die Rang-Korrelation der einzelnen Länder zeigt sich ein uneinheitliches Bild hinsichtlich Richtung und Stärke.
+
+```{r Bildung 4}
+Q2_plots[[4]]
+```
+---
+
+#### Kein globaler Trend
+- Die durchschnittlichen Werte für Staatsverschuldung und Bildungsquote haben einen leicht positiven Zusammenhang
+- Durch Entfernen des Ausreißers (Vereingtes Königreich) verschwindet dieser Effekt
+```{r Bildung 5}
+Q2_plots[[5]]
+```
+---
+
+
+### Bildung
+- [Haben Länder mit hoher Staatsverschuldung geringer gebildete Erwerbspersonen?]{.fragment .semi-fade-out fragment-index=1}
+- [Sind Länder mit besser gebildeten Erwerbspersonen in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .highlight-blue fragment-index=1}
+  -   [Welchen Einfluss könnte dies auf die Qualität der Bildung haben?]{.fragment .highlight-blue fragment-index=1}
+
+---
+
+#### Kein Zusammenhang erkennbar
+Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es keine offensichtliche Beziehung.
+
+```{r Bildung 6}
+Q2_plots[[6]]
+```
+---
+
+#### Schüler-Lehrer-Verhältnis fluktuiert
+- Das Verhältnis von Schülern je Lehrer fluktuiert mitunter stark
+- Auch für die Länder mit den durchschnittlich bestgebildesten Erwerbspersonen
+- Ein Rückschluss auf die Bildungsqualität ist nicht möglich
+
+```{r Bildung 7}
+Q2_plots[[7]]
+```
+
+## 2. Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
 - [Bildung]{.fragment .semi-fade-out fragment-index=1} 
 - [HIV-Prävalenz]{.fragment .highlight-blue fragment-index=1}
 - [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+---
 
-## HIV Prävalenz
-- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .highlight-blue fragment-index=1}
-- [Haben Länder, mit höherer Bildungsquote^[% der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index=1}
+### HIV Prävalenz
+- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[in der Bevölkerung zwischen 15 und 49 Jahren] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .highlight-blue fragment-index=1}
+- [Haben Länder, mit höherer Bildungsquote^[Anteil der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index=1}
 
 ---
 
-### Positiver Zusammenhang erkennbar
-Vier hauptsächlich muslimisch geprägte Länder beeinflussen die Trendlinie maßgeblich.
+#### Daten unvollständig
+- In den Daten fehlen Beobachtungspaare für sieben Länder
+- Beobachtungen für das Jahr 2021 fehlen komplett
 ```{r HIV-Prävalenz 1}
 Q3_plots <- Q3()
-Q3_plots[[6]]
-```
----
-
-### Trend bleibt erhalten
-Der grundsätzliche Trend findet sich weitestgehend auch auf Kontinent-Ebene wieder.
-```{r HIV-Prävalenz 2}
 Q3_plots[[1]]
 ```
-
 ---
 
-### Gemischte Ergebnisse auf Länderebene
-Spearman-Rangkorrelation zwischen HIV Prävalenz und Alkoholkonsum je Land, zeigt unterschiedlich gerichtete Zusammenhänge
+#### Positiver Zusammenhang erkennbar
+Vier hauptsächlich muslimisch geprägte Länder beeinflussen die Trendlinie maßgeblich.
+```{r HIV-Prävalenz 2}
+Q3_plots[[3]]
+```
+---
+
+#### Trend zwiegespalten
+- Der grundsätzliche Trend findet sich weitestgehend auch auf Kontinent-Ebene wieder.
+- Man sieht bereits, dass auf Ebene der Länder der Trend keine Fortsetzung findet
 ```{r HIV-Prävalenz 3}
-Q3_plots[[7]]
+Q3_plots[[2]]
 ```
+
 ---
 
-## HIV Prävalenz
-- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[% der Bevölkerung zwischen 15 und 49] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .semi-fade-out fragment-index=1}
-- [Haben Länder, mit höherer Bildungsquote^[% der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .highlight-blue fragment-index=1}
----
-
-### Bessere Bildung korreliert mit höherer HIV-Prävalenz?
-Die Bildungsquoten von Neuseeland, Tschechien und den Vereingten Staaten beeinflussen den Trend maßgeblich.
+#### Gemischte Ergebnisse auf Länderebene
+Spearman-Rangkorrelation zwischen HIV Prävalenz und Alkoholkonsum je Land, zeigt unterschiedlich gerichtete Zusammenhänge
 ```{r HIV-Prävalenz 4}
-Q3_plots[[12]]
+Q3_plots[[4]]
 ```
 ---
 
-### Uneinheitlicher Trend innerhalb der Länder
-Lediglich diese sieben Länder zeigen eine relevante Änderung in HIV-Prävalenz und Bildungsquote. 
+### HIV Prävalenz
+- [Gibt es eine Beziehung zwischen HIV-Prävalenz^[in der Bevölkerung zwischen 15 und 49 Jahren] und Alkoholkonsum^[pro Kopf, in Litern reinen Alkohol]?]{.fragment .semi-fade-out fragment-index=1}
+- [Haben Länder, mit höherer Bildungsquote^[Anteil der Erwerbspersonen mit grundlegender Schulbildung], eine  niedrigere HIV-Prävalenz?]{.fragment .highlight-blue fragment-index=1}
+
+---
+
+#### Zusammenhang besteht nicht
+Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz.
+Es scheint sogar gegenteilig zu sein.
+
 ```{r HIV-Prävalenz 5}
-Q3_plots[[11]]
+Q3_plots[[5]]
 ```
 
-# Forschungsfragen
+
+## 2. Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
 - [Bildung]{.fragment .semi-fade-out fragment-index=1} 
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
 - [Tabakkonsum]{.fragment .highlight-blue fragment-index=1}
 - [Landwirtschaft]{.fragment .semi-fade-out fragment-index=1} 
+---
 
-## Tabakkonsum
+### Tabakkonsum
 - Wie verhält sich das Bruttosozialprodukt pro Kopf zur Tabaknutzung der volljährigen Bevölkerung?
 ---
 
-### Daten nur in 7 Jahren vollständig
+#### Daten nur in 7 Jahren vollständig
 
 - Beobachtungen zum Tabakkonsum für Aruba fehlen durchgängig,
 - für die übrigen Länder liegen sie bis 2018 nur alle fünf Jahre vor. 
-```{r}
+```{r Tabak 1}
 Q4_plots <- Q4()
 Q4_plots[[1]]
 ```
 ---
 
-### Trend auf allen Kontinenten
+#### Trend auf allen Kontinenten
 Auf allen Kontinenten korrelieren höhere BIPs mit niedrigerer Prävalenz des Tabakkonsums
-```{r}
+```{r Tabak 2}
 Q4_plots[[2]]
 ```
 ---
 
-### Kein Trend bei ärmeren Volkswirtschaften
+#### Kein Trend bei ärmeren Volkswirtschaften
 
-- betrachtet man isoliert die ärmeren Volkswirtschaften scheint der Trend zu verschwinden,
-- auf Länderebene erscheint er wieder.
+- Betrachtet man gesammelt die ärmeren Volkswirtschaften scheint der Trend zu verschwinden
+- Auf Länderebene erscheint er wieder
 
-```{r}
+```{r Tabak 3}
 (Q4_plots[[4]] | Q4_plots[[3]]) + plot_layout(axes = "collect") + 
-  plot_annotation(title = "BIP pro Kopf <= 20 000$")
+  plot_annotation(title = "BIP pro Kopf kleiner 20 000$")
 ```
 ---
 
-### Mehr Geld, weniger Tabak
+#### Mehr Geld, weniger Tabak
 
-Bei den reicheren Volkswirtscahften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
-```{r}
+Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
+```{r Tabak 4}
 (Q4_plots[[6]] | Q4_plots[[5]]) + plot_layout(axes = "collect") + 
-  plot_annotation(title = "BIP pro Kopf > 20 000$")
+  plot_annotation(title = "BIP pro Kopf größer 20 000$")
 ```
 
-# Forschungsfragen
+## 2. Forschungsfragen
 - [Elektrizität und Nationaleinkommen]{.fragment .semi-fade-out fragment-index=1} 
 - [Bildung]{.fragment .semi-fade-out fragment-index=1} 
 - [HIV-Prävalenz]{.fragment .semi-fade-out fragment-index=1} 
 - [Tabakkonsum]{.fragment .semi-fade-out fragment-index=1} 
 - [Landwirtschaft]{.fragment .highlight-blue fragment-index=1}
+---
 
-## Landwirtschaft
+### Landwirtschaft
 - [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche^[als prozentualer Anteil der Gesamtfläche] und CO2 Emissionen^[pro Kopf] je Land?]{.fragment .highlight-blue fragment-index=1}
   - [Hat die Gesamtfläche einen Einfluss?]{.fragment .semi-fade-out fragment-index=1}
 
 ---
 
-### CO2-Daten zeigen Einbrüche
-Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen.
+#### CO2-Daten zeigen Einbrüche
+Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen
 
-```{r}
+```{r Landwirtschaft 1}
 Q5_plots <- Q5()
 p0 <- align_patches(Q5_plots[[1]], Q5_plots[[2]])
 p0[[1]]
 ```
 ---
 
-### CO2-Daten vermutlich fehlerhaft
-Mit Hinblick auf die Variablilität sind die Einbrüche nicht trivial.
+#### CO2-Daten vermutlich fehlerhaft
+Mit Hinblick auf die Variablilität sind die Einbrüche nicht trivial
 
-```{r}
+```{r Landwirtschaft 2}
 Q5_plots[[3]]
 ```
 ---
 
-### Kein mehrheitlicher Trend
-- Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend.
-- Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich genutzter Fläche heraus.
+#### Kein mehrheitlicher Trend
+- Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend
+- Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich genutzter Fläche heraus
 
-```{r}
+```{r Landwirtschaft 3}
 Q5_plots[[6]]
 ```
 ---
 
-### Korrelationskoeffizient uneinheitlich
-Die Korrelation von landwirtschaftlich genutzter Fläche und CO2 Emissionen pro Kopf ist je Land unterschiedlich gerichtet und in der Stärke variierend.
+#### Korrelationskoeffizient uneinheitlich
+Die Korrelation von landwirtschaftlich genutzter Fläche und CO2 Emissionen pro Kopf ist je Land unterschiedlich gerichtet und in der Stärke variierend
 
-```{r}
+```{r Landwirtschaft 4}
 Q5_plots[[4]]
 ```
 ---
 
-### Kein globaler Trend
-- Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich ebenfalls kein Trend ab.
-- Der Korrelationskoeffizient unterstützt dies.
+#### Kein globaler Trend
+- Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich ebenfalls kein Trend ab
+- Der Korrelationskoeffizient unterstützt dies
 
-```{r}
+```{r Landwirtschaft 5}
 Q5_plots[[7]]
 ```
 ---
 
-## Landwirtschaft
+### Landwirtschaft
 - [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche^[als prozentualer Anteil der Gesamtfläche] und CO2 Emissionen^[pro Kopf] je Land?]{.fragment .semi-fade-out fragment-index=1}
   - [Hat die Gesamtfläche einen Einfluss?]{.fragment .highlight-blue fragment-index=1}
   
 ---
 
-### Gesamtfläche hat keinen Einfluss
-Es scheint kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient^[bzgl. CO2 Emissionen pro Kopf und Anteil landwirtschaftlich genutzter Fläche] zu existieren.
-```{r}
+#### Gesamtfläche hat keinen Einfluss
+Es scheint kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient^[bzgl. CO2 Emissionen pro Kopf und Anteil landwirtschaftlich genutzter Fläche] zu existieren
+```{r Landwirtschaft 6}
 Q5_plots[[5]]
 ```
 
+# Agenda
+::: {.fragment .semi-fade-out fragment-index=1}
+1.  Struktur der Daten
+:::
 
+::: {.fragment .semi-fade-out fragment-index=1}
+2.  Forschungsfragen
+:::
 
+::: {.fragment .highlight-blue fragment-index=1}
+3.  Zusammenfassung und Diskussion
+:::
+
+## 3. Zusammenfassung und Diskussion
+### Zusammenfassung
+::: incremental
+- Zugang zu Elektrizität korreliert stark mit dem Nettonationaleinkommen pro Kopf
+- Eine hohe Staatsverschuldung hat keinen Zusammenhang mit einer geringen Bildungsquote der Erwerbspersonen
+- Ein Zusammenhang zwischen Alkoholkonsum und HIV-Prävalenz besteht vermutlich nicht
+- Es besteht ein negativer Zusammenhang zwischen Tabakkonsum und BIP pro Kopf
+- Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es keinen Zusammenhang
+:::
+---
+## 3. Zusammenfassung und Diskussion
+### Diskussion
+::: incremental
+- Wie sind die vergleichsweise niedrigen Bildungsquoten der Vereinigten Staaten und Neuseelands zu interpretieren?
+- Ist der negative Zusammenhang zwischen Tabakkonsum und BIP pro Kopf auf die Anti-Rauch-Gesetze der letzten Jahrzehnte zurückzuführen?
+- Sind die CO2-Daten plausibel?
+:::
 
