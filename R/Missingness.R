@@ -25,7 +25,6 @@ NA_plot_Country_vs_Series <- Worldbank %>%
                               "Staatsverschuldung",
                               "Netto-Nationaleinkommen pro Kopf")) +
   labs(x = "Land", y = "Merkmal", fill = "fehlende Beobachtungen")
-ggsave("Plots/NA_plot_Country_vs_Series.png", NA_plot_Country_vs_Series, device = "png")
 
 NA_plot_Year_vs_Series <- Worldbank %>%
   select(-Country_Name)%>%
@@ -48,7 +47,6 @@ NA_plot_Year_vs_Series <- Worldbank %>%
                               "Staatsverschuldung",
                               "Netto-Nationaleinkommen pro Kopf")) +
   labs(x = "Jahr", y = "Merkmal", fill = "fehlende Beobachtungen")
-ggsave("Plots/NA_plot_Year_vs_Series.png", NA_plot_Year_vs_Series, device = "png")
 
 NA_plot_Year_vs_Country <- Worldbank %>%
   select(-Country_Code)%>%
@@ -64,7 +62,6 @@ NA_plot_Year_vs_Country <- Worldbank %>%
   scale_fill_gradient(low = "white", high = "lightblue")+
   scale_x_discrete(guide = guide_axis(angle = 45))+
   theme_light()
-ggsave("Plots/NA_plot_Year_vs_Country.png", NA_plot_Year_vs_Country, device = "png")
 
 ######
 
@@ -80,7 +77,6 @@ NA_plot_year <- Worldbank %>%
   geom_col(fill = "lightblue")+
   labs(y = "Jahr", x = "Fehlende Beobachtungen") + 
   theme_light()
-ggsave("Plots/NA_plot_year.png", NA_plot_year, device = "png")
 
 NA_plot_country <- Worldbank %>%
   select(-Country_Code, -`Year`) %>%
@@ -94,7 +90,6 @@ NA_plot_country <- Worldbank %>%
   geom_col(fill = "lightblue")+
   labs(y = "Land", x = "Fehlende Beobachtungen") +
   theme_light()
-ggsave("Plots/NA_plot_country.png", NA_plot_country, device = "png")
 
 NA_plot_Series <- Worldbank %>%
   select(-Country_Code,-Country_Name, -`Year`) %>%
@@ -114,4 +109,3 @@ NA_plot_Series <- Worldbank %>%
                               "Staatsverschuldung",
                               "Netto-Nationaleinkommen pro Kopf")) +
   labs(x = "fehlende Beobachtungen", y = "Merkmal")
-ggsave("Plots/NA_plot_Series.png", NA_plot_Series, device = "png")
