@@ -7,39 +7,50 @@ Q5 <- function() {
   country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
   
   p0.1 <- Worldbank %>%
-    filter(`Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)` != 0) %>%
-    ggplot(aes(y = `Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`, 
+    filter(CO2_t_per_capita != 0) %>%
+    ggplot(aes(y = CO2_t_per_capita, 
                x = Year,
                group = Country_Name)) +
     geom_path(color = "lightblue") +
-    facet_wrap(~Country_Name, scales = "free_y") +
-    scale_y_continuous(guide = "none") +
+    facet_wrap(~Country_Name) +
+    scale_y_log10(label = scales::label_number(suffix = "t")) +
     scale_x_discrete(breaks = seq(2000, 2021, by = 5), labels = seq(2000, 2021, by = 5), guide = guide_axis(angle = 45)) +
-    labs(x = "Jahr", y = "CO2 Emissionen", caption = "y-Skalen nicht einheitlich\n CO2-Emissionen sind alle > 0")
-
-  p0.2 <- p0.1 +
-    geom_label_repel(data = Worldbank %>%
-                       group_by(Country_Name) %>%
-                       summarize(Var = var(`Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`)),
-                     aes(label = sprintf("Var = %.2e", Var),
-                         x = 10,
-                         y = 0), 
-                     direction = "both", force = 1)
+    labs(x = "Jahr", y = "CO2 Emissionen pro Kopf")
   
-  p0.30 <-   Worldbank %>%
-    ggplot(aes(x = `Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`,
-               y = Country_Name)) +
-    geom_boxplot() +
-    labs(x = "CO2-Emissionen",
-         y = "Land")
+  # Worldbank %>%
+  #   filter(`Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)` != 0) %>%
+  #   ggplot(aes(y = `Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`, 
+  #              x = Year,
+  #              group = Country_Name)) +
+  #   geom_path(color = "lightblue") +
+  #   facet_wrap(~Country_Name, scales = "free_y") +
+  #   scale_y_continuous(guide = "none") +
+  #   scale_x_discrete(breaks = seq(2000, 2021, by = 5), labels = seq(2000, 2021, by = 5), guide = guide_axis(angle = 45)) +
+  #   labs(x = "Jahr", y = "CO2 Emissionen", caption = "y-Skalen nicht einheitlich\n CO2-Emissionen sind alle > 0")
   
-  p0.31 <- p0.30 +
-    scale_x_log10(label = scales::label_number(suffix = "Mt"))
-  
-  p0.32 <- p0.30 +
-    scale_x_continuous(label = scales::label_number(suffix = "Mt"))
-  
-  p0.3 <- (p0.31 | p0.32) + plot_layout(axes = "collect", guides = "collect")
+  # p0.2 <- p0.1 +
+  #   geom_label_repel(data = Worldbank %>%
+  #                      group_by(Country_Name) %>%
+  #                      summarize(Var = var(`Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`)),
+  #                    aes(label = sprintf("Var = %.2e", Var),
+  #                        x = 10,
+  #                        y = 0), 
+  #                    direction = "both", force = 1)
+  # 
+  # p0.30 <-   Worldbank %>%
+  #   ggplot(aes(x = `Carbon_dioxide_(CO2)_emissions_(total)_excluding_LULUCF_(Mt_CO2e)`,
+  #              y = Country_Name)) +
+  #   geom_boxplot() +
+  #   labs(x = "CO2-Emissionen",
+  #        y = "Land")
+  # 
+  # p0.31 <- p0.30 +
+  #   scale_x_log10(label = scales::label_number(suffix = "Mt"))
+  # 
+  # p0.32 <- p0.30 +
+  #   scale_x_continuous(label = scales::label_number(suffix = "Mt"))
+  # 
+  # p0.3 <- (p0.31 | p0.32) + plot_layout(axes = "collect", guides = "collect")
   
   
   WB_summarized <- Worldbank %>%
@@ -100,8 +111,8 @@ Q5 <- function() {
                     aes(label = `Country_Name`),
                     size = 3,
                     max.overlaps = 10) +
-    labs(title = "Landwirtschaftliches Land und CO2 Emissionen",
-         x = "Anteil landwirtschaftlich genutztes Land",
+    labs(title = "Landwirtschaftliches Nutzfläche und CO2 Emissionen pro Kopf",
+         x = "Landwirtschaftliche Nutzfläche",
          y = "CO2 Emissionen pro Kopf")
   
   p4 <- WB_summarized %>%
@@ -139,8 +150,6 @@ Q5 <- function() {
   
   return(list(
     p0.1,
-    p0.2,
-    p0.3,
     p1,
     p2,
     p3,

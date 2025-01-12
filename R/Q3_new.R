@@ -40,7 +40,7 @@ Q3 <- function() {
                    is.na(`Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`)) %>%
        ungroup() %>%
        mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden")))) +
-    ggtitle("Beobachtungen zu HIV-Prävalenz und Alkoholkonsum")
+    ggtitle("Beobachtungen zu HIV-Prävalenz und Alkoholkonsum pro Kopf")
   
   p1 <- Worldbank %>%
     ggplot(aes(x = `Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`,
@@ -52,7 +52,7 @@ Q3 <- function() {
     scale_y_log10(label = scales::label_number(suffix = "%")) +
     scale_x_continuous(label = scales::label_number(suffix = "l")) +
     labs(title = "Alkoholkonsum und HIV-Prävalenz",,
-         x = "Gesamtkonsum reiner Alkohol pro Kopf",
+         x = "Alkoholkonsum pro Kopf",
          y = "HIV-Prävalenz",
          color = "Land")
   
@@ -109,8 +109,8 @@ Q3 <- function() {
     scale_x_continuous(label = scales::label_number(suffix = "l")) +
     scale_color_manual(values = country_colors) +
     guides(color = "none") +
-    labs(title = "durchschnittlicher Alkoholkonsum und HIV-Prevalenz pro Land",
-         x = "Gesamtkonsum reiner Alkohol pro Kopf",
+    labs(title = "durchschnittlicher Alkoholkonsum pro Kopf und HIV-Prevalenz pro Land",
+         x = "Alkoholkonsum pro Kopf",
          y = "HIV-Prävalenz")
   
   p1.7 <- Worldbank %>%
@@ -155,8 +155,8 @@ Q3 <- function() {
     scale_y_log10(label = scales::label_number(suffix = "%")) +
     scale_x_continuous(label = scales::label_number(suffix = "%")) +
     scale_color_manual(values = country_colors) +
-    labs(title = "Bildungsquote der Erwerbspersonen und HIV-Prävalenz",
-         x = "Erwerbspersonen mit grundlegender Bildung",
+    labs(title = "Bildungsquote und HIV-Prävalenz",
+         x = "Bildungsquote",
          y = "HIV-Prävalenz",
          color = "Land")
   

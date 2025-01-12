@@ -28,7 +28,7 @@ Q2 <- function() {
                summarize(Missing = is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
                ungroup() %>%
                mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden")))) +
-    ggtitle("Beobachtungen zum Bildungsgrad")
+    ggtitle("Beobachtungen zur Bildungsquote")
   
   p0.1 <- (p0.1A| p0.1B) + plot_layout(axes = "collect", guides = "collect")
   
@@ -38,7 +38,7 @@ Q2 <- function() {
                                       is.na(`Central_government_debt_total_(%_of_GDP)`))) %>%
                ungroup() %>%
                mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden")))) +
-    ggtitle("Beobachtungen zu Staatsverschuldung und Bildungsgrad")
+    ggtitle("Beobachtungen zu Staatsverschuldung und Bildungsquote")
   
   ###########
   #########
@@ -51,9 +51,9 @@ Q2 <- function() {
                y = `Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`,
                color = Country_Name)) +
     geom_point(size = 2, alpha = .6) +
-    labs(title = "Staatsverschuldung und Bildungsgrad der Erwerbspersonen",
-         x = "Staatsverschuldung (Anteil BIP)",
-         y = "Anteil der Erwerbspersonen mit grundlegender Bildung") +
+    labs(title = "Staatsverschuldung und Bildungsquote",
+         x = "Staatsverschuldung",
+         y = "Bildungsquote") +
     scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%"),
                        guide = guide_axis(angle = 45),
@@ -76,8 +76,7 @@ Q2 <- function() {
     guides(fill = "none") +
     labs(y = "",
          x = "Korrelationskoeffizient",
-         caption = "lediglich Länder mit durschnittlichem Grad der Elektrifizierung < 100%
-       Verwendeter Korrellationskoeffizient: Spearman") +
+         caption = "Verwendeter Korrellationskoeffizient: Spearman") +
     geom_text_repel(aes(label = sprintf("%.2f", round(r_spearman, 2)), x = sign(r_spearman) * -.10), force = 0) +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
@@ -99,8 +98,8 @@ Q2 <- function() {
     scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
     scale_y_continuous(label = scales::label_number(suffix = "%")) +
-    labs(x = "Staatsverschuldung (Anteil BIP)",
-         y = "Anteil der Erwerbspersonen mit grundlegender Bildung")
+    labs(x = "Staatsverschuldung",
+         y = "Bildungsquote")
   
   p1.3B <- p1.3A %+% (Worldbank %>%
     group_by(Country_Name) %>%
@@ -111,7 +110,7 @@ Q2 <- function() {
   
   p1.3 <- (p1.3A | p1.3B) + 
     plot_layout(axes = "collect", guides = "collect") +
-    plot_annotation(title = "Staatsverschuldung und Bildungsgrad der Erwerbspersonen im Durchschnitt")
+    plot_annotation(title = "Staatsverschuldung und Bildungsquote im Durchschnitt")
   
   # Are countries with higher percentage of labor force with basic education
   # able to maintain lower pupil-teacher ratios, and what impact might this have
@@ -182,7 +181,7 @@ Q2 <- function() {
          y = "Schüler-Lehrer-Verhältnis",
          color = "Land") +
     scale_x_discrete(guide = guide_axis(angle = 45)) +
-    labs(title = "Schüler-Lehrer-Verhältnis der 5 Länder mit den bestgebildeten Erwerbspersonen")
+    labs(title = "Schüler-Lehrer-Verhältnis der 5 Länder mit der höchsten Bildungsquote")
   
   # Worldbank %>%
   #   filter(Country_Name %in% (Worldbank %>% 

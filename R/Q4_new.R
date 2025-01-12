@@ -16,7 +16,7 @@ Q4 <- function() {
     ggplot(aes(x = Year, y = Country_Name)) +
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
-    labs(title = "Beobachtungen zum Tabakkonsum", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    labs(title = "Beobachtungen zur Prävalenz des Tabakkonsums", x = "Jahr", y = "Land", fill = "Beobachtung") +
     scale_x_discrete(guide = guide_axis(angle = 45), 
                      breaks = seq(2000, 2021, by = 5),
                      labels = seq(2000, 2021, by = 5)) +
@@ -33,7 +33,7 @@ Q4 <- function() {
     ggplot(aes(x = Year, y = Country_Name)) +
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
-    labs(title = "Beobachtungen zum BIP", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    labs(title = "Beobachtungen zum BIP pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
     scale_x_discrete(guide = guide_axis(angle = 45), 
                      breaks = seq(2000, 2021, by = 5),
                      labels = seq(2000, 2021, by = 5)) +
@@ -51,7 +51,7 @@ Q4 <- function() {
                color = Country_Name)) +
     geom_point(size = 2, alpha = .4) +
     scale_color_manual(values = country_colors) +
-    labs(x = "BIP pro Kopf (in 2021 $)",
+    labs(x = "BIP pro Kopf",
          y = "Prävalenz des Tabakkonsums") +
     guides(color = "none") +
     scale_x_continuous(labels = scales::label_number(suffix = "$")) +

@@ -9,6 +9,7 @@ lang: de
 format:
   revealjs:
     slide-number: c
+    embed-resources: true
     fig-align: center
     smaller: true
     footer: "Worldbank Datensatz"
@@ -28,7 +29,7 @@ augmentData()
 
 :::: {.fragment .fade-in fragment-index="1"}
 ::: {.fragment .highlight-blue fragment-index="4"}
-1.  Daten
+1.  Terminologie
 :::
 ::::
 
@@ -44,70 +45,50 @@ augmentData()
 :::
 ::::
 
-## 1. Daten
+## 1. Terminologie
 
-### Struktur
+:::{.incremental}
+-   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen (Inlandsprinzip)
 
-::::: columns
-::: {.column width="35%"}
--   3 Datensätze:
-    -   Worldbank 1
-    -   Worldbank 2
-    -   CO2 Emissions
--   identische Struktur
--   25 unterschiedliche Länder
--   18 unterschiedliche Merkmale
-:::
+-   **BNE**: Bruttonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen (Inländerprinzip)
 
-::: {.column width="65%"}
-| Spaltenname  | Beschreibung                              |
-|--------------|-------------------------------------------|
-| Country Name | Name des Landes                           |
-| Country Code | 3 Buchstaben Abkürzung des Landes         |
-| Series Name  | Name des untersuchten Merkmals            |
-| Series Code  | eindeutiges Kürzel des Merkmals           |
-| 2000         | Ausprägungen der Merkmale in 2000         |
-| ...          | ...                                       |
-| 2021         | Ausprägungen der Merkmale in 2021         |
-| average      | durchschnittliche Ausprägung der Merkmale |
-:::
-:::::
+-   **NNE**: Nettonationaleinkommen - BNE abzüglich Abschreibungen
 
----
-
-## 1. Daten
-### Betrachtete Merkmale
-
-| Merkmal      | Beschreibung                              |
-|--------------|-------------------------------------------|
-|              |                                           |
-|              |                                           |
-|              |                                           |
-|              |                                           |
-|              |                                           |
-|              |                                           |
-|              |                                           |
-|              |                                           |
----
-
-## 1. Daten
-
-### Terminologie
-
--   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen
-
--   **Nettonationaleinkommen**: Volkseinkommen - BIP zzgl. Saldo der Primäreinkommen (Inländerprinzip)
-
--   **Mt**: Megatonne - eine Million Tonnen
+-   **Erwerbspersonen**: Erwerbstätige & Arbeits*suchende*
 
 -   **Äquivalent reiner Alkohol**: ein Liter reiner Alkohol entspricht 20 Litern Bier à 5% Alkoholgehalt
+:::
 
--   
+## 1. Terminologie
+
+-   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs - definiert durch 
+$$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
+
+## 1. Terminologie
+
+| Merkmal | Beschreibung |
+|---------|--------------|
+|BIP pro Kopf      |BIP pro Einwohner gerechnet, *inflationsbereinigt zu 2021*|
+|NNE pro Kopf      |NNE pro Einwohner gerechnet, *inflationsbereinigt*|
+|Staatsverschuldung             |Staatsverschuldung als Vielfaches des BIP, in %|
+|Landwirtschaftliche Nutzfläche |Anteil der gesamten Landesfläche, der landwirtschaftlich genutzt wird|
+|CO2 Emissionen pro Kopf        |CO2 Emissionen pro Einwohner gerechnet|
+
+
+## 1. Terminologie
+
+| Merkmal | Beschreibung |
+|---------|--------------|
+|Zugang zu Elektrizität         |Anteil der Bevölkerung mit zuverlässiger Elektrizitätsversorgung |
+|Bildungsquote                  |Anteil der Erwerbspersonen mit grundlegender Schulbildung|
+|HIV-Prävalenz                  |Prävalenz von HIV unter der 15-49 Jährigen|
+|Alkoholkonsum  pro Kopf        |Gesamtkonsum pro Einwohner in Äquivalent reinen Alkohols der 15+ Jährigen|
+|Prävalenz des Tabakkonsums     |Anteil der Tabakonsumenten unter den Erwachsenen|
 
 # Agenda
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
-1.  Struktur der Daten
+1.  Terminologie
 :::
 
 ::: {.fragment .highlight-blue fragment-index="1"}
@@ -129,21 +110,20 @@ augmentData()
 -   [Tabakkonsum]{.fragment .semi-fade-out fragment-index="1"}
 
 -   [Landwirtschaft]{.fragment .semi-fade-out fragment-index="1"}
----
-
-### Elektrizität und Nationaleinkommen
-
--   [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen[^1] für verschiedene Länder?]{.fragment .highlight-blue fragment-index="1"}
-    -   [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index="1"}
-    -   [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index="1"}
-
-[^1]: pro Kopf, adjustiert
 
 ------------------------------------------------------------------------
 
-#### Kaum fehlende Daten
+### Elektrizität und Nationaleinkommen
 
-Lediglich das Adjustierte Nettonationaleinkommen pro Kopf verfügt bezüglich Afghanistan und dem Vereingten Königreich über fehlende Daten
+-   [Korrelliert der Zugang zu Elektrizität mit dem NNE pro Kopf für verschiedene Länder?]{.fragment .highlight-blue fragment-index="1"}
+    -   [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index="1"}
+    -   [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index="1"}
+
+------------------------------------------------------------------------
+
+#### Daten fast vollständig
+
+Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungen bezüglich des NNE pro Kopf.
 
 ```{r Elektrizität 0}
 Q1_plots <- Q1()
@@ -154,7 +134,7 @@ Q1_plots[[10]]
 
 #### Positiver Zusammenhang erkennbar
 
-Zwischen der Elektrifizierung und dem bereinigten pro-Kopf-Einkommen scheint ein positiver Zusammenhang zu existieren.
+Zwischen der Elektrifizierung und dem NNE pro Kopf scheint ein positiver Zusammenhang zu existieren.
 
 ```{r Elektrizität 1}
 Q1_plots[[9]]
@@ -173,7 +153,7 @@ Q1_plots[[9]]
 
 ------------------------------------------------------------------------
 
-#### Berechnung der Korrelation
+#### Korrelation
 
 -   Aufgrund der Nichtlinearität verwenden wir Rangkorrelation
 -   Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität, hier lässt sich kein Korrelationskoeffizient berechnen
@@ -183,38 +163,6 @@ knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 ```
 
 ------------------------------------------------------------------------
-
-<!-- ### Spearman-Korrelation -->
-
-<!-- Für Länder mit durchschnittlichem Zugang zu Elektrizität < 100 % lässt sich ein -->
-
-<!-- Korrellationskoeefizienten berechnen. Wir verwenden die  Rangkorrellation nach Spearman: -->
-
-<!-- $$ -->
-
-<!-- r_{E, Y}^{Spearman} =  -->
-
-<!-- \frac { -->
-
-<!-- \sum_{i=1}^n (rg(E_i) - \bar{rg}_E) \cdot (rg(Y_i) - \bar{rg}_{Y})} -->
-
-<!-- {(\sum_{i=1}^n (rg(E_i) - \bar{rg}_E)^2 \cdot (rg(Y_i) - \bar{rg}_{Y})^2))^\frac{1}{2} -->
-
-<!-- }  -->
-
-<!-- $$ -->
-
-<!-- <p> -->
-
-<!-- Mit: -->
-
-<!-- </p> -->
-
-<!-- - $E$ Zugang zu Elektrizität -->
-
-<!-- - $Y$ Nettonationaleinkommen -->
-
-<!-- --- -->
 
 #### Korrelationskoeefizient überwiegend positiv
 
@@ -226,13 +174,13 @@ Q1_plots[[1]]
 
 ### Elektrizität und Nationaleinkommen
 
--   [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen[^2] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Korrelliert der Zugang zu Elektrizität mit dem NNE pro Kopf für verschiedene Länder?]{.fragment .semi-fade-out fragment-index="1"}
     -   [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .highlight-blue fragment-index="1"}
 
     -   [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index="1"}
+    
+------------------------------------------------------------------------
 
-[^2]: pro Kopf, adjustiert
----
 
 #### Landesgröße hat keinen Einfluss
 
@@ -248,11 +196,9 @@ Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Lande
 
 ### Elektrizität und Nationaleinkommen
 
--   [Korrelliert der Zugang zu Elektrizität mit dem Nettonationaleinkommen[^3] für verschiedene Länder?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Korrelliert der Zugang zu Elektrizität mit dem NNE pro Kopf für verschiedene Länder?]{.fragment .semi-fade-out fragment-index="1"}
     -   [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .semi-fade-out fragment-index="1"}
     -   [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .highlight-blue fragment-index="1"}
-
-[^3]: pro Kopf, adjustiert
 
 ------------------------------------------------------------------------
 
@@ -281,19 +227,19 @@ Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zus
 
 -   [Landwirtschaft]{.fragment .semi-fade-out fragment-index="1"}
 
----
+------------------------------------------------------------------------
 
 ### Bildung
 
--   [Haben Länder mit hoher Staatsverschuldung geringer gebildete Erwerbspersonen?]{.fragment .highlight-blue fragment-index="1"}
--   [Sind Länder mit besser gebildeten Erwerbspersonen in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Haben Länder mit hoher Staatsverschuldung eine geringe Bildungsquote?]{.fragment .highlight-blue fragment-index="1"}
+-   [Sind Länder mit hoher Bildungsquote in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .semi-fade-out fragment-index="1"}
     -   [Welchen Einfluss könnte dies auf die Qualität der Bildung haben?]{.fragment .semi-fade-out fragment-index="1"}
 
 ------------------------------------------------------------------------
 
 #### Daten fehlen großflächig
 
-Sowohl zur Staatsverschuldung, als auch zum Bildungsgrad der Erwerbspersonen fehlen Daten.
+Sowohl zur Staatsverschuldung, als auch zur Bildunsgquote fehlen Daten.
 
 ```{r Bildung 1}
 Q2_plots <- Q2()
@@ -304,7 +250,7 @@ Q2_plots[[1]]
 
 #### Wenige komplette Paare
 
-Folglich gibt es nur eine geringe Anzahl an kompletten Paaren von Staatsverschuldung und Bildungsgrad der Erwerbspersonen bezüglich Land und Jahr
+Es gibt lediglich eine geringe Anzahl an kompletten Paaren von Staatsverschuldung und Bildungsquote bezüglich Land und Jahr
 
 ```{r Bildung 2}
 Q2_plots[[2]]
@@ -314,7 +260,7 @@ Q2_plots[[2]]
 
 #### Kein einheitlicher Trend
 
-Betrachtet man Staatsverschuldung und Bildungsgrad der Erwerbspersonen je Land, zeichnet sich kein einheitlicher Trend ab.
+Betrachtet man Staatsverschuldung und Bildungsquote je Land, zeichnet sich kein einheitlicher Trend ab.
 
 ```{r Bildung 3}
 Q2_plots[[3]]
@@ -324,7 +270,7 @@ Q2_plots[[3]]
 
 #### Korrelationskoeffizient uneinheitlich
 
-Berechnet man die Rang-Korrelation der einzelnen Länder zeigt sich ein uneinheitliches Bild hinsichtlich Richtung und Stärke.
+Der Korrelationskoeffizient der einzelnen Länder zeigt ein uneinheitliches Bild hinsichtlich Richtung und Stärke.
 
 ```{r Bildung 4}
 Q2_plots[[4]]
@@ -345,15 +291,15 @@ Q2_plots[[5]]
 
 ### Bildung
 
--   [Haben Länder mit hoher Staatsverschuldung geringer gebildete Erwerbspersonen?]{.fragment .semi-fade-out fragment-index="1"}
--   [Sind Länder mit besser gebildeten Erwerbspersonen in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .highlight-blue fragment-index="1"}
+-   [Haben Länder mit hoher Staatsverschuldung eine geringe Bildungsquote?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Sind Länder mit hoher Bildungsquote in der Lage, ein niedriges Schüler-Lehrer Verhältnis zu halten?]{.fragment .highlight-blue fragment-index="1"}
     -   [Welchen Einfluss könnte dies auf die Qualität der Bildung haben?]{.fragment .highlight-blue fragment-index="1"}
 
 ------------------------------------------------------------------------
 
 #### Kein Zusammenhang erkennbar
 
-Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es keine offensichtliche Beziehung.
+Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es in den betrachteten Daten keine Beziehung.
 
 ```{r Bildung 6}
 Q2_plots[[6]]
@@ -364,7 +310,7 @@ Q2_plots[[6]]
 #### Schüler-Lehrer-Verhältnis fluktuiert
 
 -   Das Verhältnis von Schülern je Lehrer fluktuiert mitunter stark
--   Auch für die Länder mit den durchschnittlich bestgebildesten Erwerbspersonen
+-   Auch für die Länder mit den durchschnittlich höchsten Bildungsquote
 -   Ein Rückschluss auf die Bildungsqualität ist nicht möglich
 
 ```{r Bildung 7}
@@ -383,18 +329,13 @@ Q2_plots[[7]]
 
 -   [Landwirtschaft]{.fragment .semi-fade-out fragment-index="1"}
 
----
+------------------------------------------------------------------------
 
-### HIV Prävalenz
+### HIV-Prävalenz
 
--   [Gibt es eine Beziehung zwischen HIV-Prävalenz[^4] und Alkoholkonsum[^5]?]{.fragment .highlight-blue fragment-index="1"}
--   [Haben Länder, mit höherer Bildungsquote[^6], eine niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Gibt es eine Beziehung zwischen HIV-Prävalenz und Alkoholkonsum pro Kopf?]{.fragment .highlight-blue fragment-index="1"}
+-   [Haben Länder mit höherer Bildungsquote eine niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index="1"}
 
-[^4]: in der Bevölkerung zwischen 15 und 49 Jahren
-
-[^5]: pro Kopf, in Litern reinen Alkohol
-
-[^6]: Anteil der Erwerbspersonen mit grundlegender Schulbildung
 
 ------------------------------------------------------------------------
 
@@ -422,8 +363,8 @@ Q3_plots[[3]]
 
 #### Trend zwiegespalten
 
--   Der grundsätzliche Trend findet sich weitestgehend auch auf Kontinent-Ebene wieder.
--   Man sieht bereits, dass auf Ebene der Länder der Trend keine Fortsetzung findet
+-   Trend auch auf Kontinent-Ebene vorhanden
+-   keine Fortsetzung auf Ebene der Länder
 
 ```{r HIV-Prävalenz 3}
 Q3_plots[[2]]
@@ -431,9 +372,7 @@ Q3_plots[[2]]
 
 ------------------------------------------------------------------------
 
-#### Gemischte Ergebnisse auf Länderebene
-
-Spearman-Rangkorrelation zwischen HIV Prävalenz und Alkoholkonsum je Land, zeigt unterschiedlich gerichtete Zusammenhänge
+#### Korrelation auf Länderebene uneinheitlich
 
 ```{r HIV-Prävalenz 4}
 Q3_plots[[4]]
@@ -441,22 +380,17 @@ Q3_plots[[4]]
 
 ------------------------------------------------------------------------
 
-### HIV Prävalenz
+### HIV-Prävalenz
 
--   [Gibt es eine Beziehung zwischen HIV-Prävalenz[^7] und Alkoholkonsum[^8]?]{.fragment .semi-fade-out fragment-index="1"}
--   [Haben Länder, mit höherer Bildungsquote[^9], eine niedrigere HIV-Prävalenz?]{.fragment .highlight-blue fragment-index="1"}
-
-[^7]: in der Bevölkerung zwischen 15 und 49 Jahren
-
-[^8]: pro Kopf, in Litern reinen Alkohol
-
-[^9]: Anteil der Erwerbspersonen mit grundlegender Schulbildung
+-   [Gibt es eine Beziehung zwischen HIV-Prävalenz und Alkoholkonsum?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Haben Länder mit höherer Bildungsquote eine niedrigere HIV-Prävalenz?]{.fragment .highlight-blue fragment-index="1"}
 
 ------------------------------------------------------------------------
 
 #### Zusammenhang besteht nicht
 
-Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz. Es scheint sogar gegenteilig zu sein.
+- Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz. 
+- In den betrachteten Daten scheint es sogar gegenteilig zu sein.
 
 ```{r HIV-Prävalenz 5}
 Q3_plots[[5]]
@@ -474,18 +408,18 @@ Q3_plots[[5]]
 
 -   [Landwirtschaft]{.fragment .semi-fade-out fragment-index="1"}
 
----
+------------------------------------------------------------------------
 
 ### Tabakkonsum
 
--  Wie verhält sich das Bruttosozialprodukt pro Kopf zur Tabaknutzung der volljährigen Bevölkerung?
+-   Wie verhält sich das BIP pro Kopf zur Prävalenz des Tabakkonsums?
 
----
+------------------------------------------------------------------------
 
 #### Daten nur in 7 Jahren vollständig
 
--   Beobachtungen zum Tabakkonsum für Aruba fehlen durchgängig
--   für die übrigen Länder liegen sie bis 2018 nur alle fünf Jahre vor
+-   Beobachtungen zur Prävalenz des Tabakkonsums für Aruba fehlen durchgängig
+-   für die übrigen Länder liegen sie vor 2018 nur alle fünf Jahre vor
 
 ```{r Tabak 1}
 Q4_plots <- Q4()
@@ -506,8 +440,8 @@ Q4_plots[[2]]
 
 #### Kein Trend bei ärmeren Volkswirtschaften
 
--   Betrachtet man gesammelt die ärmeren Volkswirtschaften scheint der Trend zu verschwinden
--   Auf Länderebene erscheint er wieder
+-   Für die Gesamtheit der ärmeren Volkswirtschaften verschwindet der Trend
+-   Auf Länderebene existiert der Trend weiter
 
 ```{r Tabak 3}
 (Q4_plots[[4]] | Q4_plots[[3]]) + plot_layout(axes = "collect") + 
@@ -516,7 +450,7 @@ Q4_plots[[2]]
 
 ------------------------------------------------------------------------
 
-#### Mehr Geld, weniger Tabak
+#### BIP pro Kopf korreliert negativ mit Tabakkonsum
 
 Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
 
@@ -537,16 +471,12 @@ Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, al
 
 -   [Landwirtschaft]{.fragment .highlight-blue fragment-index="1"}
 
----
+------------------------------------------------------------------------
 
 ### Landwirtschaft
 
--   [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche[^10] und CO2 Emissionen[^11] je Land?]{.fragment .highlight-blue fragment-index="1"}
+-   [Gibt es einen Zusammenhang zwischen landwirtschaftlicher Nutzfläche und CO2 Emissionen pro Kopf je Land?]{.fragment .highlight-blue fragment-index="1"}
     -   [Hat die Gesamtfläche einen Einfluss?]{.fragment .semi-fade-out fragment-index="1"}
-
-[^10]: als prozentualer Anteil der Gesamtfläche
-
-[^11]: pro Kopf
 
 ------------------------------------------------------------------------
 
@@ -556,79 +486,65 @@ Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel er
 
 ```{r Landwirtschaft 1}
 Q5_plots <- Q5()
-p0 <- align_patches(Q5_plots[[1]], Q5_plots[[2]])
-p0[[1]]
+Q5_plots[[1]]
 ```
 
-------------------------------------------------------------------------
-
-#### CO2-Daten vermutlich fehlerhaft
-
-Mit Hinblick auf die Variablilität sind die Einbrüche nicht trivial
-
-```{r Landwirtschaft 2}
-Q5_plots[[3]]
-```
 
 ------------------------------------------------------------------------
 
 #### Kein mehrheitlicher Trend
 
 -   Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend
--   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich genutzter Fläche heraus
+-   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich Nutzfläche heraus
 
 ```{r Landwirtschaft 3}
-Q5_plots[[6]]
+Q5_plots[[4]]
 ```
 
 ------------------------------------------------------------------------
 
 #### Korrelationskoeffizient uneinheitlich
 
-Die Korrelation von landwirtschaftlich genutzter Fläche und CO2 Emissionen pro Kopf ist je Land unterschiedlich gerichtet und in der Stärke variierend
+Die Korrelation von landwirtschaftlicher Nutzfläche und CO2 Emissionen pro Kopf variiert in Stärke und Richtung.
 
 ```{r Landwirtschaft 4}
-Q5_plots[[4]]
+Q5_plots[[2]]
 ```
 
 ------------------------------------------------------------------------
 
 #### Kein globaler Trend
 
--   Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich ebenfalls kein Trend ab
--   Der Korrelationskoeffizient unterstützt dies
+Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich kein Trend ab
+
 
 ```{r Landwirtschaft 5}
-Q5_plots[[7]]
+Q5_plots[[5]]
 ```
 
 ------------------------------------------------------------------------
 
 ### Landwirtschaft
 
--   [Gibt es einen Zusammenhang zwischen landwirtschaftlich genutzter Fläche[^12] und CO2 Emissionen[^13] je Land?]{.fragment .semi-fade-out fragment-index="1"}
+-   [Gibt es einen Zusammenhang zwischen landwirtschaftlicher Nutzfläche und CO2 Emissionen pro Kopf je Land?]{.fragment .semi-fade-out fragment-index="1"}
     -   [Hat die Gesamtfläche einen Einfluss?]{.fragment .highlight-blue fragment-index="1"}
-
-[^12]: als prozentualer Anteil der Gesamtfläche
-
-[^13]: pro Kopf
 
 ------------------------------------------------------------------------
 
 #### Gesamtfläche hat keinen Einfluss
 
-Es scheint kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^14] zu existieren
+In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^13] vor.
 
-[^14]: bzgl. CO2 Emissionen pro Kopf und Anteil landwirtschaftlich genutzter Fläche
+[^13]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
 ```{r Landwirtschaft 6}
-Q5_plots[[5]]
+Q5_plots[[3]]
 ```
 
 # Agenda
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
-1.  Struktur der Daten
+1.  Terminologie
 :::
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
@@ -645,8 +561,8 @@ Q5_plots[[5]]
 
 ::: incremental
 -   Zugang zu Elektrizität korreliert stark mit dem Nettonationaleinkommen pro Kopf
--   Eine hohe Staatsverschuldung hat keinen Zusammenhang mit einer geringen Bildungsquote der Erwerbspersonen
--   Ein Zusammenhang zwischen Alkoholkonsum und HIV-Prävalenz besteht vermutlich nicht
+-   Eine hohe Staatsverschuldung hat keinen Zusammenhang mit einer geringen Bildungsquote
+-   Ein Zusammenhang zwischen Alkoholkonsum und HIV-Prävalenz gibt es in den Daten nicht
 -   Es besteht ein negativer Zusammenhang zwischen Tabakkonsum und BIP pro Kopf
 -   Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es keinen Zusammenhang
 :::

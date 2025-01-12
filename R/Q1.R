@@ -16,7 +16,7 @@ Q1 <- function() {
     ggplot(aes(x = Year, y = Country_Name)) +
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
-    labs(title = "Beobachtungen zum Nettonationaleinkommen pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    labs(title = "Beobachtungen zum NNE pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
     scale_x_discrete(guide = guide_axis(angle = 45), 
                      breaks = seq(2000, 2021, by = 5),
                      labels = seq(2000, 2021, by = 5)) +
@@ -33,8 +33,8 @@ Q1 <- function() {
     scale_x_continuous(label = scales::label_number(suffix = "%")) +
     scale_y_log10(label = scales::label_number(suffix = "$")) +
     scale_color_manual(values = country_colors) +
-    labs(x = "Zugang zu Elektrizität\n(Anteil Gesamtbevölkerung)",
-         y = "Netto-pro-Kopf-Einkommen (bereinigt)",
+    labs(x = "Zugang zu Elektrizität",
+         y = "NNE pro Kopf",
          color = "Land")
   
   correlation <- Worldbank %>%
@@ -68,7 +68,7 @@ Q1 <- function() {
               aes(y = `Adjusted_net_national_income_per_capita_(current_US$)`)
               )+
     scale_y_log10(labels = scales::label_number(suffix = "$")) +
-    labs(y = "Netto-pro-Kopf-Einkommen (bereinigt)")
+    labs(y = "NNE pro Kopf")
   
   # for later use - number of observations per bin
   Electricity_obs_per_bin <- Worldbank %>%
@@ -81,7 +81,7 @@ Q1 <- function() {
     facet_wrap(~Continent, ncol = 2) +
     scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%")) +
-    labs(x = "Zugang zu Elektrizität\n(Anteil Gesamtbevölkerung)",
+    labs(x = "Zugang zu Elektrizität",
          color = "Land") +
     theme(panel.grid.minor = element_blank())
   
@@ -92,7 +92,7 @@ Q1 <- function() {
                          x = electricity_binned, y = 100), 
                      direction = "y", force = 0
                      ) +
-    labs(x = "Zugang zu Elektrizität\n(Anteil Gesamtbevölkerung)")+
+    labs(x = "Zugang zu Elektrizität")+
     theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
   #
   data_p23 <- Worldbank %>%
