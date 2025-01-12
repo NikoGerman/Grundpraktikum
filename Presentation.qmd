@@ -63,6 +63,12 @@ augmentData()
 
 -   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs - definiert durch 
 $$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
+```{r Spearman, fig.align='center'}
+p <- spearman_examples()
+p
+```
+
+
 
 ## 1. Terminologie
 
@@ -125,7 +131,7 @@ $$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{
 
 Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungen bezüglich des NNE pro Kopf.
 
-```{r Elektrizität 0}
+```{r Elektrizität 0, fig.align='center'}
 Q1_plots <- Q1()
 Q1_plots[[10]]
 ```
@@ -136,7 +142,7 @@ Q1_plots[[10]]
 
 Zwischen der Elektrifizierung und dem NNE pro Kopf scheint ein positiver Zusammenhang zu existieren.
 
-```{r Elektrizität 1}
+```{r Elektrizität 1, fig.align='center'}
 Q1_plots[[9]]
 ```
 
@@ -147,7 +153,7 @@ Q1_plots[[9]]
 -   Der positive Zusammenhang ist auf allen Kontinenten vorhanden
 -   Ein Großteil der Länder verfügt bereites über einen Elektrifizierungsgrad \> 75%
 
-```{r Elektrizität 2}
+```{r Elektrizität 2, fig.align='center'}
 (Q1_plots[[2]] | Q1_plots[[3]]) + plot_layout(axis = "collect")
 ```
 
@@ -158,7 +164,7 @@ Q1_plots[[9]]
 -   Aufgrund der Nichtlinearität verwenden wir Rangkorrelation
 -   Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität, hier lässt sich kein Korrelationskoeffizient berechnen
 
-```{r Elektrizität 3}
+```{r Elektrizität 3, fig.align='center'}
 knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 ```
 
@@ -166,7 +172,7 @@ knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 
 #### Korrelationskoeefizient überwiegend positiv
 
-```{r Elektrizität 4}
+```{r Elektrizität 4, fig.align='center'}
 Q1_plots[[1]]
 ```
 
@@ -186,7 +192,7 @@ Q1_plots[[1]]
 
 Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Landesgröße
 
-```{r Elektrizität 5}
+```{r Elektrizität 5, fig.align='center'}
 (Q1_plots[[4]] / Q1_plots[[5]]) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
@@ -206,7 +212,7 @@ Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Lande
 
 Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zusammenhang mit der Stärke und Richtung der Rangkorrelation
 
-```{r Elektrizität 6}
+```{r Elektrizität 6, fig.align='center'}
 (Q1_plots[[6]] / Q1_plots[[7]]) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
@@ -237,22 +243,23 @@ Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zus
 
 ------------------------------------------------------------------------
 
-#### Daten fehlen großflächig
+<!-- #### Daten fehlen großflächig -->
 
-Sowohl zur Staatsverschuldung, als auch zur Bildunsgquote fehlen Daten.
+<!-- Sowohl zur Staatsverschuldung, als auch zur Bildunsgquote fehlen Daten. -->
 
-```{r Bildung 1}
-Q2_plots <- Q2()
-Q2_plots[[1]]
-```
+<!-- ```{r Bildung 1} -->
+<!-- Q2_plots <- Q2() -->
+<!-- Q2_plots[[1]] -->
+<!-- ``` -->
 
-------------------------------------------------------------------------
+<!-- ------------------------------------------------------------------------ -->
 
 #### Wenige komplette Paare
 
 Es gibt lediglich eine geringe Anzahl an kompletten Paaren von Staatsverschuldung und Bildungsquote bezüglich Land und Jahr
 
-```{r Bildung 2}
+```{r Bildung 2, fig.align='center'}
+Q2_plots <- Q2()
 Q2_plots[[2]]
 ```
 
@@ -262,7 +269,7 @@ Q2_plots[[2]]
 
 Betrachtet man Staatsverschuldung und Bildungsquote je Land, zeichnet sich kein einheitlicher Trend ab.
 
-```{r Bildung 3}
+```{r Bildung 3, fig.align='center'}
 Q2_plots[[3]]
 ```
 
@@ -272,7 +279,7 @@ Q2_plots[[3]]
 
 Der Korrelationskoeffizient der einzelnen Länder zeigt ein uneinheitliches Bild hinsichtlich Richtung und Stärke.
 
-```{r Bildung 4}
+```{r Bildung 4, fig.align='center'}
 Q2_plots[[4]]
 ```
 
@@ -283,7 +290,7 @@ Q2_plots[[4]]
 -   Die durchschnittlichen Werte für Staatsverschuldung und Bildungsquote haben einen leicht positiven Zusammenhang
 -   Durch Entfernen des Ausreißers (Vereingtes Königreich) verschwindet dieser Effekt
 
-```{r Bildung 5}
+```{r Bildung 5, fig.align='center'}
 Q2_plots[[5]]
 ```
 
@@ -301,7 +308,7 @@ Q2_plots[[5]]
 
 Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es in den betrachteten Daten keine Beziehung.
 
-```{r Bildung 6}
+```{r Bildung 6, fig.align='center'}
 Q2_plots[[6]]
 ```
 
@@ -313,7 +320,7 @@ Q2_plots[[6]]
 -   Auch für die Länder mit den durchschnittlich höchsten Bildungsquote
 -   Ein Rückschluss auf die Bildungsqualität ist nicht möglich
 
-```{r Bildung 7}
+```{r Bildung 7, fig.align='center'}
 Q2_plots[[7]]
 ```
 
@@ -344,7 +351,7 @@ Q2_plots[[7]]
 -   In den Daten fehlen Beobachtungspaare für sieben Länder
 -   Beobachtungen für das Jahr 2021 fehlen komplett
 
-```{r HIV-Prävalenz 1}
+```{r HIV-Prävalenz 1, fig.align='center'}
 Q3_plots <- Q3()
 Q3_plots[[1]]
 ```
@@ -355,7 +362,7 @@ Q3_plots[[1]]
 
 Vier hauptsächlich muslimisch geprägte Länder beeinflussen die Trendlinie maßgeblich.
 
-```{r HIV-Prävalenz 2}
+```{r HIV-Prävalenz 2, fig.align='center'}
 Q3_plots[[3]]
 ```
 
@@ -366,7 +373,7 @@ Q3_plots[[3]]
 -   Trend auch auf Kontinent-Ebene vorhanden
 -   keine Fortsetzung auf Ebene der Länder
 
-```{r HIV-Prävalenz 3}
+```{r HIV-Prävalenz 3, fig.align='center'}
 Q3_plots[[2]]
 ```
 
@@ -374,7 +381,7 @@ Q3_plots[[2]]
 
 #### Korrelation auf Länderebene uneinheitlich
 
-```{r HIV-Prävalenz 4}
+```{r HIV-Prävalenz 4, fig.align='center'}
 Q3_plots[[4]]
 ```
 
@@ -392,7 +399,7 @@ Q3_plots[[4]]
 - Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz. 
 - In den betrachteten Daten scheint es sogar gegenteilig zu sein.
 
-```{r HIV-Prävalenz 5}
+```{r HIV-Prävalenz 5, fig.align='center'}
 Q3_plots[[5]]
 ```
 
@@ -421,7 +428,7 @@ Q3_plots[[5]]
 -   Beobachtungen zur Prävalenz des Tabakkonsums für Aruba fehlen durchgängig
 -   für die übrigen Länder liegen sie vor 2018 nur alle fünf Jahre vor
 
-```{r Tabak 1}
+```{r Tabak 1, fig.align='center'}
 Q4_plots <- Q4()
 Q4_plots[[1]]
 ```
@@ -432,7 +439,7 @@ Q4_plots[[1]]
 
 Auf allen Kontinenten korrelieren höhere BIPs mit niedrigerer Prävalenz des Tabakkonsums
 
-```{r Tabak 2}
+```{r Tabak 2, fig.align='center'}
 Q4_plots[[2]]
 ```
 
@@ -443,7 +450,7 @@ Q4_plots[[2]]
 -   Für die Gesamtheit der ärmeren Volkswirtschaften verschwindet der Trend
 -   Auf Länderebene existiert der Trend weiter
 
-```{r Tabak 3}
+```{r Tabak 3, fig.align='center'}
 (Q4_plots[[4]] | Q4_plots[[3]]) + plot_layout(axes = "collect") + 
   plot_annotation(title = "BIP pro Kopf kleiner 20 000$")
 ```
@@ -454,7 +461,7 @@ Q4_plots[[2]]
 
 Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
 
-```{r Tabak 4}
+```{r Tabak 4, fig.align='center'}
 (Q4_plots[[6]] | Q4_plots[[5]]) + plot_layout(axes = "collect") + 
   plot_annotation(title = "BIP pro Kopf größer 20 000$")
 ```
@@ -484,7 +491,7 @@ Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, al
 
 Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen
 
-```{r Landwirtschaft 1}
+```{r Landwirtschaft 1, fig.align='center'}
 Q5_plots <- Q5()
 Q5_plots[[1]]
 ```
@@ -497,7 +504,7 @@ Q5_plots[[1]]
 -   Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend
 -   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich Nutzfläche heraus
 
-```{r Landwirtschaft 3}
+```{r Landwirtschaft 3, fig.align='center'}
 Q5_plots[[4]]
 ```
 
@@ -507,7 +514,7 @@ Q5_plots[[4]]
 
 Die Korrelation von landwirtschaftlicher Nutzfläche und CO2 Emissionen pro Kopf variiert in Stärke und Richtung.
 
-```{r Landwirtschaft 4}
+```{r Landwirtschaft 4, fig.align='center'}
 Q5_plots[[2]]
 ```
 
@@ -518,7 +525,7 @@ Q5_plots[[2]]
 Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich kein Trend ab
 
 
-```{r Landwirtschaft 5}
+```{r Landwirtschaft 5, fig.align='center'}
 Q5_plots[[5]]
 ```
 
@@ -537,7 +544,7 @@ In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Kor
 
 [^13]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
-```{r Landwirtschaft 6}
+```{r Landwirtschaft 6, fig.align='center'}
 Q5_plots[[3]]
 ```
 
