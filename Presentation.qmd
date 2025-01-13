@@ -1,8 +1,8 @@
 ---
 title: "Worldbank Datensatz"
-subtitle: "verschiedene Fragestellungen"
+subtitle: "Projektpartner: Elisabeth Lucke, Noemi Castelletti"
 author: "Thomas Witzani, Wenxuan Liang, Nikolai German, Yanyu Zhao"
-institute: "Elisabeth Lucke"
+institute: "Gruppe G"
 date: "20. Januar 2025"
 date-format: "DD. MMMM YYYY"
 lang: de
@@ -29,7 +29,7 @@ augmentData()
 
 :::: {.fragment .fade-in fragment-index="1"}
 ::: {.fragment .highlight-blue fragment-index="4"}
-1.  Terminologie
+1.  Hintergrund
 :::
 ::::
 
@@ -45,32 +45,52 @@ augmentData()
 :::
 ::::
 
-## 1. Terminologie
+## 1. Hintergrund
+### Datenlage
+
+::::: columns
+::: {.column width="35%"}
+- 3 Datensätze:
+  - Worldbank 1
+  - Worldbank 2
+  - CO2 Emissions
+- identische Struktur
+- 25 unterschiedliche Länder
+- 18 unterschiedliche Merkmale
+:::
+
+::: {.column width="65%"}
+|Spaltenname            |Beschreibung                             |
+|-----------------------|-----------------------------------------|
+|Country Name           |Name des Landes                          |
+|Country Code           |3 Buchstaben Abkürzung des Landes        |
+|Series Name            |Name des untersuchten Merkmals           |
+|Series Code            |eindeutiges Kürzel des Merkmals          |
+|2000                   |Ausprägungen der Merkmale in 2000        |
+|...                    |...                                      |
+|2021                   |Ausprägungen der Merkmale in 2021        |
+|average                |durchschnittliche Ausprägung der Merkmale|
+:::
+:::::
+
+
+## 1. Hintergrund
+### Terminologie
 
 :::{.incremental}
 -   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen (Inlandsprinzip)
 
--   **BNE**: Bruttonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen (Inländerprinzip)
-
--   **NNE**: Nettonationaleinkommen - BNE abzüglich Abschreibungen
+-   **NNE**: Nettonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen, abzüglich Abschreibungen
 
 -   **Erwerbspersonen**: Erwerbstätige & Arbeits*suchende*
 
 -   **Äquivalent reiner Alkohol**: ein Liter reiner Alkohol entspricht 20 Litern Bier à 5% Alkoholgehalt
+
+-   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs
 :::
 
-## 1. Terminologie
-
--   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs - definiert durch 
-$$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
-```{r Spearman, fig.align='center'}
-p <- spearman_examples()
-p
-```
-
-
-
-## 1. Terminologie
+## 1. Hintergrund
+### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
 |---------|--------------|
@@ -81,7 +101,8 @@ p
 |CO2 Emissionen pro Kopf        |CO2 Emissionen pro Einwohner gerechnet|
 
 
-## 1. Terminologie
+## 1. Hintergrund
+### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
 |---------|--------------|
@@ -94,7 +115,7 @@ p
 # Agenda
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
-1.  Terminologie
+1.  Hintergrund
 :::
 
 ::: {.fragment .highlight-blue fragment-index="1"}
@@ -551,7 +572,7 @@ Q5_plots[[3]]
 # Agenda
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
-1.  Terminologie
+1.  Hintergrund
 :::
 
 ::: {.fragment .semi-fade-out fragment-index="1"}
@@ -567,11 +588,11 @@ Q5_plots[[3]]
 ### Zusammenfassung
 
 ::: incremental
--   Zugang zu Elektrizität korreliert stark mit dem Nettonationaleinkommen pro Kopf
--   Eine hohe Staatsverschuldung hat keinen Zusammenhang mit einer geringen Bildungsquote
+-   Zugang zu Elektrizität korreliert im Datensatz stark mit dem Nettonationaleinkommen pro Kopf
+-   Eine hohe Staatsverschuldung hat in den vorhandenen Daten keinen Zusammenhang mit einer geringen Bildungsquote
 -   Ein Zusammenhang zwischen Alkoholkonsum und HIV-Prävalenz gibt es in den Daten nicht
--   Es besteht ein negativer Zusammenhang zwischen Tabakkonsum und BIP pro Kopf
--   Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es keinen Zusammenhang
+-   Im Datensatz existiert ein negativer Zusammenhang zwischen Tabakkonsum und BIP pro Kopf
+-   Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es keinen Zusammenhang in den vorliegenden Daten
 :::
 
 ------------------------------------------------------------------------
@@ -585,3 +606,24 @@ Q5_plots[[3]]
 -   Ist der negative Zusammenhang zwischen Tabakkonsum und BIP pro Kopf auf die Anti-Rauch-Gesetze der letzten Jahrzehnte zurückzuführen?
 -   Sind die CO2-Daten plausibel?
 :::
+
+## 
+
+## 3. Zusammenfassung und Diskussion
+### Spearman-(Rang-)Korrelation
+
+Definition:
+$$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
+```{r Spearman, fig.align='center'}
+p <- spearman_examples()
+p
+```
+
+## 3. Zusammenfassung und Diskussion
+### Volkswirtschaftliche Gesamtrechnung
+
+-   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen (Inlandsprinzip)
+
+-   **BNE**: Bruttonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen (Inländerprinzip)
+
+-   **NNE**: Nettonationaleinkommen - BNE abzüglich Abschreibungen
