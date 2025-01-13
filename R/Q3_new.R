@@ -58,7 +58,8 @@ Q3 <- function() {
   
   # view facetted per continent
   p1.1 <- p1 + facet_wrap(~Continent, ncol = 3) + 
-    guides(color = "none")
+    #guides(color = "none")
+    theme(legend.position='right')
   
   # view Asia
   p1.2 <- p1 %+% (Worldbank %>% 
