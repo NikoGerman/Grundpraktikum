@@ -37,6 +37,26 @@ spearman_examples <- function() {
   return(p_out)
 }
 
+graphVGR <- grViz("
+  digraph {
+  layout = dot
+    node [shape = diamond, color=lightblue, style=filled,fixedsize=False, fontname=Helvetica, labelType=\"html\"]
+    edge[color=grey,arrowhead=vee,minlen = 1]
+    
+    BIP[label = <<b>Bruttoinlandsprodukt</b>>]
+    BNE[label = <<b>Bruttonationaleinkommen</b>>]
+    NNE[label = <<b>Nettonationaleinkommen</b>>]
+  
+    BIP -> BNE[label=<Saldo Primäreinkommen>, fontname=Helvetica]
+    BNE -> NNE[label=<Abschreibungen>, fontname=Helvetica]
+    
+    edge [minlen = 2]
+    
+  }
+   ")
+
+svg_VGR <- DiagrammeRsvg::export_svg(graphVGR)
+rsvg::rsvg_png(charToRaw(svg_VGR), file = "./Ressources/graphVGR.png", height = 1440)
 
 
 

@@ -622,8 +622,18 @@ p
 ## 3. Zusammenfassung und Diskussion
 ### Volkswirtschaftliche Gesamtrechnung
 
--   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen (Inlandsprinzip)
+<img src="./Ressources/graphVGR.png" width="800"/>
 
--   **BNE**: Bruttonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen (Inländerprinzip)
 
--   **NNE**: Nettonationaleinkommen - BNE abzüglich Abschreibungen
+## 3. Zusammenfassung und Diskussion
+### Trendlinien
+
+-   Die Trendlinien in den Graphen wurden durch (einfache) Lineare Regression erzeugt
+
+-   Das Kleinste-Quadrate (KQ) Problem lautet $$\hat{\beta} = \operatorname*{arg\,min}_\beta \sum (y_i - \beta_0 + x_i\,\beta_1)^2$$ 
+
+-   Die Regressionsgerade ist dann gegeben durch $y = \hat{\beta_0} + x\,\hat{\beta_1}$
+
+
+
+

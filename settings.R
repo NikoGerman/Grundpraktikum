@@ -8,6 +8,11 @@ library(forcats)
 library(checkmate)
 library(readxl)
 library(patchwork)
+library(DiagrammeR)
+library(DiagrammeRsvg)
+library(htmlwidgets)
+library(rsvg)
+
 # set ggplot theme
 theme_set(theme_light() + 
             theme(plot.title = element_text(hjust = 0.5, size = 14)))
