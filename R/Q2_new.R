@@ -156,6 +156,7 @@ Q2 <- function() {
                                 select(Country_Name) %>%
                                 pull())
     ) %>%
+    filter(!is.na(`Pupil-teacher_ratio_tertiary`)) %>%
     ggplot(aes(x = Year,
            y = `Pupil-teacher_ratio_tertiary`,
            color = Country_Name,
@@ -172,7 +173,7 @@ Q2 <- function() {
                                                    pull())
                        ) %>%
                        filter(!is.na(`Pupil-teacher_ratio_tertiary`)) %>%
-                       slice_max(Year, by = `Country_Name`),
+                       slice_min(Year, by = `Country_Name`),
                      aes(label = `Country_Name`),
                      size = 3,
                      max.overlaps = 10) +

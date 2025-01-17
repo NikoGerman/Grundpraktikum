@@ -150,7 +150,7 @@ augmentData()
 
 #### Daten fast vollständig
 
-Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungen bezüglich des NNE pro Kopf.
+Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungspaare.
 
 ```{r Elektrizität 0, fig.align='center'}
 Q1_plots <- Q1()

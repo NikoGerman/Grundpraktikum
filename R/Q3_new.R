@@ -58,8 +58,14 @@ Q3 <- function() {
   
   # view facetted per continent
   p1.1 <- p1 + facet_wrap(~Continent, ncol = 3) + 
-    #guides(color = "none")
-    theme(legend.position='right')
+    guides(color = "none") +
+    geom_label_repel(data = Worldbank %>%
+                       filter(!is.na(`Prevalence_of_HIV_total_(%_of_population_ages_15-49)`) & 
+                                !is.na(`Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`)) %>%
+                       group_by(Country_Name) %>%
+                       slice_max(order_by = Year),
+                     aes(label = Country_Name), max.overlaps = 5, alpha = .65)
+    #theme(legend.position='right')
   
   # view Asia
   p1.2 <- p1 %+% (Worldbank %>% 
