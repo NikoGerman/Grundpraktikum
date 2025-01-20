@@ -30,7 +30,7 @@ Q2 <- function() {
                mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden")))) +
     ggtitle("Beobachtungen zur Bildungsquote")
   
-  p0.1 <- (p0.1A| p0.1B) + plot_layout(axes = "collect", guides = "collect")
+  # p0.1 <- (p0.1A| p0.1B) + plot_layout(axes = "collect", guides = "collect")
   
   p0.2 <- p0.1A %+% (Worldbank %>%
                group_by(Year, Country_Name) %>%
@@ -39,6 +39,25 @@ Q2 <- function() {
                ungroup() %>%
                mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden")))) +
     ggtitle("Beobachtungen zu Staatsverschuldung und Bildungsquote")
+  
+  
+  p0.1 <- Worldbank %>%
+    group_by(Year, Country_Name) %>%
+    summarize(Missing = is.na(`Pupil-teacher_ratio_tertiary`) | 
+                is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
+    ungroup() %>%
+    mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden"))) %>%
+    ggplot(aes(x = Year, y = Country_Name)) +
+    geom_tile(aes(fill = Missing), alpha = .7) +
+    scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
+    labs(title = "Beobachtungen zu Bildungsquote und Schüler-Lehrer-Verhältnis", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    scale_x_discrete(guide = guide_axis(angle = 45), 
+                     breaks = seq(2000, 2021, by = 5),
+                     labels = seq(2000, 2021, by = 5)) +
+    theme(#panel.grid.major = element_blank(),
+      #panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      axis.line = element_line(color = "grey", linewidth = .25))
   
   ###########
   #########
@@ -97,9 +116,68 @@ Q2 <- function() {
     geom_label_repel(aes(label = Country_Name)) +
     scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
-    scale_y_continuous(label = scales::label_number(suffix = "%")) +
+    scale_y_continuous(label = scales::label_number(suffix = "%"), limits = c(0, 80)) +
     labs(x = "Staatsverschuldung",
          y = "Bildungsquote")
+  
+  p1.3U <- Worldbank %>%
+    group_by(Country_Name) %>%
+    summarise(mean_debt = median(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
+              mean_education = median(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
+    ungroup() %>%
+    ggplot(aes(x = mean_debt,
+               y = mean_education,
+               color = Country_Name)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "grey") +
+    geom_label_repel(aes(label = Country_Name)) +
+    scale_color_manual(values = country_colors, guide = "none") +
+    scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
+    scale_y_continuous(label = scales::label_number(suffix = "%"), limits = c(0, 80)) +
+    labs(x = "Staatsverschuldung",
+         y = "Bildungsquote")
+  
+  p1.3V <- Worldbank %>%
+    filter(!is.na(`Central_government_debt_total_(%_of_GDP)`) &
+             !is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
+    group_by(Country_Name) %>%
+    slice_min(Year) %>%
+    summarise(mean_debt = mean(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
+              mean_education = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
+    ungroup() %>%
+    ggplot(aes(x = mean_debt,
+               y = mean_education,
+               color = Country_Name)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "grey") +
+    geom_label_repel(aes(label = Country_Name)) +
+    scale_color_manual(values = country_colors, guide = "none") +
+    scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
+    scale_y_continuous(label = scales::label_number(suffix = "%"), limits = c(0, 80)) +
+    labs(x = "Staatsverschuldung",
+         y = "Bildungsquote")
+  
+  p1.3W <- Worldbank %>%
+    filter(!is.na(`Central_government_debt_total_(%_of_GDP)`) &
+             !is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
+    group_by(Country_Name) %>%
+    slice_max(Year) %>%
+    summarise(mean_debt = mean(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
+              mean_education = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
+    ungroup() %>%
+    ggplot(aes(x = mean_debt,
+               y = mean_education,
+               color = Country_Name)) +
+    geom_point() +
+    geom_smooth(method = "lm", se = FALSE, color = "grey") +
+    geom_label_repel(aes(label = Country_Name)) +
+    scale_color_manual(values = country_colors, guide = "none") +
+    scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
+    scale_y_continuous(label = scales::label_number(suffix = "%"), limits = c(0, 80)) +
+    labs(x = "Staatsverschuldung",
+         y = "Bildungsquote")
+  
+  p.X <- (p1.3V + ggtitle("Erste")| p1.3A +ggtitle("Durchschnitt")| p1.3U + ggtitle("Mittlere") | p1.3W +ggtitle("Letzte")) + plot_layout(axes = "collect")
   
   p1.3B <- p1.3A %+% (Worldbank %>%
     group_by(Country_Name) %>%
@@ -212,6 +290,7 @@ Q2 <- function() {
               p1.2,
               p1.3,
               p2.1,
-              p2.2))
+              p2.2,
+              p.X))
 }
 

@@ -47,31 +47,44 @@ augmentData()
 
 ## 1. Hintergrund
 ### Datenlage
+:::{.incremental}
 
-::::: columns
-::: {.column width="35%"}
-- 3 Datensätze:
-  - Worldbank 1
-  - Worldbank 2
-  - CO2 Emissions
-- identische Struktur
-- 25 unterschiedliche Länder
+- 25 verschiedene Länder
 - 18 unterschiedliche Merkmale
+- jährliche Beobachtungen
+- Erste Beobachtung: Jahr 2000
+- Letzte Beobachtung: Jahr 2021
+
 :::
 
-::: {.column width="65%"}
-|Spaltenname            |Beschreibung                             |
-|-----------------------|-----------------------------------------|
-|Country Name           |Name des Landes                          |
-|Country Code           |3 Buchstaben Abkürzung des Landes        |
-|Series Name            |Name des untersuchten Merkmals           |
-|Series Code            |eindeutiges Kürzel des Merkmals          |
-|2000                   |Ausprägungen der Merkmale in 2000        |
-|...                    |...                                      |
-|2021                   |Ausprägungen der Merkmale in 2021        |
-|average                |durchschnittliche Ausprägung der Merkmale|
-:::
-:::::
+
+<!-- ## 1. Hintergrund -->
+<!-- ### Datenlage -->
+
+<!-- ::::: columns -->
+<!-- ::: {.column width="35%"} -->
+<!-- - 3 Datensätze: -->
+<!--   - Worldbank 1 -->
+<!--   - Worldbank 2 -->
+<!--   - CO2 Emissions -->
+<!-- - identische Struktur -->
+<!-- - 25 unterschiedliche Länder -->
+<!-- - 18 unterschiedliche Merkmale -->
+<!-- ::: -->
+
+<!-- ::: {.column width="65%"} -->
+<!-- |Spaltenname            |Beschreibung                             | -->
+<!-- |-----------------------|-----------------------------------------| -->
+<!-- |Country Name           |Name des Landes                          | -->
+<!-- |Country Code           |3 Buchstaben Abkürzung des Landes        | -->
+<!-- |Series Name            |Name des untersuchten Merkmals           | -->
+<!-- |Series Code            |eindeutiges Kürzel des Merkmals          | -->
+<!-- |2000                   |Ausprägungen der Merkmale in 2000        | -->
+<!-- |...                    |...                                      | -->
+<!-- |2021                   |Ausprägungen der Merkmale in 2021        | -->
+<!-- |average                |durchschnittliche Ausprägung der Merkmale| -->
+<!-- ::: -->
+<!-- ::::: -->
 
 
 ## 1. Hintergrund
@@ -150,7 +163,7 @@ augmentData()
 
 #### Daten fast vollständig
 
-Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungspaare.
+Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungen zum NNE.
 
 ```{r Elektrizität 0, fig.align='center'}
 Q1_plots <- Q1()
@@ -182,8 +195,8 @@ Q1_plots[[9]]
 
 #### Korrelation
 
--   Aufgrund der Nichtlinearität verwenden wir Rangkorrelation
--   Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität, hier lässt sich kein Korrelationskoeffizient berechnen
+-   Einige Länder verfügen im gesamten beobachteten Zeitraum über 100% Zugang zu Elektrizität
+-   Für diese lässt sich kein Korrelationskoeffizient berechnen
 
 ```{r Elektrizität 3, fig.align='center'}
 knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
@@ -191,7 +204,7 @@ knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
 
 ------------------------------------------------------------------------
 
-#### Korrelationskoeefizient überwiegend positiv
+#### Korrelationskoeffizient überwiegend positiv
 
 ```{r Elektrizität 4, fig.align='center'}
 Q1_plots[[1]]
@@ -325,11 +338,21 @@ Q2_plots[[5]]
 
 ------------------------------------------------------------------------
 
+#### Kaum komplette Paare
+
+Für Bildungsquote und Schüler-Lehrer-Verhältnis gibt es nur sehr wenige komplette Paare im Datensatz.
+
+```{r Bildung 6, fig.align='center'}
+Q2_plots[[1]]
+```
+
+------------------------------------------------------------------------
+
 #### Kein Zusammenhang erkennbar
 
 Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es in den betrachteten Daten keine Beziehung.
 
-```{r Bildung 6, fig.align='center'}
+```{r Bildung 7, fig.align='center'}
 Q2_plots[[6]]
 ```
 
@@ -341,7 +364,7 @@ Q2_plots[[6]]
 -   Auch für die Länder mit den durchschnittlich höchsten Bildungsquote
 -   Ein Rückschluss auf die Bildungsqualität ist nicht möglich
 
-```{r Bildung 7, fig.align='center'}
+```{r Bildung 8, fig.align='center'}
 Q2_plots[[7]]
 ```
 
@@ -634,6 +657,15 @@ p
 
 -   Die Regressionsgerade ist dann gegeben durch $y = \hat{\beta_0} + x\,\hat{\beta_1}$
 
+## 3. Zusammenfassung und Diskussion
+### Aggregierung
+
+- Bei unvollständigen Daten haben wir uns in der Regel für den Mittelwert entschieden
+- andere Formen der Aggregierung können andere Ergebnisse liefern
+
+```{r Aggregierung, fig.align='center'}
+Q2_plots[[8]]
+```
 
 
 

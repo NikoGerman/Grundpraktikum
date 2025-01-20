@@ -10,14 +10,13 @@ Q1 <- function() {
   
   p0 <- Worldbank %>%
     group_by(Year, Country_Name) %>%
-    summarize(Missing = is.na(`Adjusted_net_national_income_per_capita_(current_US$)`) |
-                is.na(`Access_to_electricity_(%_of_population)`)) %>%
+    summarize(Missing = is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
     ungroup() %>%
     mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden"))) %>%
     ggplot(aes(x = Year, y = Country_Name)) +
     geom_tile(aes(fill = Missing), alpha = .7) +
     scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
-    labs(title = "Beobachtungspaare zu NNE pro Kopf und Zugang zu Elektrizität", x = "Jahr", y = "Land", fill = "Beobachtung") +
+    labs(title = "Beobachtungen zu NNE pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
     scale_x_discrete(guide = guide_axis(angle = 45), 
                      breaks = seq(2000, 2021, by = 5),
                      labels = seq(2000, 2021, by = 5)) +
