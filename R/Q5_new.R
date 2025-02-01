@@ -111,7 +111,7 @@ Q5 <- function() {
                     aes(label = `Country_Name`),
                     size = 3,
                     max.overlaps = 10) +
-    labs(title = "Landwirtschaftliches Nutzfläche und CO2 Emissionen pro Kopf",
+    labs(title = "Landwirtschaftliche Nutzfläche und CO2 Emissionen pro Kopf",
          x = "Landwirtschaftliche Nutzfläche",
          y = "CO2 Emissionen pro Kopf")
   

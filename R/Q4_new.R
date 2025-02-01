@@ -70,12 +70,15 @@ Q4 <- function() {
 
   
   p1.1 <- p1 %+% (Worldbank %>%
-           filter(`GDP_per_capita_PPP_(constant_2021_international_$)` <= 20000)) +
+                    filter(Development_status == "Industrieland")
+           #filter(`GDP_per_capita_PPP_(constant_2021_international_$)` <= 20000)
+           ) +
     geom_text_repel(data = (Worldbank %>% 
                               group_by(Country_Name) %>%
                               slice_min(order_by = Year) %>%
                               ungroup() %>%
-                              filter(`GDP_per_capita_PPP_(constant_2021_international_$)` <= 20000)),
+                              #filter(`GDP_per_capita_PPP_(constant_2021_international_$)` <= 20000)
+                              filter(Development_status == "Industrieland")),
                     aes(label = Country_Name),
                     size = 3, max.overlaps = 10)
   
@@ -87,12 +90,14 @@ Q4 <- function() {
     
     
   p1.2 <- p1 %+% (Worldbank %>%
-    filter(`GDP_per_capita_PPP_(constant_2021_international_$)` > 20000)) +
+    #filter(`GDP_per_capita_PPP_(constant_2021_international_$)` > 20000)
+      filter(Development_status != "Industrieland")) +
     geom_text_repel(data = (Worldbank %>% 
                       group_by(Country_Name) %>%
                       slice_min(order_by = Year) %>%
                       ungroup() %>%
-                      filter(`GDP_per_capita_PPP_(constant_2021_international_$)` > 20000)),
+                      #filter(`GDP_per_capita_PPP_(constant_2021_international_$)` > 20000)
+                        filter(Development_status != "Industrieland")),
                     aes(label = Country_Name),
                     size = 3, max.overlaps = 10)
   

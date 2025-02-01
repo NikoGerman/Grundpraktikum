@@ -1,14 +1,38 @@
 Q1 <- function() {
-  #####
-  # Welcher Zusammenhang besteht zwischen der Stromversorgung und 
-  # dem bereinigten Netto-Pro-Kopf-Einkommen in verschiedenen Ländern?
-  # Hängt dies auch von der Fläche oder der Bevölkerung eines Landes ab?
-  #####
-  # calculate spearman correlation coefficients
+  # ----------------------
+  # Question:
+  #   - Welcher Zusammenhang besteht zwischen der Stromversorgung und 
+  #     dem bereinigten Netto-Pro-Kopf-Einkommen in verschiedenen Ländern?
+  #   - Hängt dies auch 
+  #       - von der Fläche oder 
+  #       - der Bevölkerung
+  #     eines Landes ab?
+  # ----------------------
+  
+  # ----------------------
+  # load Data
+  # ----------------------
   Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
   country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
   
-  p0 <- Worldbank %>%
+  # ----------------------
+  # calculate spearman correlation between
+  #   - Access to Electricity
+  #   - Net National income p.c.
+  # by country, only keep the non-NA values
+  # ----------------------
+  correlation <- Worldbank %>%
+    group_by(Country_Name) %>%
+    summarize(r_spearman = cor(x = `Access_to_electricity_(%_of_population)`, 
+                               y = `Adjusted_net_national_income_per_capita_(current_US$)`,
+                               method = "spearman",
+                               use = "na.or.complete")) %>%
+    filter(!is.na(r_spearman))
+  
+  # ----------------------
+  # plot Missingness of Net National Income p.c.
+  # ----------------------
+  missingness <- Worldbank %>%
     group_by(Year, Country_Name) %>%
     summarize(Missing = is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
     ungroup() %>%
@@ -25,7 +49,11 @@ Q1 <- function() {
           panel.border = element_blank(),
           axis.line = element_line(color = "grey", linewidth = .25))
   
-  p1.0 <- Worldbank %>%
+  # ----------------------
+  #   - plot Access to Electricity vs Net National Income p.c.
+  #   - color countries by using countrycolors
+  # ----------------------
+  plot1 <- Worldbank %>%
     ggplot(aes(x = `Access_to_electricity_(%_of_population)`,
                y = `Adjusted_net_national_income_per_capita_(current_US$)`,
                color = Country_Name)) +
@@ -36,16 +64,60 @@ Q1 <- function() {
     labs(x = "Zugang zu Elektrizität",
          y = "NNE pro Kopf",
          color = "Land")
+
+  # ----------------------
+  #   - create basic plot with Net National Income p.c on y-axis
+  #   - y-axis is logarithmic
+  # ----------------------
+  plot2_basic <- ggplot(Worldbank,
+              aes(y = `Adjusted_net_national_income_per_capita_(current_US$)`)
+              )+
+    scale_y_log10(labels = scales::label_number(suffix = "$")) +
+    labs(y = "NNE pro Kopf")
   
-  correlation <- Worldbank %>%
-    group_by(Country_Name) %>%
-    summarize(r_spearman = cor(x = `Access_to_electricity_(%_of_population)`, 
-                              y = `Adjusted_net_national_income_per_capita_(current_US$)`,
-                              method = "spearman",
-                              use = "na.or.complete")) %>%
-    filter(!is.na(r_spearman))
-  #
-  p1.1 <- correlation %>%
+  # ----------------------
+  #   - use plot2_basic and add Access to Elektricity on x-Axis
+  #   - scatterplot
+  #   - facetting by continent
+  #   - countries get colored by countryColors
+  # ----------------------
+  plot2_part1 <- plot2_basic + 
+    geom_point(aes(x = `Access_to_electricity_(%_of_population)`), color = "grey", alpha = .7) +
+    facet_wrap(~Continent, ncol = 2) +
+    #scale_color_manual(values = country_colors, guide = "none") +
+    scale_x_continuous(label = scales::label_number(suffix = "%"),
+                       guide = guide_axis(angle = 45)) +
+    labs(x = "Zugang zu Elektrizität",
+         color = "Land") +
+    theme(panel.grid.minor = element_blank())
+  
+  # ----------------------
+  #   - use plot2_basic and add electricity binned on x-Axis
+  #   - histogram per bin
+  #   - number of obervations per bin gets calculated and is added as label
+  # ----------------------
+  plot2_part2 <- plot2_basic + geom_boxplot(aes(x = electricity_binned, group = electricity_binned)) +
+    geom_label_repel(data = Worldbank %>%
+                       group_by(electricity_binned) %>%
+                       summarize(count = n()),
+                     aes(label = paste("n =", count),
+                         x = electricity_binned, y = 100), 
+                     direction = "y", force = 0
+                     ) +
+    labs(x = "Zugang zu Elektrizität")+
+    theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
+  
+  # ----------------------
+  #   - using patchwork, combine _part1 and _part2 to plot2
+  #   - y axis (Net National Income p.c.) gets collected
+  # ----------------------
+  plot2 <- (plot2_part1 | plot2_part2) + plot_layout(axis = "collect")
+  
+  # ----------------------
+  # plot 3
+  #   - plot correlation by country
+  # ----------------------
+  plot3 <- correlation %>%
     ggplot(aes(x = r_spearman, y = forcats::fct_reorder(`Country_Name`, r_spearman))) +
     geom_col(fill = "lightblue") +
     geom_vline(xintercept = 0, color = "red") +
@@ -63,44 +135,25 @@ Q1 <- function() {
           axis.line = element_line(color = "grey", linewidth = .25)) +
     scale_x_continuous(limits = c(-1, 1))
   
-  # basic plot
-  p1.23 <- ggplot(Worldbank,
-              aes(y = `Adjusted_net_national_income_per_capita_(current_US$)`)
-              )+
-    scale_y_log10(labels = scales::label_number(suffix = "$")) +
-    labs(y = "NNE pro Kopf")
-  
-  # for later use - number of observations per bin
-  Electricity_obs_per_bin <- Worldbank %>%
-    group_by(electricity_binned) %>%
-    summarize(count = n())
-  
-  # scatterplot faceted by continent
-  p1.2 <- p1.23 + 
-    geom_point(aes(x = `Access_to_electricity_(%_of_population)`, color = `Country_Name`)) +
-    facet_wrap(~Continent, ncol = 2) +
-    scale_color_manual(values = country_colors, guide = "none") +
-    scale_x_continuous(label = scales::label_number(suffix = "%")) +
-    labs(x = "Zugang zu Elektrizität",
-         color = "Land") +
-    theme(panel.grid.minor = element_blank())
-  
-  # bosxplots with 25% intervals
-  p1.3 <- p1.23 + geom_boxplot(aes(x = electricity_binned, group = electricity_binned)) +
-    geom_label_repel(data = Electricity_obs_per_bin,
-                     aes(label = paste("n =", count),
-                         x = electricity_binned, y = 100), 
-                     direction = "y", force = 0
-                     ) +
-    labs(x = "Zugang zu Elektrizität")+
-    theme(panel.grid.major.x = element_blank(), panel.grid.minor.x = element_blank())
-  #
-  data_p23 <- Worldbank %>%
+  # ----------------------
+  #   - build data for plot 4
+  #   - calculate mean Population and Surface Area per Country
+  #   - join the correlation data from before
+  # ----------------------
+  data_plot4 <- Worldbank %>%
     group_by(`Country_Name`) %>%
     summarize(avg_pop = mean(`Population_total`), surface = mean(`Surface_area_(sq_km)`)) %>%
     full_join(correlation)
-  #
-  p2.1 <- data_p23 %>%
+  
+  # ----------------------
+  # plot4_part1
+  #   - plot surface vs correlation of Access to Electricity and Net National Income p.c
+  #   - as scatterplot, each point represents a country
+  #   - add regression line using simple linear regression ("lm")
+  #   - label points with the name of the respective country
+  #   - x has a logarithmic scale
+  # ----------------------
+  plot4_part1 <- data_plot4 %>%
     ggplot(aes(x = surface, y = r_spearman, color = Country_Name)) +
     scale_x_log10(limits = c(1e2, 1e8), labels = scales::label_number(suffix = " qkm")) +
     scale_color_manual(values = country_colors, guide = "none") +
@@ -113,20 +166,65 @@ Q1 <- function() {
     ylim(-.5, 1.25) +
     labs(y = "Korrellationskoeffizient")  +
     labs(x = "Landesfläche")
-  #
-  p2.2 <- p2.1 %+%
-    (data_p23 %>%
-       filter(Country_Name != "Aruba")) +
-    labs(x = "Landesfläche")
-  #
-  p3.1 <- p2.1 %+% aes(x = avg_pop/1000000) %+%
-    scale_x_log10(limits = c(5e-2, 3e3), labels = scales::label_number(suffix = " Mio")) +
-    labs(x = "Bevölkerung")
-  #
-  p3.2 <- p2.2 %+% aes(x = avg_pop/1000000) %+%
+  
+  # ----------------------
+  # plot4_part2
+  #   - same as part1, but without Aruba, since its small size has huge impact
+  # ----------------------
+  plot4_part2 <- plot4_part1 %+%
+    (data_plot4 %>%
+       filter(Country_Name != "Aruba"))
+  
+  # ----------------------
+  # plot4
+  #   - using patchwork, combine part1 and part2
+  #   - collect the x and y axis
+  # ----------------------
+  plot4 <- (plot4_part1 / plot4_part2) +
+    plot_layout(axes = "collect") +
+    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
+  
+  # ----------------------
+  # plot5_part1
+  #   - same as plot4_part1, but population instead of surface on x-axis
+  # ----------------------
+  plot5_part1 <- plot4_part1 %+% aes(x = avg_pop/1000000) %+%
     scale_x_log10(limits = c(5e-2, 3e3), labels = scales::label_number(suffix = " Mio")) +
     labs(x = "Bevölkerung")
   
+  # ----------------------
+  # plot5_part2
+  #   - same as plot4_part2, but population instead of surface on x-axis
+  # ----------------------
+  plot5_part2 <- plot4_part2 %+% aes(x = avg_pop/1000000) %+%
+    scale_x_log10(limits = c(5e-2, 3e3), labels = scales::label_number(suffix = " Mio")) +
+    labs(x = "Bevölkerung")
+  
+  # ----------------------
+  # plot5
+  #   - using patchwork, combine part1 and part2
+  #   - collect the x and y axis
+  # ----------------------
+  plot5 <- (plot5_part1 / plot5_part2) +
+    plot_layout(axes = "collect") +
+    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
+
+  
+  # return(list(p1.1, 
+  #             p1.2, 
+  #             p1.3, 
+  #             p2.1, 
+  #             p2.2, 
+  #             p3.1, 
+  #             p3.2, 
+  #             t1,
+  #             p1.0,
+  #             p0)) 
+  
+  
+  # ----------------------
+  # table containing the countries with mean Access to Electricity > 99%
+  # ----------------------
   t1 <- Worldbank %>%
     group_by(Country_Name) %>%
     summarize("durchschnittliche Elektrifizierung" = mean(`Access_to_electricity_(%_of_population)`)) %>%
@@ -135,14 +233,17 @@ Q1 <- function() {
     rename(Land = Country_Name) %>%
     mutate(`durchschnittliche Elektrifizierung` = sprintf("%.1f%%", `durchschnittliche Elektrifizierung`))
   
-  return(list(p1.1, 
-              p1.2, 
-              p1.3, 
-              p2.1, 
-              p2.2, 
-              p3.1, 
-              p3.2, 
-              t1,
-              p1.0,
-              p0)) 
+  # ----------------------
+  # return plots and table as named list
+  # ----------------------
+  return(list(
+    missingness = missingness, 
+    plot1 = plot1, 
+    plot2 = plot2, 
+    plot3 = plot3,
+    plot4 = plot4,
+    plot5 = plot5,
+    Table1 = t1
+    )
+  )
 }

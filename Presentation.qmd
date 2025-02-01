@@ -14,7 +14,7 @@ format:
     smaller: true
     footer: "Worldbank Datensatz"
     theme: white
-    logo: "Ressources/LMU_Logo.svg"
+    logo: "Resources/LMU_Logo.svg"
 editor: visual
 ---
 
@@ -46,51 +46,22 @@ augmentData()
 ::::
 
 ## 1. Hintergrund
+
 ### Datenlage
-:::{.incremental}
 
-- 25 verschiedene Länder
-- 18 unterschiedliche Merkmale
-- jährliche Beobachtungen
-- Erste Beobachtung: Jahr 2000
-- Letzte Beobachtung: Jahr 2021
-
+::: incremental
+-   25 verschiedene Länder
+-   18 unterschiedliche Merkmale
+-   jährliche Beobachtungen
+-   Erste Beobachtung: Jahr 2000
+-   Letzte Beobachtung: Jahr 2021
 :::
 
-
-<!-- ## 1. Hintergrund -->
-<!-- ### Datenlage -->
-
-<!-- ::::: columns -->
-<!-- ::: {.column width="35%"} -->
-<!-- - 3 Datensätze: -->
-<!--   - Worldbank 1 -->
-<!--   - Worldbank 2 -->
-<!--   - CO2 Emissions -->
-<!-- - identische Struktur -->
-<!-- - 25 unterschiedliche Länder -->
-<!-- - 18 unterschiedliche Merkmale -->
-<!-- ::: -->
-
-<!-- ::: {.column width="65%"} -->
-<!-- |Spaltenname            |Beschreibung                             | -->
-<!-- |-----------------------|-----------------------------------------| -->
-<!-- |Country Name           |Name des Landes                          | -->
-<!-- |Country Code           |3 Buchstaben Abkürzung des Landes        | -->
-<!-- |Series Name            |Name des untersuchten Merkmals           | -->
-<!-- |Series Code            |eindeutiges Kürzel des Merkmals          | -->
-<!-- |2000                   |Ausprägungen der Merkmale in 2000        | -->
-<!-- |...                    |...                                      | -->
-<!-- |2021                   |Ausprägungen der Merkmale in 2021        | -->
-<!-- |average                |durchschnittliche Ausprägung der Merkmale| -->
-<!-- ::: -->
-<!-- ::::: -->
-
-
 ## 1. Hintergrund
+
 ### Terminologie
 
-:::{.incremental}
+::: incremental
 -   **BIP**: Bruttoinlandsprodukt - alle innerhalb einer Zeiteinheit im Inland hergestellten Waren und Dienstleistungen (Inlandsprinzip)
 
 -   **NNE**: Nettonationaleinkommen - BIP zzgl. Saldo der Primäreinkommen, abzüglich Abschreibungen
@@ -103,27 +74,28 @@ augmentData()
 :::
 
 ## 1. Hintergrund
+
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|---------|--------------|
-|BIP pro Kopf      |BIP pro Einwohner gerechnet, *inflationsbereinigt zu 2021*|
-|NNE pro Kopf      |NNE pro Einwohner gerechnet, *inflationsbereinigt*|
-|Staatsverschuldung             |Staatsverschuldung als Vielfaches des BIP, in %|
-|Landwirtschaftliche Nutzfläche |Anteil der gesamten Landesfläche, der landwirtschaftlich genutzt wird|
-|CO2 Emissionen pro Kopf        |CO2 Emissionen pro Einwohner gerechnet|
-
+|----------------------------|-------------------------------------------|
+| BIP pro Kopf | BIP pro Einwohner gerechnet, *inflationsbereinigt zu 2021* |
+| NNE pro Kopf | NNE pro Einwohner gerechnet, *inflationsbereinigt* |
+| Staatsverschuldung | Staatsverschuldung als Vielfaches des BIP, in % |
+| Landwirtschaftliche Nutzfläche | Anteil der gesamten Landesfläche, der landwirtschaftlich genutzt wird |
+| CO2 Emissionen pro Kopf | CO2 Emissionen pro Einwohner gerechnet |
 
 ## 1. Hintergrund
+
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|---------|--------------|
-|Zugang zu Elektrizität         |Anteil der Bevölkerung mit zuverlässiger Elektrizitätsversorgung |
-|Bildungsquote                  |Anteil der Erwerbspersonen mit grundlegender Schulbildung|
-|HIV-Prävalenz                  |Prävalenz von HIV unter der 15-49 Jährigen|
-|Alkoholkonsum  pro Kopf        |Gesamtkonsum pro Einwohner in Äquivalent reinen Alkohols der 15+ Jährigen|
-|Prävalenz des Tabakkonsums     |Anteil der Tabakonsumenten unter den Erwachsenen|
+|----------------------------|-------------------------------------------|
+| Zugang zu Elektrizität | Anteil der Bevölkerung mit zuverlässiger Elektrizitätsversorgung |
+| Bildungsquote | Anteil der Erwerbspersonen mit grundlegender Schulbildung |
+| HIV-Prävalenz | Prävalenz von HIV unter der 15-49 Jährigen |
+| Alkoholkonsum pro Kopf | Gesamtkonsum pro Einwohner in Äquivalent reinen Alkohols der 15+ Jährigen |
+| Prävalenz des Tabakkonsums | Anteil der Tabakonsumenten unter den Erwachsenen |
 
 # Agenda
 
@@ -167,7 +139,7 @@ Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtu
 
 ```{r Elektrizität 0, fig.align='center'}
 Q1_plots <- Q1()
-Q1_plots[[10]]
+Q1_plots$missingness
 ```
 
 ------------------------------------------------------------------------
@@ -177,7 +149,7 @@ Q1_plots[[10]]
 Zwischen der Elektrifizierung und dem NNE pro Kopf scheint ein positiver Zusammenhang zu existieren.
 
 ```{r Elektrizität 1, fig.align='center'}
-Q1_plots[[9]]
+Q1_plots$plot1
 ```
 
 ------------------------------------------------------------------------
@@ -188,7 +160,7 @@ Q1_plots[[9]]
 -   Ein Großteil der Länder verfügt bereites über einen Elektrifizierungsgrad \> 75%
 
 ```{r Elektrizität 2, fig.align='center'}
-(Q1_plots[[2]] | Q1_plots[[3]]) + plot_layout(axis = "collect")
+Q1_plots$plot2
 ```
 
 ------------------------------------------------------------------------
@@ -199,15 +171,16 @@ Q1_plots[[9]]
 -   Für diese lässt sich kein Korrelationskoeffizient berechnen
 
 ```{r Elektrizität 3, fig.align='center'}
-knitr::kable(Q1_plots[[8]], format = "html", align = c("l", "r"))
+knitr::kable(Q1_plots$Table1, format = "html", align = c("l", "r"))
 ```
+
 
 ------------------------------------------------------------------------
 
 #### Korrelationskoeffizient überwiegend positiv
 
 ```{r Elektrizität 4, fig.align='center'}
-Q1_plots[[1]]
+Q1_plots$plot3
 ```
 
 ------------------------------------------------------------------------
@@ -218,18 +191,15 @@ Q1_plots[[1]]
     -   [Gibt es einen Zusammenhang mit der Landesgröße?]{.fragment .highlight-blue fragment-index="1"}
 
     -   [Gibt es einen Zusammenhang mit der Bevölkerungsgröße?]{.fragment .semi-fade-out fragment-index="1"}
-    
-------------------------------------------------------------------------
 
+------------------------------------------------------------------------
 
 #### Landesgröße hat keinen Einfluss
 
 Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Landesgröße
 
 ```{r Elektrizität 5, fig.align='center'}
-(Q1_plots[[4]] / Q1_plots[[5]]) +
-    plot_layout(axes = "collect") +
-    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
+Q1_plots$plot4
 ```
 
 ------------------------------------------------------------------------
@@ -247,10 +217,7 @@ Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Lande
 Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zusammenhang mit der Stärke und Richtung der Rangkorrelation
 
 ```{r Elektrizität 6, fig.align='center'}
-(Q1_plots[[6]] / Q1_plots[[7]]) +
-    plot_layout(axes = "collect") +
-    plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
-
+Q1_plots$plot5
 ```
 
 ------------------------------------------------------------------------
@@ -276,17 +243,6 @@ Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zus
     -   [Welchen Einfluss könnte dies auf die Qualität der Bildung haben?]{.fragment .semi-fade-out fragment-index="1"}
 
 ------------------------------------------------------------------------
-
-<!-- #### Daten fehlen großflächig -->
-
-<!-- Sowohl zur Staatsverschuldung, als auch zur Bildunsgquote fehlen Daten. -->
-
-<!-- ```{r Bildung 1} -->
-<!-- Q2_plots <- Q2() -->
-<!-- Q2_plots[[1]] -->
-<!-- ``` -->
-
-<!-- ------------------------------------------------------------------------ -->
 
 #### Wenige komplette Paare
 
@@ -387,7 +343,6 @@ Q2_plots[[7]]
 -   [Gibt es eine Beziehung zwischen HIV-Prävalenz und Alkoholkonsum pro Kopf?]{.fragment .highlight-blue fragment-index="1"}
 -   [Haben Länder mit höherer Bildungsquote eine niedrigere HIV-Prävalenz?]{.fragment .semi-fade-out fragment-index="1"}
 
-
 ------------------------------------------------------------------------
 
 #### Daten unvollständig
@@ -440,8 +395,8 @@ Q3_plots[[4]]
 
 #### Zusammenhang besteht nicht
 
-- Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz. 
-- In den betrachteten Daten scheint es sogar gegenteilig zu sein.
+-   Länder mit höherer durchschnittlicher Bildungsquote haben keine niedrigere HIV-Prävalenz.
+-   In den betrachteten Daten scheint es sogar gegenteilig zu sein.
 
 ```{r HIV-Prävalenz 5, fig.align='center'}
 Q3_plots[[5]]
@@ -533,20 +488,19 @@ Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, al
 
 #### CO2-Daten zeigen Einbrüche
 
-Die CO2 Daten weißen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen
+Die CO2 Daten weisen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen
 
 ```{r Landwirtschaft 1, fig.align='center'}
 Q5_plots <- Q5()
 Q5_plots[[1]]
 ```
 
-
 ------------------------------------------------------------------------
 
 #### Kein mehrheitlicher Trend
 
 -   Die jeweiligen Daten der einzelnen Länder zeigen keinen mehrheitlichen Trend
--   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf bei sehr geringer landwirtschaftlich Nutzfläche heraus
+-   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf, bei sehr geringer landwirtschaftlicher Nutzfläche heraus
 
 ```{r Landwirtschaft 3, fig.align='center'}
 Q5_plots[[4]]
@@ -568,7 +522,6 @@ Q5_plots[[2]]
 
 Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich kein Trend ab
 
-
 ```{r Landwirtschaft 5, fig.align='center'}
 Q5_plots[[5]]
 ```
@@ -584,9 +537,9 @@ Q5_plots[[5]]
 
 #### Gesamtfläche hat keinen Einfluss
 
-In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^13] vor.
+In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^1] vor.
 
-[^13]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
+[^1]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
 ```{r Landwirtschaft 6, fig.align='center'}
 Q5_plots[[3]]
@@ -630,42 +583,36 @@ Q5_plots[[3]]
 -   Sind die CO2-Daten plausibel?
 :::
 
-## 
+# Appendix
 
-## 3. Zusammenfassung und Diskussion
-### Spearman-(Rang-)Korrelation
+## Spearman-(Rang-)Korrelation
 
-Definition:
-$$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
+Definition: $$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
+
 ```{r Spearman, fig.align='center'}
 p <- spearman_examples()
 p
 ```
 
-## 3. Zusammenfassung und Diskussion
-### Volkswirtschaftliche Gesamtrechnung
+## Volkswirtschaftliche Gesamtrechnung
 
-<img src="./Ressources/graphVGR.png" width="800"/>
+<!-- <img src="/Figures/Appendix/graphVGR.png" width="800"/> -->
 
+![](Figures/Appendix/graphVGR.png){fig-align="center" width=70%}
 
-## 3. Zusammenfassung und Diskussion
-### Trendlinien
+## Trendlinien
 
 -   Die Trendlinien in den Graphen wurden durch (einfache) Lineare Regression erzeugt
 
--   Das Kleinste-Quadrate (KQ) Problem lautet $$\hat{\beta} = \operatorname*{arg\,min}_\beta \sum (y_i - \beta_0 + x_i\,\beta_1)^2$$ 
+-   Das Kleinste-Quadrate (KQ) Problem lautet $$\hat{\beta} = \operatorname*{arg\,min}_\beta \sum (y_i - \beta_0 + x_i\,\beta_1)^2$$
 
 -   Die Regressionsgerade ist dann gegeben durch $y = \hat{\beta_0} + x\,\hat{\beta_1}$
 
-## 3. Zusammenfassung und Diskussion
-### Aggregierung
+## Aggregierung
 
-- Bei unvollständigen Daten haben wir uns in der Regel für den Mittelwert entschieden
-- andere Formen der Aggregierung können andere Ergebnisse liefern
+-   Bei unvollständigen Daten haben wir uns in der Regel für den Mittelwert entschieden
+-   andere Formen der Aggregierung können andere Ergebnisse liefern
 
 ```{r Aggregierung, fig.align='center'}
 Q2_plots[[8]]
 ```
-
-
-
