@@ -82,9 +82,21 @@ Q1 <- function() {
   #   - countries get colored by countryColors
   # ----------------------
   plot2_part1 <- plot2_basic + 
+    # geom_point(aes(x = `Access_to_electricity_(%_of_population)`, color = Country_Name), alpha = .7) +
+    # geom_label_repel(data = Worldbank %>%
+    #                    filter(!is.na(`Access_to_electricity_(%_of_population)`) &
+    #                             !is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
+    #                    slice_min(order_by = Year, by = Country_Name),
+    #                    #slice_sample(n = 1, by = Country_Name),
+    #                  aes(x = `Access_to_electricity_(%_of_population)`,
+    #                      y = `Adjusted_net_national_income_per_capita_(current_US$)`,
+    #                      color = Country_Name,
+    #                      label = Country_Name),
+    #                  size = 3,
+    #                  max.overlaps = 10, force = .8) +
+    # scale_color_manual(values = country_colors, guide = "none") +
     geom_point(aes(x = `Access_to_electricity_(%_of_population)`), color = "grey", alpha = .7) +
     facet_wrap(~Continent, ncol = 2) +
-    #scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%"),
                        guide = guide_axis(angle = 45)) +
     labs(x = "Zugang zu Elektrizität",

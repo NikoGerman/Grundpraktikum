@@ -116,7 +116,7 @@ ReadData <- function() {
   # ----------------------
   levels(Worldbank$Country_Name) <- c(
     "Afghanistan", "Aruba", "Bangladesch", "Bolivien", "Brasilien",
-    "Kambodscha", "Tshad", "VR China", "Tschechien", "Finnland",
+    "Kambodscha", "Tschad", "VR China", "Tschechien", "Finnland",
     "Ghana", "Indien", "Kasachstan", "Mali", "Neuseeland",
     "Nigeria", "Pakistan", "Peru", "Katar", "Russland",
     "Tansania", "Thailand", "Vereinigtes Königreich", "Vereinigte Staaten", "Vietnam"

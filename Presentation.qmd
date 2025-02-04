@@ -71,6 +71,8 @@ augmentData()
 -   **Äquivalent reiner Alkohol**: ein Liter reiner Alkohol entspricht 20 Litern Bier à 5% Alkoholgehalt
 
 -   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs
+
+-   **Trendlinien**: die gezeigten Trendlinien wurden nach der Kleinsten-Quadrate Methode angepasst
 :::
 
 ## 1. Hintergrund
@@ -601,12 +603,28 @@ p
 ![](Figures/Appendix/graphVGR.png){fig-align="center" width=70%}
 
 ## Trendlinien
+### Parameterschätzung
 
--   Die Trendlinien in den Graphen wurden durch (einfache) Lineare Regression erzeugt
+-   Die Trendlinien in den Graphen wurden durch **(einfache) Lineare Regression** erzeugt
 
--   Das Kleinste-Quadrate (KQ) Problem lautet $$\hat{\beta} = \operatorname*{arg\,min}_\beta \sum (y_i - \beta_0 + x_i\,\beta_1)^2$$
+-   Die **Strukturgleichung** ist gegeben durch: $y_i = \beta_0 + \beta_1 \cdot x_i + \epsilon_i$, wobei $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ ist
 
--   Die Regressionsgerade ist dann gegeben durch $y = \hat{\beta_0} + x\,\hat{\beta_1}$
+-   Wir schätzen $\mathbf{\beta} = (\beta_0, \beta_1)^\top$ durch minimieren des **Kleinste-Quadrate (KQ) Problems** zu $$\mathbf{\hat{\beta}} = \operatorname*{arg\,min}_\mathbf{\beta} \sum_{i=1}^n (y_i - \beta_0 + x_i\,\beta_1)^2$$
+
+-   Die **Regressionsgerade** ist dann gegeben durch $\mathbf{\hat{y}} = \hat{\beta_0} + \mathbf{x}\,\hat{\beta_1}$
+
+## Trendlinien
+### Konfidenzintervall
+
+- Wir schätzen: $\hat{\sigma}^2 = \frac{1}{n - 2} \sum_{i=1}^n\hat{\epsilon}_i^2 = \frac{1}{n - 2} \sum_{i=1}^n(y_i - \hat{\beta_0} - \hat{\beta_1}\cdot x_i)^2$
+
+- Weiterhin gilt: $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \sim t_{n-2}$, mit $\sigma_{y_i}^2 = \hat{\sigma}^2  \Biggl[\frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{i = 1}^n (x_i - \bar{x}^2)}\Biggr]$
+
+- Das **Konfidenzintervall von $\hat{y}_i$ zum Niveau $\alpha$** ist dann: $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2), \hat{y}_i + \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2)\Biggr]$
+
+- Hierbei ist $t_{1-\frac{\alpha}{2}}(n-2)$ das $(1-\frac{\alpha}{2})$-Quantil der $t$-Verteilung mit $n-2$ Freiheitsgraden
+
+
 
 ## Aggregierung
 
