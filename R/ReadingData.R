@@ -11,7 +11,7 @@ ReadData <- function() {
   Worldbank2_raw <- readr::read_csv(path_Worldbank2, show_col_types = FALSE)
   CO2_raw <- read.table(path_CO2, header = TRUE, sep = ";")
   Continents_raw <- readRDS(path_Continents)
-  AdvancedEconomies <- readRDS(path_AdvancedEconomies)
+  CountryClassifications_raw <- read.csv(path_CountryClassifications, sep = ";")
   
   # ----------------------
   # clean Worldbank1:
@@ -63,12 +63,6 @@ ReadData <- function() {
     mutate(data = round(as.numeric(data), 2)) %>%
     pivot_wider(names_from = "Series.Name", values_from = "data")
   
-  # CO2$data <- gsub(pattern = "\\.", replacement = "", CO2$data)
-  # CO2$data <- gsub(pattern = "^0", replacement = "0.", CO2$data)
-  # CO2$data <- round(as.numeric(CO2$data), 2)
-  # CO2 <- CO2 %>%
-  #   pivot_wider(names_from = "Series.Name", values_from = "data")
-  
   # ----------------------
   # clean CO2 data:
   #   - keep Continent Name and Country Codes
@@ -83,25 +77,41 @@ ReadData <- function() {
     filter(!(Continent == "Europe" & `Country Code` %in% c("RUS", "KAZ")))
   
   # ----------------------
+  # clean Country Classification data:
+  #   - keep Country Codes and Income Group
+  #   - set labels to german
+  #   - rename to fit within naming scheme
+  # ----------------------
+  CountryClassifications <- CountryClassifications_raw %>%
+    select(Code, Income.group) %>%
+    filter(Income.group != "") %>%
+    mutate(Income.group = factor(Income.group, levels = c("High income",
+                                                          "Upper middle income",
+                                                          "Lower middle income",
+                                                          "Low income"),
+                                 labels = c("Hohes Volkseinkommen",
+                                            "Volkseinkommen oberes Mittelfeld",
+                                            "Volkseinkommen unteres Mittelfeld",
+                                            "Niedriges Volkseinkommen"))) %>%
+    rename("Country Code" = "Code",
+           "Income Group" = "Income.group")
+  
+  # ----------------------
   # Join Data:
   #   - Worldbank1 and Worldbank2 gets joined on Country and year
   #   - CO2 data gets joined also on Country and year
-  #   - Country Name and -Code get cast into factor variable
+  #   - Continent Classification is joined
+  #   - Country Classifications gets joined
+  #   - Country Name and -Code, as well as Continent get cast into factor variable
   #   - Year gets cast into ordered factor
-  #   - Advanced Economies is a vector, containing developed countries
-  #     - data of IMF: https://www.imf.org/en/Publications/WEO/weo-database/2023/April/groups-and-aggregates#ea
-  #     - if a country is in that list, it gets the tag "Industrieland"
-  #     - else "Schwellen-/Entwicklungsland"
-  #   - Continent
   # ----------------------
   Worldbank <- Worldbank1 %>%
     full_join(Worldbank2, by = c("Country Name" = "Country Name", "Country Code" = "Country Code", "Year" = "Year")) %>%
     full_join(CO2, by = c("Country Name" = "Country.Name", "Country Code" = "Country.Code", "Year" = "Year")) %>%
-    mutate(across(c(`Country Name`, `Country Code`), ~as.factor(.x))) %>%
-    mutate(Year = as.ordered(Year),
-           Development_status = ifelse(`Country Name` %in% AdvancedEconomies, "Industrieland", "Schwellen-/Entwicklungsland")) %>% 
     left_join(Continents, by = "Country Code", relationship = "many-to-many") %>%
-    mutate(Continent = as.factor(Continent))
+    left_join(CountryClassifications, by = "Country Code") %>%
+    mutate(across(c(`Country Name`, `Country Code`, Continent), ~as.factor(.x)),
+           Year = as.ordered(Year))
   
   # ----------------------
   # clean columnnames:

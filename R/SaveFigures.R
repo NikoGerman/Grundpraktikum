@@ -12,6 +12,12 @@ spearman_examples() %>%
   ggsave(filename = "Figures/Appendix/spearman_examples.png", device = "png")
 
 # ----------------------
+# save aggregation examples as .png
+# ----------------------
+aggr_examples() %>%
+ggsave(filename = "Figures/Appendix/aggregation_examples.png", device = "png")
+
+# ----------------------
 # save plots Q1 - Q5
 # Note: throws loads of warnings from every call of ggplot
 # ----------------------

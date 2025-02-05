@@ -31,23 +31,10 @@ Q1 <- function() {
   
   # ----------------------
   # plot Missingness of Net National Income p.c.
+  #   - for plot.missing() see utils.R
   # ----------------------
-  missingness <- Worldbank %>%
-    group_by(Year, Country_Name) %>%
-    summarize(Missing = is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
-    ungroup() %>%
-    mutate(Missing = factor(Missing, levels = c(TRUE, FALSE), labels = c("fehlt", "vorhanden"))) %>%
-    ggplot(aes(x = Year, y = Country_Name)) +
-    geom_tile(aes(fill = Missing), alpha = .7) +
-    scale_fill_manual(values = c("fehlt" = "orange", "vorhanden" = "lightblue")) +
-    labs(title = "Beobachtungen zu NNE pro Kopf", x = "Jahr", y = "Land", fill = "Beobachtung") +
-    scale_x_discrete(guide = guide_axis(angle = 45), 
-                     breaks = seq(2000, 2021, by = 5),
-                     labels = seq(2000, 2021, by = 5)) +
-    theme(#panel.grid.major = element_blank(),
-          #panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          axis.line = element_line(color = "grey", linewidth = .25))
+  missingness <- Worldbank %>% plot.missing(x1 = "Adjusted_net_national_income_per_capita_(current_US$)") +
+    ggtitle("Beobachtungen zu NNE pro Kopf")
   
   # ----------------------
   #   - plot Access to Electricity vs Net National Income p.c.
@@ -82,19 +69,6 @@ Q1 <- function() {
   #   - countries get colored by countryColors
   # ----------------------
   plot2_part1 <- plot2_basic + 
-    # geom_point(aes(x = `Access_to_electricity_(%_of_population)`, color = Country_Name), alpha = .7) +
-    # geom_label_repel(data = Worldbank %>%
-    #                    filter(!is.na(`Access_to_electricity_(%_of_population)`) &
-    #                             !is.na(`Adjusted_net_national_income_per_capita_(current_US$)`)) %>%
-    #                    slice_min(order_by = Year, by = Country_Name),
-    #                    #slice_sample(n = 1, by = Country_Name),
-    #                  aes(x = `Access_to_electricity_(%_of_population)`,
-    #                      y = `Adjusted_net_national_income_per_capita_(current_US$)`,
-    #                      color = Country_Name,
-    #                      label = Country_Name),
-    #                  size = 3,
-    #                  max.overlaps = 10, force = .8) +
-    # scale_color_manual(values = country_colors, guide = "none") +
     geom_point(aes(x = `Access_to_electricity_(%_of_population)`), color = "grey", alpha = .7) +
     facet_wrap(~Continent, ncol = 2) +
     scale_x_continuous(label = scales::label_number(suffix = "%"),
@@ -128,25 +102,11 @@ Q1 <- function() {
   # ----------------------
   # plot 3
   #   - plot correlation by country
+  #   - for corr.plot() see utils.R
   # ----------------------
-  plot3 <- correlation %>%
-    ggplot(aes(x = r_spearman, y = forcats::fct_reorder(`Country_Name`, r_spearman))) +
-    geom_col(fill = "lightblue") +
-    geom_vline(xintercept = 0, color = "red") +
-    geom_vline(xintercept = 0.5, color = "red", linetype = "dashed") +
-    geom_vline(xintercept = -0.5, color = "red", linetype = "dashed") +
-    guides(fill = "none") +
-    labs(y = "",
-         x = "Korrelationskoeffizient",
-         caption = "lediglich Länder mit durschnittlichem Grad der Elektrifizierung < 100%
-       Verwendeter Korrellationskoeffizient: Spearman") +
-    geom_text_repel(aes(label = sprintf("%.2f", round(r_spearman, 2)), x = sign(r_spearman) * -.10), force = 0) +
-    theme(panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank(),
-          axis.line = element_line(color = "grey", linewidth = .25)) +
-    scale_x_continuous(limits = c(-1, 1))
-  
+  plot3 <- Worldbank %>% corr.plot(x1 = "Access_to_electricity_(%_of_population)",
+            x2 = "Adjusted_net_national_income_per_capita_(current_US$)")
+ 
   # ----------------------
   #   - build data for plot 4
   #   - calculate mean Population and Surface Area per Country
@@ -171,9 +131,10 @@ Q1 <- function() {
     scale_color_manual(values = country_colors, guide = "none") +
     geom_point() +
     geom_smooth(method = "lm",
-                se = FALSE, 
+                se = TRUE, 
                 color = "grey",
-                linewidth = .75) +
+                linewidth = .75,
+                alpha = .15) +
     geom_text_repel(aes(label = `Country_Name`), force = 1) +
     ylim(-.5, 1.25) +
     labs(y = "Korrellationskoeffizient")  +
@@ -220,19 +181,6 @@ Q1 <- function() {
   plot5 <- (plot5_part1 / plot5_part2) +
     plot_layout(axes = "collect") +
     plot_annotation(caption = "Verwendeter Korrellationskoeffizient: Spearman")
-
-  
-  # return(list(p1.1, 
-  #             p1.2, 
-  #             p1.3, 
-  #             p2.1, 
-  #             p2.2, 
-  #             p3.1, 
-  #             p3.2, 
-  #             t1,
-  #             p1.0,
-  #             p0)) 
-  
   
   # ----------------------
   # table containing the countries with mean Access to Electricity > 99%

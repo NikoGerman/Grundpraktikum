@@ -72,7 +72,7 @@ augmentData()
 
 -   **Spearman-(Rang-)Korrelation**: misst *Monotonie* des Zusammenhangs
 
--   **Trendlinien**: die gezeigten Trendlinien wurden nach der Kleinsten-Quadrate Methode angepasst
+-   **Trendlinien**: die gezeigten Trendlinien wurden durch einfache lineare Regression erzeugt
 :::
 
 ## 1. Hintergrund
@@ -252,7 +252,7 @@ Es gibt lediglich eine geringe Anzahl an kompletten Paaren von Staatsverschuldun
 
 ```{r Bildung 2, fig.align='center'}
 Q2_plots <- Q2()
-Q2_plots[[2]]
+Q2_plots$missingness_1
 ```
 
 ------------------------------------------------------------------------
@@ -262,7 +262,7 @@ Q2_plots[[2]]
 Betrachtet man Staatsverschuldung und Bildungsquote je Land, zeichnet sich kein einheitlicher Trend ab.
 
 ```{r Bildung 3, fig.align='center'}
-Q2_plots[[3]]
+Q2_plots$plot1
 ```
 
 ------------------------------------------------------------------------
@@ -272,7 +272,7 @@ Q2_plots[[3]]
 Der Korrelationskoeffizient der einzelnen Länder zeigt ein uneinheitliches Bild hinsichtlich Richtung und Stärke.
 
 ```{r Bildung 4, fig.align='center'}
-Q2_plots[[4]]
+Q2_plots$plot2
 ```
 
 ------------------------------------------------------------------------
@@ -283,7 +283,7 @@ Q2_plots[[4]]
 -   Durch Entfernen des Ausreißers (Vereingtes Königreich) verschwindet dieser Effekt
 
 ```{r Bildung 5, fig.align='center'}
-Q2_plots[[5]]
+Q2_plots$plot3
 ```
 
 ------------------------------------------------------------------------
@@ -301,7 +301,7 @@ Q2_plots[[5]]
 Für Bildungsquote und Schüler-Lehrer-Verhältnis gibt es nur sehr wenige komplette Paare im Datensatz.
 
 ```{r Bildung 6, fig.align='center'}
-Q2_plots[[1]]
+Q2_plots$missingness_2
 ```
 
 ------------------------------------------------------------------------
@@ -311,7 +311,7 @@ Q2_plots[[1]]
 Zwischen einer hohen Bildungsquote und niedrigen Schüler-Lehrer-Verhältnissen gibt es in den betrachteten Daten keine Beziehung.
 
 ```{r Bildung 7, fig.align='center'}
-Q2_plots[[6]]
+Q2_plots$plot4
 ```
 
 ------------------------------------------------------------------------
@@ -319,11 +319,11 @@ Q2_plots[[6]]
 #### Schüler-Lehrer-Verhältnis fluktuiert
 
 -   Das Verhältnis von Schülern je Lehrer fluktuiert mitunter stark
--   Auch für die Länder mit den durchschnittlich höchsten Bildungsquote
+-   Auch für die Länder mit den durchschnittlich höchsten Bildungsquoten
 -   Ein Rückschluss auf die Bildungsqualität ist nicht möglich
 
 ```{r Bildung 8, fig.align='center'}
-Q2_plots[[7]]
+Q2_plots$plot5
 ```
 
 ## 2. Forschungsfragen
@@ -354,7 +354,7 @@ Q2_plots[[7]]
 
 ```{r HIV-Prävalenz 1, fig.align='center'}
 Q3_plots <- Q3()
-Q3_plots[[1]]
+Q3_plots$missingness
 ```
 
 ------------------------------------------------------------------------
@@ -364,7 +364,7 @@ Q3_plots[[1]]
 Vier hauptsächlich muslimisch geprägte Länder beeinflussen die Trendlinie maßgeblich.
 
 ```{r HIV-Prävalenz 2, fig.align='center'}
-Q3_plots[[3]]
+Q3_plots$plot1
 ```
 
 ------------------------------------------------------------------------
@@ -375,7 +375,7 @@ Q3_plots[[3]]
 -   keine Fortsetzung auf Ebene der Länder
 
 ```{r HIV-Prävalenz 3, fig.align='center'}
-Q3_plots[[2]]
+Q3_plots$plot2
 ```
 
 ------------------------------------------------------------------------
@@ -383,7 +383,7 @@ Q3_plots[[2]]
 #### Korrelation auf Länderebene uneinheitlich
 
 ```{r HIV-Prävalenz 4, fig.align='center'}
-Q3_plots[[4]]
+Q3_plots$plot3
 ```
 
 ------------------------------------------------------------------------
@@ -401,7 +401,7 @@ Q3_plots[[4]]
 -   In den betrachteten Daten scheint es sogar gegenteilig zu sein.
 
 ```{r HIV-Prävalenz 5, fig.align='center'}
-Q3_plots[[5]]
+Q3_plots$plot4
 ```
 
 ## 2. Forschungsfragen
@@ -431,7 +431,7 @@ Q3_plots[[5]]
 
 ```{r Tabak 1, fig.align='center'}
 Q4_plots <- Q4()
-Q4_plots[[1]]
+Q4_plots$missingness
 ```
 
 ------------------------------------------------------------------------
@@ -441,30 +441,30 @@ Q4_plots[[1]]
 Auf allen Kontinenten korrelieren höhere BIPs mit niedrigerer Prävalenz des Tabakkonsums
 
 ```{r Tabak 2, fig.align='center'}
-Q4_plots[[2]]
+Q4_plots$plot1
 ```
 
 ------------------------------------------------------------------------
 
 #### Kein Trend bei ärmeren Volkswirtschaften
 
--   Für die Gesamtheit der ärmeren Volkswirtschaften verschwindet der Trend
+-   Für die Gesamtheit der ärmeren Volkswirtschaften[^1] verschwindet der Trend
 -   Auf Länderebene existiert der Trend weiter
 
+[^1]: gemäß Klassifikation durch die Weltbank von 2023
+
 ```{r Tabak 3, fig.align='center'}
-(Q4_plots[[4]] | Q4_plots[[3]]) + plot_layout(axes = "collect") + 
-  plot_annotation(title = "BIP pro Kopf kleiner 20 000$")
+Q4_plots$plot2
 ```
 
 ------------------------------------------------------------------------
 
 #### BIP pro Kopf korreliert negativ mit Tabakkonsum
 
-Bei den reicheren Volkswirtschaften existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
+Bei den reicheren Volkswirtschaften[^1] existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
 
 ```{r Tabak 4, fig.align='center'}
-(Q4_plots[[6]] | Q4_plots[[5]]) + plot_layout(axes = "collect") + 
-  plot_annotation(title = "BIP pro Kopf größer 20 000$")
+Q4_plots$plot3
 ```
 
 ## 2. Forschungsfragen
@@ -539,9 +539,9 @@ Q5_plots[[5]]
 
 #### Gesamtfläche hat keinen Einfluss
 
-In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^1] vor.
+In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^2] vor.
 
-[^1]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
+[^2]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
 ```{r Landwirtschaft 6, fig.align='center'}
 Q5_plots[[3]]
@@ -632,5 +632,5 @@ p
 -   andere Formen der Aggregierung können andere Ergebnisse liefern
 
 ```{r Aggregierung, fig.align='center'}
-Q2_plots[[8]]
+aggr_examples
 ```
