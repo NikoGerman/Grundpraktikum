@@ -1,4 +1,11 @@
-Q1 <- function() {
+Q1 <- function(data, country_colors = NULL, save = FALSE) {
+  # ----------------------
+  # check properties of input
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(country_colors, null.ok = TRUE)
+  checkmate::assertFlag(save)
+  
   # ----------------------
   # Question:
   #   - Welcher Zusammenhang besteht zwischen der Stromversorgung und 
@@ -10,10 +17,11 @@ Q1 <- function() {
   # ----------------------
   
   # ----------------------
-  # load Data
+  # if not provided, generate country_colors
   # ----------------------
-  Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
-  country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
+  if (is.null(country_colors)) {
+    country_colors <- assignCountryColors(data)
+  }
   
   # ----------------------
   # calculate spearman correlation between
@@ -21,7 +29,7 @@ Q1 <- function() {
   #   - Net National income p.c.
   # by country, only keep the non-NA values
   # ----------------------
-  correlation <- Worldbank %>%
+  correlation <- data %>%
     group_by(Country_Name) %>%
     summarize(r_spearman = cor(x = `Access_to_electricity_(%_of_population)`, 
                                y = `Adjusted_net_national_income_per_capita_(current_US$)`,
@@ -33,14 +41,14 @@ Q1 <- function() {
   # plot Missingness of Net National Income p.c.
   #   - for plot.missing() see utils.R
   # ----------------------
-  missingness <- Worldbank %>% plot.missing(x1 = "Adjusted_net_national_income_per_capita_(current_US$)") +
+  missingness <- data %>% plot.missing(x1 = "Adjusted_net_national_income_per_capita_(current_US$)") +
     ggtitle("Beobachtungen zu NNE pro Kopf")
   
   # ----------------------
   #   - plot Access to Electricity vs Net National Income p.c.
   #   - color countries by using countrycolors
   # ----------------------
-  plot1 <- Worldbank %>%
+  plot1 <- data %>%
     ggplot(aes(x = `Access_to_electricity_(%_of_population)`,
                y = `Adjusted_net_national_income_per_capita_(current_US$)`,
                color = Country_Name)) +
@@ -56,7 +64,7 @@ Q1 <- function() {
   #   - create basic plot with Net National Income p.c on y-axis
   #   - y-axis is logarithmic
   # ----------------------
-  plot2_basic <- ggplot(Worldbank,
+  plot2_basic <- ggplot(data,
               aes(y = `Adjusted_net_national_income_per_capita_(current_US$)`)
               )+
     scale_y_log10(labels = scales::label_number(suffix = "$")) +
@@ -83,7 +91,7 @@ Q1 <- function() {
   #   - number of obervations per bin gets calculated and is added as label
   # ----------------------
   plot2_part2 <- plot2_basic + geom_boxplot(aes(x = electricity_binned, group = electricity_binned)) +
-    geom_label_repel(data = Worldbank %>%
+    geom_label_repel(data = data %>%
                        group_by(electricity_binned) %>%
                        summarize(count = n()),
                      aes(label = paste("n =", count),
@@ -104,7 +112,7 @@ Q1 <- function() {
   #   - plot correlation by country
   #   - for corr.plot() see utils.R
   # ----------------------
-  plot3 <- Worldbank %>% corr.plot(x1 = "Access_to_electricity_(%_of_population)",
+  plot3 <- data %>% corr.plot(x1 = "Access_to_electricity_(%_of_population)",
             x2 = "Adjusted_net_national_income_per_capita_(current_US$)")
  
   # ----------------------
@@ -112,7 +120,7 @@ Q1 <- function() {
   #   - calculate mean Population and Surface Area per Country
   #   - join the correlation data from before
   # ----------------------
-  data_plot4 <- Worldbank %>%
+  data_plot4 <- data %>%
     group_by(`Country_Name`) %>%
     summarize(avg_pop = mean(`Population_total`), surface = mean(`Surface_area_(sq_km)`)) %>%
     full_join(correlation)
@@ -185,7 +193,7 @@ Q1 <- function() {
   # ----------------------
   # table containing the countries with mean Access to Electricity > 99%
   # ----------------------
-  t1 <- Worldbank %>%
+  t1 <- data %>%
     group_by(Country_Name) %>%
     summarize("durchschnittliche Elektrifizierung" = mean(`Access_to_electricity_(%_of_population)`)) %>%
     arrange(desc(`durchschnittliche Elektrifizierung`)) %>%
@@ -194,9 +202,9 @@ Q1 <- function() {
     mutate(`durchschnittliche Elektrifizierung` = sprintf("%.1f%%", `durchschnittliche Elektrifizierung`))
   
   # ----------------------
-  # return plots and table as named list
+  # save plots and table as named list
   # ----------------------
-  return(list(
+  result <- list(
     missingness = missingness, 
     plot1 = plot1, 
     plot2 = plot2, 
@@ -204,6 +212,23 @@ Q1 <- function() {
     plot4 = plot4,
     plot5 = plot5,
     Table1 = t1
-    )
   )
+  
+  # ----------------------
+  # save Figures if flag is set TRUE
+  # for save.figures, see utils
+  # WARNING
+  # save needs to be FALSE here, 
+  # otherways it would create an infinity loop
+  # ----------------------
+  if (save) {
+    save.figures(Q1, list(data = data,
+                          country_colors = country_colors,
+                          save = FALSE))
+  }
+  
+  # ----------------------
+  # return result
+  # ----------------------
+  return(result)
 }

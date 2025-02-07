@@ -1,4 +1,11 @@
-Q4 <- function() {
+Q4 <- function(data, country_colors = NULL, save = FALSE) {
+  # ----------------------
+  # check properties of input
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(country_colors, null.ok = TRUE)
+  checkmate::assertFlag(save)
+  
   # ----------------------
   # Question:
   #   - How does GDP per capita relate to the prevalence 
@@ -6,10 +13,11 @@ Q4 <- function() {
   # ----------------------
   
   # ----------------------
-  # load Data
+  # if not provided, generate country_colors
   # ----------------------
-  Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
-  country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
+  if (is.null(country_colors)) {
+    country_colors <- assignCountryColors(data)
+  }
   
   # ----------------------
   # missingness:
@@ -18,7 +26,7 @@ Q4 <- function() {
   #     by Country/Year
   #   - for plot.missing() see utils.R
   # ----------------------
-  missingness <- Worldbank %>% plot.missing(x1 = "Prevalence_of_current_tobacco_use_(%_of_adults)") +
+  missingness <- data %>% plot.missing(x1 = "Prevalence_of_current_tobacco_use_(%_of_adults)") +
     ggtitle("Beobachtungen zur Prävalenz des Tabakkonsums")
   
   # ----------------------
@@ -28,7 +36,7 @@ Q4 <- function() {
   #     y: Prevalence of tobacco use
   #     color: Country
   # ----------------------
-  plot_basic <- Worldbank %>%
+  plot_basic <- data %>%
     ggplot(aes(x = `GDP_per_capita_PPP_(constant_2021_international_$)`,
                y = `Prevalence_of_current_tobacco_use_(%_of_adults)`,
                color = Country_Name)) +
@@ -50,7 +58,7 @@ Q4 <- function() {
     geom_smooth(se = TRUE, color = "grey", method = "lm", alpha = .15) +
     facet_wrap(~Continent) +
     scale_x_log10(labels = scales::label_number(suffix = "$"), limits = c(1000, 200000)) +
-    geom_text_repel(data = (Worldbank %>% 
+    geom_text_repel(data = (data %>% 
                               group_by(Country_Name) %>%
                               slice_min(order_by = Year) %>%
                               ungroup()),
@@ -63,10 +71,10 @@ Q4 <- function() {
   #     - leaves only the countries which are NOT labelled as "High income"
   #     - puts a text label on the first observation of each country
   # ----------------------
-  plot2_basic <- plot_basic %+% (Worldbank %>%
+  plot2_basic <- plot_basic %+% (data %>%
                     filter(Income_Group != "Hohes Volkseinkommen")
            ) +
-    geom_text_repel(data = (Worldbank %>% 
+    geom_text_repel(data = (data %>% 
                               group_by(Country_Name) %>%
                               slice_min(order_by = Year) %>%
                               ungroup() %>%
@@ -108,10 +116,10 @@ Q4 <- function() {
   #     - leaves only the countries which are labelled as "High income"
   #     - puts a text label on the first observation of each country
   # ----------------------
-  plot3_basic <- plot_basic %+% (Worldbank %>%
+  plot3_basic <- plot_basic %+% (data %>%
                             filter(Income_Group == "Hohes Volkseinkommen")
     ) +
-    geom_text_repel(data = (Worldbank %>% 
+    geom_text_repel(data = (data %>% 
                       group_by(Country_Name) %>%
                       slice_min(order_by = Year) %>%
                       ungroup() %>%
@@ -148,12 +156,30 @@ Q4 <- function() {
     plot_annotation(title = "Länder mit hohen Einkommen")
   
   # ----------------------
-  # return plots as named list
+  # save plots as named list
   # ----------------------
-  return(list(
+  result <- list(
     missingness = missingness,
     plot1 = plot1,
     plot2 = plot2,
     plot3 = plot3
-    ))
+    )
+  
+  # ----------------------
+  # save Figures if flag is set TRUE
+  # for save.figures, see utils
+  # WARNING
+  # save needs to be FALSE here, 
+  # otherways it would create an infinity loop
+  # ----------------------
+  if (save) {
+    save.figures(Q4, list(data = data,
+                          country_colors = country_colors,
+                          save = FALSE))
+  }
+  
+  # ----------------------
+  # return result
+  # ----------------------
+  return(result)
 }

@@ -1,4 +1,11 @@
-Q2 <- function() {
+Q2 <- function(data, country_colors = NULL, save = FALSE) {
+  # ----------------------
+  # check properties of input
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(country_colors, null.ok = TRUE)
+  checkmate::assertFlag(save)
+  
   # ----------------------
   # Question:
   #   - Do countries with higher central government debt as a percentage of GDP
@@ -9,10 +16,11 @@ Q2 <- function() {
   # ----------------------
   
   # ----------------------
-  # load Data
+  # if not provided, generate country_colors
   # ----------------------
-  Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
-  country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
+  if (is.null(country_colors)) {
+    country_colors <- assignCountryColors(data)
+  }
 
   # ----------------------
   # missingness_1:
@@ -22,7 +30,7 @@ Q2 <- function() {
   # by Country/Year. Label Missing if either one of the to features is missing
   #   - for plot.missing() see utils.R
   # ----------------------
-  missingness_1 <- Worldbank %>% plot.missing(x1 = "Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)",
+  missingness_1 <- data %>% plot.missing(x1 = "Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)",
                              x2 = "Central_government_debt_total_(%_of_GDP)") +
     ggtitle("Beobachtungen zu Staatsverschuldung und Bildungsquote")
   
@@ -34,7 +42,7 @@ Q2 <- function() {
   # by Country/Year. Label Missing if either one of the to features is missing
   #   - for plot.missing() see utils.R
   # ----------------------
-  missingness_2 <- Worldbank %>% plot.missing(x1 = "Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)",
+  missingness_2 <- data %>% plot.missing(x1 = "Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)",
                              x2 = "Pupil-teacher_ratio_tertiary") +
     ggtitle("Beobachtungen zu Bildungsquote und Schüler-Lehrer-Verhältnis")
   
@@ -45,7 +53,7 @@ Q2 <- function() {
   #     y: percentage of Labour force w/ basic education
   #     faceted by country
   # ----------------------
-  plot1 <- Worldbank %>%
+  plot1 <- data %>%
     filter((!is.na(`Central_government_debt_total_(%_of_GDP)`) & 
               !is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`))) %>%
     ggplot(aes(x = `Central_government_debt_total_(%_of_GDP)`,
@@ -69,7 +77,7 @@ Q2 <- function() {
   #     y: Country
   #   - for corr.plot() see utils.R
   # ----------------------
-  plot2 <- Worldbank %>% corr.plot(x1 = "Central_government_debt_total_(%_of_GDP)",
+  plot2 <- data %>% corr.plot(x1 = "Central_government_debt_total_(%_of_GDP)",
             x2 = "Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)")
   
   
@@ -83,7 +91,7 @@ Q2 <- function() {
   #       y: education of labour force
   #   - additionally a regression line is fitted on global level
   # ----------------------
-  plot3_part1 <- Worldbank %>%
+  plot3_part1 <- data %>%
     group_by(Country_Name) %>%
     summarise(mean_debt = mean(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
               mean_education = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
@@ -104,7 +112,7 @@ Q2 <- function() {
   # plot3_part2:
   #   same as part_1, but the United Kingdom gets excluded, since its an outlier
   # ----------------------
-  plot3_part2 <- plot3_part1 %+% (Worldbank %>%
+  plot3_part2 <- plot3_part1 %+% (data %>%
     group_by(Country_Name) %>%
     summarise(mean_debt = mean(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
               mean_education = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
@@ -128,7 +136,7 @@ Q2 <- function() {
   #     y: mean pupil teacher ratio
   #   Additionally we fit a regression line on a gloabl level
   # ----------------------
-  plot4 <- Worldbank %>%
+  plot4 <- data %>%
     group_by(Country_Name) %>%
     summarize(mean_ptr = mean(`Pupil-teacher_ratio_tertiary`, na.rm = TRUE),
               mean_bildungsquote = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
@@ -154,8 +162,8 @@ Q2 <- function() {
   #   and connect the dots by country
   #   additionally fit a regression line on global level
   # ----------------------
-  plot5 <- Worldbank %>%
-    filter(Country_Name %in% (Worldbank %>% 
+  plot5 <- data %>%
+    filter(Country_Name %in% (data %>% 
                                 group_by(Country_Name) %>%
                                 summarize(m = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
                                 slice_max(m, n = 5) %>%
@@ -170,8 +178,8 @@ Q2 <- function() {
     geom_path(linewidth = .7, na.rm = TRUE) +
     geom_point() +
     geom_smooth(aes(group = 1), method = "lm", color = "grey", se = TRUE, linewidth = 0.75, alpha = .15) +
-    geom_label_repel(data = Worldbank %>%
-                       filter(Country_Name %in% (Worldbank %>% 
+    geom_label_repel(data = data %>%
+                       filter(Country_Name %in% (data %>% 
                                                    group_by(Country_Name) %>%
                                                    summarize(m = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
                                                    slice_max(m, n = 5) %>%
@@ -191,9 +199,9 @@ Q2 <- function() {
     labs(title = "Schüler-Lehrer-Verhältnis der 5 Länder mit der höchsten Bildungsquote")
   
   # ----------------------
-  # return plots as named list
+  # save plots as named list
   # ----------------------
-  return(list(
+  result <- list(
     missingness_1 = missingness_1,
     missingness_2 = missingness_2,
     plot1 = plot1,
@@ -201,6 +209,23 @@ Q2 <- function() {
     plot3 = plot3,
     plot4 = plot4,
     plot5 = plot5
-  ))
+  )
+  
+  # ----------------------
+  # save Figures if flag is set TRUE
+  # for save.figures, see utils
+  # WARNING
+  # save needs to be FALSE here, 
+  # otherways it would create an infinity loop
+  # ----------------------
+  if (save) {
+    save.figures(Q2, list(data = data,
+                          country_colors = country_colors,
+                          save = FALSE))
+  }
+  
+  # ----------------------
+  # return result
+  # ----------------------
+  return(result)
 }
-

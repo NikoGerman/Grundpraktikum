@@ -1,11 +1,10 @@
-# ----------------------
-# produce contents of the Appendix
-# ----------------------
-
-# ----------------------
-# produce examples for spearman correlation
-# ----------------------
-spearman_examples <- function() {
+spearman_examples <- function(save = FALSE) {
+  # create examples for spearman correlation
+  
+  # ----------------------
+  # assert property of input
+  # ----------------------
+  checkmate::assertFlag(save)
   # ----------------------
   #   - set random seed
   #   - x_ : 50 values ranging from 0 to 10
@@ -68,13 +67,24 @@ spearman_examples <- function() {
   #   gather plots in 2x3
   #   add title
   # ----------------------
-  p_out <- ((p_exp | p_lin | p_noise) / (p_sin | p_const | p_rand)) + 
+  result <- ((p_exp | p_lin | p_noise) / (p_sin | p_const | p_rand)) + 
     plot_annotation(title = "Spearman Korrelationskoeffizient")
   
   # ----------------------
-  #   retrun final plot
+  #   if save is TRUE, check if directory exists, if not create it
+  #   save result as .png
   # ----------------------
-  return(p_out)
+  if (save) {
+    if (!dir.exists("Figures/Appendix")) {
+      dir.create(file.path("Figures/Appendix"))
+    }
+    ggsave(result, filename = "Figures/Appendix/spearman_examples.png", device = "png")
+  }
+  
+  # ----------------------
+  #   retrun result
+  # ----------------------
+  return(result)
 }
 
 # ----------------------
@@ -82,8 +92,18 @@ spearman_examples <- function() {
 # returns raw format
 # ----------------------
 
-graph_VGR <- function() {
-  DiagrammeR::grViz("
+graph_VGR <- function(return.raw = FALSE) {
+  # create graph explaining Volkswirtschaftliche Gesamtrechnung (VGR)
+  
+  # ----------------------
+  # assert property of input
+  # ----------------------
+  checkmate::assertFlag(return.raw)
+  
+  # ----------------------
+  # create result: the graph
+  # ----------------------
+  result <- DiagrammeR::grViz("
   digraph {
   layout = dot
     node [shape = diamond, color=lightblue, style=filled,fixedsize=False, fontname=Helvetica, labelType=\"html\"]
@@ -102,19 +122,54 @@ graph_VGR <- function() {
    ") %>%
     DiagrammeRsvg::export_svg() %>%
     charToRaw()
+  
+  # ----------------------
+  # check if directory exists, if not create it
+  # save result as .png
+  # ----------------------
+  if (!dir.exists("Figures/Appendix")) {
+    dir.create(file.path("Figures/Appendix"))
+  }
+  rsvg::rsvg_png(result, file = "Figures/Appendix/graphVGR.png", height = 1440)
+  
+  # ----------------------
+  # if return.raw is TRUE, return result (raw format)
+  # ----------------------
+  if (return.raw) {
+    return(result)
+  }
 }
 
-# ----------------------
-# produce aggregation examples using question 2
-# aggregating education by Country:
-#   - mean
-#   - median
-#   - first observation by Year
-#   - last observation by Year
-# returns a single plot
-# ----------------------
-aggr_examples <- function() {
-  p_mean <- Worldbank %>%
+aggr_examples <- function(data, country_colors = NULL, save = FALSE) {
+  # create examples of different aggregation outputs
+  # aggregating education by Country:
+  #   - mean
+  #   - median
+  #   - first observation by Year
+  #   - last observation by Year
+  # returns a single plot
+  
+  # ----------------------
+  # assert properties of inputs
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(country_colors, null.ok = TRUE)
+  checkmate::assertFlag(save)
+  
+  # ----------------------
+  # if not provided, generate country_colors
+  # ----------------------
+  if (is.null(country_colors)) {
+    country_colors <- assignCountryColors(data)
+  }
+  
+  # ----------------------
+  # p_mean
+  #   + aggregate labor force w/ basic education by country
+  #     using the mean
+  #   + plot that aggregation vs mean central gov debt
+  # ----------------------
+  p_mean <- data %>%
     group_by(Country_Name) %>%
     summarise(mean_debt = mean(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
               agg_education = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
@@ -123,7 +178,7 @@ aggr_examples <- function() {
                y = agg_education,
                color = Country_Name)) +
     geom_point() +
-    geom_smooth(method = "lm", se = FALSE, color = "grey") +
+    geom_smooth(method = "lm", se = TRUE, color = "grey", alpha = .15) +
     geom_label_repel(aes(label = Country_Name)) +
     scale_color_manual(values = country_colors, guide = "none") +
     scale_x_continuous(label = scales::label_number(suffix = "%"), limits = c(20, 130)) +
@@ -132,14 +187,26 @@ aggr_examples <- function() {
          y = "Bildungsquote",
          title = "Durchschnitt")
   
-  p_median <- p_mean %+% (Worldbank %>%
+  # ----------------------
+  # p_median
+  #   + aggregate labor force w/ basic education by country
+  #     using the median
+  #   + plot that aggregation vs mean central gov debt
+  # ----------------------
+  p_median <- p_mean %+% (data %>%
     group_by(Country_Name) %>%
     summarise(mean_debt = median(`Central_government_debt_total_(%_of_GDP)`, na.rm = TRUE),
               agg_education = median(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
     ungroup()) +
     ggtitle("Mittlere")
   
-  p_first.obs <- p_mean %+% (Worldbank %>%
+  # ----------------------
+  # p_first.obs
+  #   + aggregate labor force w/ basic education by country
+  #     using the first observation
+  #   + plot that aggregation vs mean central gov debt
+  # ----------------------
+  p_first.obs <- p_mean %+% (data %>%
                                filter(!is.na(`Central_government_debt_total_(%_of_GDP)`) &
                                         !is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
                                group_by(Country_Name) %>%
@@ -149,7 +216,13 @@ aggr_examples <- function() {
                                ungroup()) +
     ggtitle("Erste")
   
-  p_last.obs <- p_mean %+% (Worldbank %>%
+  # ----------------------
+  # p_last.obs
+  #   + aggregate labor force w/ basic education by country
+  #     using the last observation
+  #   + plot that aggregation vs mean central gov debt
+  # ----------------------
+  p_last.obs <- p_mean %+% (data %>%
                                filter(!is.na(`Central_government_debt_total_(%_of_GDP)`) &
                                         !is.na(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`)) %>%
                                group_by(Country_Name) %>%
@@ -159,6 +232,24 @@ aggr_examples <- function() {
                                ungroup()) +
     ggtitle("Letzte")
   
-  (p_first.obs | p_mean | p_median | p_last.obs) + 
-    plot_layout(axes = "collect")
+  # ----------------------
+  # using patchwork, combine p_first.obs, p_mean, p_median, p_last.obs as result
+  # ----------------------
+  result <- (p_first.obs | p_mean | p_median | p_last.obs) + 
+    plot_layout(axes = "collect") + plot_annotation(title = "Ein Beispiel aus Frage 2")
+  
+  # ----------------------
+  # save result examples as .png
+  # ----------------------
+  if (save) {
+    if (!dir.exists("Figures/Appendix")) {
+      dir.create(file.path("Figures/Appendix"))
+    }
+    ggsave(result, filename = "Figures/Appendix/aggregation_examples.png", device = "png")
+  }
+  
+  # ----------------------
+  # return result
+  # ----------------------
+  return(result)
 }

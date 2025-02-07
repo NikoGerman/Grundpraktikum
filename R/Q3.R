@@ -1,4 +1,11 @@
-Q3 <- function() {
+Q3 <- function(data, country_colors = NULL, save = FALSE) {
+  # ----------------------
+  # check properties of input
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(country_colors, null.ok = TRUE)
+  checkmate::assertFlag(save)
+  
   # ----------------------
   # Question:
   #   - How does the HIV prevalence in the population aged 15-49 
@@ -8,10 +15,11 @@ Q3 <- function() {
   # ----------------------
   
   # ----------------------
-  # load Data
+  # if not provided, generate country_colors
   # ----------------------
-  Worldbank <- readRDS("Data/cleaned/Worldbank.RDS")
-  country_colors <- readRDS("Data/cleaned/Country_Colors.rds")
+  if (is.null(country_colors)) {
+    country_colors <- assignCountryColors(data)
+  }
   
   # ----------------------
   # missingness:
@@ -22,7 +30,7 @@ Q3 <- function() {
   #   Label Missing if either one of the to features is missing
   #   - for plot.missing() see utils.R
   # ----------------------
-  missingness <- Worldbank %>% plot.missing(x1 = "Prevalence_of_HIV_total_(%_of_population_ages_15-49)",
+  missingness <- data %>% plot.missing(x1 = "Prevalence_of_HIV_total_(%_of_population_ages_15-49)",
                              x2 = "Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)") +
     ggtitle("Beobachtungen zu HIV-Prävalenz und Alkoholkonsum pro Kopf")
   
@@ -35,7 +43,7 @@ Q3 <- function() {
   #   - instead of a color guide, labels are used
   #   - a linear regression line is fitted
   # ----------------------
-  plot1 <- Worldbank %>%
+  plot1 <- data %>%
     group_by(Country_Name) %>%
     summarise(avg_alkohol = mean(`Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`, na.rm = TRUE),
               avg_HIV = mean(`Prevalence_of_HIV_total_(%_of_population_ages_15-49)`, na.rm = TRUE)) %>%
@@ -59,12 +67,12 @@ Q3 <- function() {
   #   - plot is faceted by continent
   #   - instead of a color guide, labels are used
   # ----------------------
-  plot2 <- Worldbank %>%
+  plot2 <- data %>%
     ggplot(aes(x = `Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`,
                y = `Prevalence_of_HIV_total_(%_of_population_ages_15-49)`,
                color = Country_Name)) +
     geom_point() +
-    geom_label_repel(data = Worldbank %>%
+    geom_label_repel(data = data %>%
                        filter(!is.na(`Prevalence_of_HIV_total_(%_of_population_ages_15-49)`) & 
                                 !is.na(`Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)`)) %>%
                        group_by(Country_Name) %>%
@@ -87,7 +95,7 @@ Q3 <- function() {
   #   - only Countries are shown, were correlation is computeable
   #   - for corr.plot() see utils.R
   # ----------------------
-  plot3 <- Worldbank %>% corr.plot(x1 = "Prevalence_of_HIV_total_(%_of_population_ages_15-49)",
+  plot3 <- data %>% corr.plot(x1 = "Prevalence_of_HIV_total_(%_of_population_ages_15-49)",
             x2 = "Total_alcohol_consumption_per_capita_(liters_of_pure_alcohol_projected_estimates_15+_years_of_age)")
   
   # ----------------------
@@ -100,7 +108,7 @@ Q3 <- function() {
   #   - instead of a color guide, labels are used
   #   - regression line is fitted
   # ----------------------
-  plot4 <- Worldbank %>%
+  plot4 <- data %>%
     group_by(Country_Name) %>%
     summarise(avg_HIV = mean(`Prevalence_of_HIV_total_(%_of_population_ages_15-49)`, na.rm = TRUE),
               avg_edu = mean(`Labor_force_with_basic_education_(%_of_total_working-age_population_with_basic_education)`, na.rm = TRUE)) %>%
@@ -116,13 +124,31 @@ Q3 <- function() {
          y = "HIV-Prävalenz")
   
   # ----------------------
-  # return plots as named list
+  # save plots as named list
   # ----------------------
-  return(list(
+  result <- list(
     missingness = missingness,
     plot1 = plot1,
     plot2 = plot2,
     plot3 = plot3,
     plot4 = plot4
-    ))
+  )
+  
+  # ----------------------
+  # save Figures if flag is set TRUE
+  # for save.figures, see utils
+  # WARNING
+  # save needs to be FALSE here, 
+  # otherways it would create an infinity loop
+  # ----------------------
+  if (save) {
+    save.figures(Q3, list(data = data,
+                          country_colors = country_colors,
+                          save = FALSE))
+  }
+  
+  # ----------------------
+  # return result
+  # ----------------------
+  return(result)
 }

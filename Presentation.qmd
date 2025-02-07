@@ -23,8 +23,7 @@ editor: visual
 ```{r setup}
 #| output: false
 source("source_all.R")
-ReadData()
-augmentData()
+DataPrep(method = "save", colors = FALSE)
 ```
 
 :::: {.fragment .fade-in fragment-index="1"}
@@ -140,7 +139,7 @@ augmentData()
 Lediglich für Afghanistan und das Vereingte Königreich fehlen einige Beobachtungen zum NNE.
 
 ```{r Elektrizität 0, fig.align='center'}
-Q1_plots <- Q1()
+Q1_plots <- Q1(readRDS("Data/cleaned/Worldbank.RDS"))
 Q1_plots$missingness
 ```
 
@@ -198,7 +197,8 @@ Q1_plots$plot3
 
 #### Landesgröße hat keinen Einfluss
 
-Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Landesgröße
+-   Die Stärke und Richtung der Rangkorrelation zeigt keinen Zusammenhang zur Landesgröße
+-   Sensitivätsanalyse bezüglich des Extremwerts Aruba verdeutlicht dies
 
 ```{r Elektrizität 5, fig.align='center'}
 Q1_plots$plot4
@@ -216,7 +216,8 @@ Q1_plots$plot4
 
 #### Bevölkerungsgröße hat wenig Einfluss
 
-Die Bevölkerungsgröße zeigt einen kleinen bis nicht vorhandenen positiven Zusammenhang mit der Stärke und Richtung der Rangkorrelation
+-   Die Bevölkerungsgröße zeigt einen **kleinen bis nicht vorhandenen positiven Zusammenhang** mit der Stärke und Richtung der Rangkorrelation
+-   Entfernen des Extremwerts Aruba ändert daran nichts (Sensitivitätsanalyse)
 
 ```{r Elektrizität 6, fig.align='center'}
 Q1_plots$plot5
@@ -251,7 +252,7 @@ Q1_plots$plot5
 Es gibt lediglich eine geringe Anzahl an kompletten Paaren von Staatsverschuldung und Bildungsquote bezüglich Land und Jahr
 
 ```{r Bildung 2, fig.align='center'}
-Q2_plots <- Q2()
+Q2_plots <- Q2(readRDS("Data/cleaned/Worldbank.RDS"))
 Q2_plots$missingness_1
 ```
 
@@ -353,7 +354,7 @@ Q2_plots$plot5
 -   Beobachtungen für das Jahr 2021 fehlen komplett
 
 ```{r HIV-Prävalenz 1, fig.align='center'}
-Q3_plots <- Q3()
+Q3_plots <- Q3(readRDS("Data/cleaned/Worldbank.RDS"))
 Q3_plots$missingness
 ```
 
@@ -430,7 +431,7 @@ Q3_plots$plot4
 -   für die übrigen Länder liegen sie vor 2018 nur alle fünf Jahre vor
 
 ```{r Tabak 1, fig.align='center'}
-Q4_plots <- Q4()
+Q4_plots <- Q4(readRDS("Data/cleaned/Worldbank.RDS"))
 Q4_plots$missingness
 ```
 
@@ -493,8 +494,8 @@ Q4_plots$plot3
 Die CO2 Daten weisen für mehrere Länder Einbrüche auf, welche unplausibel erscheinen
 
 ```{r Landwirtschaft 1, fig.align='center'}
-Q5_plots <- Q5()
-Q5_plots[[1]]
+Q5_plots <- Q5(readRDS("Data/cleaned/Worldbank.RDS"))
+Q5_plots$plot1
 ```
 
 ------------------------------------------------------------------------
@@ -505,7 +506,7 @@ Q5_plots[[1]]
 -   Katar sticht mit sehr hohen CO2 Emissionen pro Kopf, bei sehr geringer landwirtschaftlicher Nutzfläche heraus
 
 ```{r Landwirtschaft 3, fig.align='center'}
-Q5_plots[[4]]
+Q5_plots$plot2
 ```
 
 ------------------------------------------------------------------------
@@ -515,7 +516,7 @@ Q5_plots[[4]]
 Die Korrelation von landwirtschaftlicher Nutzfläche und CO2 Emissionen pro Kopf variiert in Stärke und Richtung.
 
 ```{r Landwirtschaft 4, fig.align='center'}
-Q5_plots[[2]]
+Q5_plots$plot3
 ```
 
 ------------------------------------------------------------------------
@@ -525,7 +526,7 @@ Q5_plots[[2]]
 Betrachtet man die beiden Faktoren jeweils im Durchschnitt, zeichnet sich kein Trend ab
 
 ```{r Landwirtschaft 5, fig.align='center'}
-Q5_plots[[5]]
+Q5_plots$plot4
 ```
 
 ------------------------------------------------------------------------
@@ -544,7 +545,7 @@ In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Kor
 [^2]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
 ```{r Landwirtschaft 6, fig.align='center'}
-Q5_plots[[3]]
+Q5_plots$plot5
 ```
 
 # Agenda
@@ -566,11 +567,11 @@ Q5_plots[[3]]
 ### Zusammenfassung
 
 ::: incremental
--   Zugang zu Elektrizität korreliert im Datensatz stark mit dem Nettonationaleinkommen pro Kopf
--   Eine hohe Staatsverschuldung hat in den vorhandenen Daten keinen Zusammenhang mit einer geringen Bildungsquote
--   Ein Zusammenhang zwischen Alkoholkonsum und HIV-Prävalenz gibt es in den Daten nicht
--   Im Datensatz existiert ein negativer Zusammenhang zwischen Tabakkonsum und BIP pro Kopf
--   Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es keinen Zusammenhang in den vorliegenden Daten
+-   Zugang zu Elektrizität korreliert im Datensatz **stark positiv** mit dem Nettonationaleinkommen pro Kopf
+-   Eine hohe Staatsverschuldung hat in den vorhandenen Daten **keinen Zusammenhang** mit einer geringen Bildungsquote
+-   Ein **Zusammenhang** zwischen Alkoholkonsum und HIV-Prävalenz **gibt es in den Daten nicht**
+-   Im Datensatz existiert ein **negativer Zusammenhang** zwischen Tabakkonsum und BIP pro Kopf
+-   Zwischen dem Anteil landwirtschaftlich genutzter Fläche den CO2 Emissionen pro Kopf gibt es **keinen Zusammenhang** in den vorliegenden Daten
 :::
 
 ------------------------------------------------------------------------
@@ -592,18 +593,17 @@ Q5_plots[[3]]
 Definition: $$r^{sp}_{XY} = \frac{\sum{(rg(X_i) - \bar{rg}_X)(rg(Y_i) - \bar{rg}_Y)}}{(\sum{(rg(X_i) - \bar{rg}_X)^2}\sum{(rg(Y_i) - \bar{rg}_Y)^2})^\frac{1}{2}} \in [-1, 1]$$
 
 ```{r Spearman, fig.align='center'}
-p <- spearman_examples()
-p
+spearman_examples()
 ```
 
 ## Volkswirtschaftliche Gesamtrechnung
 
-<!-- <img src="/Figures/Appendix/graphVGR.png" width="800"/> -->
-
 ![](Figures/Appendix/graphVGR.png){fig-align="center" width=70%}
 
-## Trendlinien
+## Lineare Regression
 ### Parameterschätzung
+
+:::incremental
 
 -   Die Trendlinien in den Graphen wurden durch **(einfache) Lineare Regression** erzeugt
 
@@ -613,8 +613,12 @@ p
 
 -   Die **Regressionsgerade** ist dann gegeben durch $\mathbf{\hat{y}} = \hat{\beta_0} + \mathbf{x}\,\hat{\beta_1}$
 
-## Trendlinien
+:::
+
+## Lineare Regression
 ### Konfidenzintervall
+
+:::incremental
 
 - Wir schätzen: $\hat{\sigma}^2 = \frac{1}{n - 2} \sum_{i=1}^n\hat{\epsilon}_i^2 = \frac{1}{n - 2} \sum_{i=1}^n(y_i - \hat{\beta_0} - \hat{\beta_1}\cdot x_i)^2$
 
@@ -624,7 +628,9 @@ p
 
 - Hierbei ist $t_{1-\frac{\alpha}{2}}(n-2)$ das $(1-\frac{\alpha}{2})$-Quantil der $t$-Verteilung mit $n-2$ Freiheitsgraden
 
+- Für großes $n$ gilt asymptotisch $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \overset{a}{\sim} \mathcal{N}(0,1)$ und damit $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}, \hat{y}_i + \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}\Biggr]$
 
+:::
 
 ## Aggregierung
 
@@ -632,5 +638,29 @@ p
 -   andere Formen der Aggregierung können andere Ergebnisse liefern
 
 ```{r Aggregierung, fig.align='center'}
-aggr_examples
+aggr_examples(readRDS("Data/cleaned/Worldbank.RDS"))
 ```
+
+## Klassifizierung durch Weltbank
+
+- Die Weltbank klassifiziert jährlich die betrachteten Länder nach dem Bruttonationaleinkommen pro Kopf in vier Kategorien
+      
+- In Frage vier haben wir diese Klassifizierung genutzt
+
+- Die Zuordnungen waren im Einzelnen:
+```{r Klassifizierung, fig.align='center'}
+dfg <- readRDS("Data/cleaned/Worldbank.RDS") %>%
+  group_by(Income_Group) %>%
+  summarise(Countries = paste(unique(Country_Name), collapse = ", "), .groups = 'drop')
+
+knitr::kable(dfg, col.names = c("Klassifizierung", "Länder"), format = "html", align = c("l", "r")) %>%
+  kableExtra::kable_styling(font_size = 24)
+``` 
+
+
+
+
+
+
+
+
