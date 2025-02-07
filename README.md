@@ -18,7 +18,7 @@ Grundsätzlich enthält es alle nötigen Skripte um Präsentation, Grafiken und 
 
 
 ## Anleitung
-Bitte führen sie zunächst den nachfolgenden Befehl in R aus, um die notwendigen Pakete zu installieren:
+Bitte führen sie zunächst den nachfolgenden Befehl in R aus, um die notwendigen Pakete und Dependencies zu installieren:
 ```
 renv::restore()
 ```

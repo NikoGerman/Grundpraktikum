@@ -1,8 +1,6 @@
 source("settings.R")
 source("R/utils.R")
 source("R/DataPrep.R")
-# source("R/ReadingData.R")
-# source("R/augmentData.R")
 source("R/Q1.R")
 source("R/Q2.R")
 source("R/Q3.R")
