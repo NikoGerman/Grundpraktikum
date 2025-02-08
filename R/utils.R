@@ -129,3 +129,19 @@ save.figures <- function(fun, args){
     }
   }
 }
+
+save.all <- function() {
+  # save all plots
+  data <- DataPrep(method = "return", colors = FALSE)
+  for (fun in paste0("Q", 1:5)) {
+    temp <- do.call(fun, args = list(data = data, method = "save")) %>%
+      suppress_mw()
+    msg <- paste0(fun, " plots saved to ", "<Figures/", fun, ">")
+    cat(msg, "\n")
+  }
+  spearman_examples(method = "save") %>% suppress_mw()
+  aggr_examples(data, method = "save") %>% suppress_mw()
+  graph_VGR(method = "save") %>% suppress_mw()
+  country_classification(data, method = "save") %>% suppress_mw()
+  cat("Appendix plots saved to <Figures/Appendix>\n")
+}

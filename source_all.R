@@ -1,4 +1,4 @@
-source("settings.R")
+source("R/settings.R")
 source("R/utils.R")
 source("R/DataPrep.R")
 source("R/Q1.R")

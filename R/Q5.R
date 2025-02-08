@@ -1,10 +1,11 @@
-Q5 <- function(data, country_colors = NULL, save = FALSE) {
+Q5 <- function(data, country_colors = NULL, method = "save") {
   # ----------------------
   # check properties of input
   # ----------------------
   checkmate::assertDataFrame(data, col.names = "named")
   checkmate::assertCharacter(country_colors, null.ok = TRUE)
-  checkmate::assertFlag(save)
+  checkmate::assertCharacter(method, len = 1, any.missing = FALSE)
+  checkmate::assertSubset(method, choices = c("save", "return"))
   
   # ----------------------
   # Question:
@@ -152,20 +153,20 @@ Q5 <- function(data, country_colors = NULL, save = FALSE) {
   )
   
   # ----------------------
-  # save Figures if flag is set TRUE
+  # save Figures if method is set to "save"
   # for save.figures, see utils
   # WARNING
-  # save needs to be FALSE here, 
-  # otherways it would create an infinity loop
+  # method needs to be "return" here,
+  # other ways it would create an infinity loop
   # ----------------------
-  if (save) {
+  if (method == "save") {
     save.figures(Q5, list(data = data,
                           country_colors = country_colors,
-                          save = FALSE))
+                          method = "return"))
+  } else {
+    # ----------------------
+    # return result
+    # ----------------------
+    return(result)
   }
-  
-  # ----------------------
-  # return result
-  # ----------------------
-  return(result)
 }

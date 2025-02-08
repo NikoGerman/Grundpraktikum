@@ -1,10 +1,11 @@
-spearman_examples <- function(save = FALSE) {
+spearman_examples <- function(method = "save") {
   # create examples for spearman correlation
   
   # ----------------------
   # assert property of input
   # ----------------------
-  checkmate::assertFlag(save)
+  checkmate::assertCharacter(method, len = 1, any.missing = FALSE)
+  checkmate::assertSubset(method, choices = c("save", "return"))
   # ----------------------
   #   - set random seed
   #   - x_ : 50 values ranging from 0 to 10
@@ -74,17 +75,17 @@ spearman_examples <- function(save = FALSE) {
   #   if save is TRUE, check if directory exists, if not create it
   #   save result as .png
   # ----------------------
-  if (save) {
+  if (method == "save") {
     if (!dir.exists("Figures/Appendix")) {
       dir.create(file.path("Figures/Appendix"))
     }
     ggsave(result, filename = "Figures/Appendix/spearman_examples.png", device = "png")
+  } else {
+    # ----------------------
+    #   retrun result
+    # ----------------------
+    return(result)
   }
-  
-  # ----------------------
-  #   retrun result
-  # ----------------------
-  return(result)
 }
 
 # ----------------------
@@ -92,13 +93,14 @@ spearman_examples <- function(save = FALSE) {
 # returns raw format
 # ----------------------
 
-graph_VGR <- function(return.raw = FALSE) {
+graph_VGR <- function(method = "save") {
   # create graph explaining Volkswirtschaftliche Gesamtrechnung (VGR)
   
   # ----------------------
   # assert property of input
   # ----------------------
-  checkmate::assertFlag(return.raw)
+  checkmate::assertCharacter(method, len = 1, any.missing = FALSE)
+  checkmate::assertSubset(method, choices = c("save", "return"))
   
   # ----------------------
   # create result: the graph
@@ -123,24 +125,22 @@ graph_VGR <- function(return.raw = FALSE) {
     DiagrammeRsvg::export_svg() %>%
     charToRaw()
   
-  # ----------------------
-  # check if directory exists, if not create it
-  # save result as .png
-  # ----------------------
-  if (!dir.exists("Figures/Appendix")) {
-    dir.create(file.path("Figures/Appendix"))
-  }
-  rsvg::rsvg_png(result, file = "Figures/Appendix/graphVGR.png", height = 1440)
-  
-  # ----------------------
-  # if return.raw is TRUE, return result (raw format)
-  # ----------------------
-  if (return.raw) {
+  if (method == "save") {
+    # ----------------------
+    # check if directory exists, if not create it
+    # save result as .png
+    # ----------------------
+    if (!dir.exists("Figures/Appendix")) {
+      dir.create(file.path("Figures/Appendix"))
+    }
+    rsvg::rsvg_png(result, file = "Figures/Appendix/graphVGR.png", height = 1440)
+  } else {
     return(result)
   }
+  
 }
 
-aggr_examples <- function(data, country_colors = NULL, save = FALSE) {
+aggr_examples <- function(data, country_colors = NULL, method = "save") {
   # create examples of different aggregation outputs
   # aggregating education by Country:
   #   - mean
@@ -154,7 +154,8 @@ aggr_examples <- function(data, country_colors = NULL, save = FALSE) {
   # ----------------------
   checkmate::assertDataFrame(data, col.names = "named")
   checkmate::assertCharacter(country_colors, null.ok = TRUE)
-  checkmate::assertFlag(save)
+  checkmate::assertCharacter(method, len = 1, any.missing = FALSE)
+  checkmate::assertSubset(method, choices = c("save", "return"))
   
   # ----------------------
   # if not provided, generate country_colors
@@ -241,15 +242,38 @@ aggr_examples <- function(data, country_colors = NULL, save = FALSE) {
   # ----------------------
   # save result examples as .png
   # ----------------------
-  if (save) {
+  if (method == "save") {
     if (!dir.exists("Figures/Appendix")) {
       dir.create(file.path("Figures/Appendix"))
     }
     ggsave(result, filename = "Figures/Appendix/aggregation_examples.png", device = "png")
+  } else {
+    # ----------------------
+    # return result
+    # ----------------------
+    return(result)
   }
+}
+
+country_classification <-function(data, method = "save") {
+  # ----------------------
+  # assert properties of inputs
+  # ----------------------
+  checkmate::assertDataFrame(data, col.names = "named")
+  checkmate::assertCharacter(method, len = 1, any.missing = FALSE)
+  checkmate::assertSubset(method, choices = c("save", "return"))
   
-  # ----------------------
-  # return result
-  # ----------------------
-  return(result)
+  result <- data %>%
+    group_by(Income_Group) %>%
+    summarise(Countries = paste(unique(Country_Name), collapse = ", "), .groups = 'drop') %>%
+    rename(Klassifizierung = Income_Group, Länder = Countries) %>%
+    knitr::kable(format = "html", align = c("l", "r")) %>%
+    kableExtra::kable_styling(font_size = 24)
+  
+  if (method == "save") {
+     result %>%
+      readr::write_file("Figures/Appendix/Country_Classification.html")
+  } else {
+    return(result)
+  }
 }
