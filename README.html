@@ -371,17 +371,20 @@ Executive Summary zu erzeugen.</p>
 <h2>Anleitung</h2>
 <div id="wiederherstellen-der-umgebung" class="section level3">
 <h3>Wiederherstellen der Umgebung</h3>
-<p>Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
+<p><strong>R Version 4.4 oder höher benötigt!</strong><br />
+Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
 notwendigen Pakete und Dependencies zu installieren:</p>
 <pre><code>renv::restore()</code></pre>
 </div>
 <div id="erzeugen-der-präsentation" class="section level3">
 <h3>Erzeugen der Präsentation</h3>
-<p>Zum Erzeugen der Präsentation, öffnen Sie wahlweise Presentation.qmd
-und klicken dort “Render” oder führen folgenden R-Command aus:</p>
+<p>Um Speicherplatz zu sparen, muss die wurde darauf verzichtet die
+gerenderte Präsentation abzuspeichern. Zum Erzeugen der Präsentation,
+öffnen Sie wahlweise Presentation.qmd und klicken dort “Render” oder
+führen folgenden R-Command aus:</p>
 <pre><code>quarto::quarto_render(&quot;Presentation.qmd&quot;)</code></pre>
 <p>Die gerenderte Präsentation trägt dann den Namen Presentation.html,
-Presentation_held.html ist die Präsentation, welche vorgetragen wurde.
+Presentation_held.pdf ist die Präsentation, welche vorgetragen wurde.
 Zur Erzeugung dieser existiert kein gesonderter Code.</p>
 </div>
 <div id="erzeugen-der-executive-summary" class="section level3">
@@ -424,10 +427,6 @@ Verwendung finden.<br />
 Q1.R,…, Q5.R erzeugen jeweils die Grafiken für Frage 1,…, Frage 5.<br />
 Appendix.R erzeugt die im Anhang der Präsentation genutzten
 Grafiken.</p>
-</div>
-<div id="ressources" class="section level3">
-<h3>Ressources</h3>
-<p>Das Verzeichnis enthält lediglich eine Grafik mit dem LMU Logo.</p>
 </div>
 <div id="weitere-verzeichnisse" class="section level3">
 <h3>Weitere Verzeichnisse</h3>

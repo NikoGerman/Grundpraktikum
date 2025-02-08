@@ -19,6 +19,7 @@ um sowohl Präsentation als auch Grafiken und Executive Summary zu erzeugen.
 ## Anleitung
 
 ### Wiederherstellen der Umgebung
+**R Version 4.4 oder höher benötigt!**\
 Bitte führen sie zunächst den nachfolgenden R-Command aus, um die notwendigen
 Pakete und Dependencies zu installieren:
 ```
