@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: 72
----
-
 # Worldbank Datensatz
 **Modul Grundlegendes Praxisprojekt P11.1 Bachelor Statistik und Data Science (PO 2021)**
 
