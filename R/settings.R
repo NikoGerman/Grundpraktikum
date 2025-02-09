@@ -7,14 +7,6 @@ library(ggplot2)
 library(ggrepel)
 library(patchwork)
 
-# library(forcats)
-# library(checkmate)
-# library(viridis)
-# library(readxl)
-# library(DiagrammeR)
-# library(DiagrammeRsvg)
-# library(rsvg)
-
 # ----------------------
 # set paths to datasets
 # ----------------------

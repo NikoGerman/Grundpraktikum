@@ -13,15 +13,26 @@ um sowohl Präsentation als auch Grafiken und Executive Summary zu erzeugen.
 ## Anleitung
 
 ### Wiederherstellen der Umgebung
-**R Version 4.4 oder höher benötigt!**\
-Bitte führen sie zunächst den nachfolgenden R-Command aus, um die notwendigen
-Pakete und Dependencies zu installieren:
-```
-renv::restore()
-```
+
+  1.  Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt. 
+  **R Version 4.4 oder höher benötigt!**
+  
+  2.  Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
+  notwendigen Pakete und Dependencies zu installieren:
+  ```
+  renv::restore()
+  ```
+  3.  **Vorsicht, Schritt nur ausführen, wenn die Wiederherstellung scheiterte! Kann zu Fehlern führen.**
+  Sollten Sie keine aktuelle R Version bereitsstellen können, 
+  oder das Wiederherstellen der Umgebung einen Fehler produzieren,
+  besteht mit folgendem R-Command die Möglichkeit die benötigten Packages
+  direkt zu installieren.\ 
+  ```
+  source("R/env_hard_setup.R")
+  ```
 
 ### Erzeugen der Präsentation
-Um Speicherplatz zu sparen, muss die wurde darauf verzichtet die gerenderte
+Um Speicherplatz zu sparen, wurde bewusst darauf verzichtet die gerenderte
 Präsentation abzuspeichern. Zum Erzeugen der Präsentation, öffnen Sie wahlweise
 Presentation.qmd und klicken dort "Render" oder führen folgenden R-Command aus:
 ```
@@ -47,7 +58,7 @@ zwischengespeichert. Um trotzdem den Abgaberichtlinien genüge zu tun, liegen
 alle in der Präsentation genutzen Grafiken im Verzeichnis Figures/.\ 
 Sollten Sie diese neu erzeugen wollen, führen sie folgenden R-Command aus:
 ```
-source(source_all.R)
+source("source_all.R")
 save.all()
 ```
 
@@ -57,26 +68,20 @@ sowie die aufbereiteten Daten im Subverzeichnis /cleaned.\
 Sollten Sie die Daten in /cleaned neu erzeugen wollen, führen Sie folgenden
 R-Command aus:
 ```
-source(source_all.R)
+source("source_all.R")
 DataPrep(method = "save", colors = TRUE)
 ```
 
 ### R
-Das Verzeichnis R/ enthält alle .R Skripte mit Ausnahme von settings.R und 
-source_all.R.\
+Das Verzeichnis R/ enthält alle .R Skripte mit Ausnahme von source_all.R.\
 Die Skripte sind in der Regel nach ihrer angedachten Funktionalität
 benannt.\
 In utils.R finden sich Funktionen, die in verschiedenen anderen
 Skripten Verwendung finden.\
 Q1.R,..., Q5.R erzeugen jeweils die Grafiken für
 Frage 1,..., Frage 5.\
-Appendix.R erzeugt die im Anhang der
-Präsentation genutzten Grafiken.
+Appendix.R erzeugt die im Anhang der Präsentation genutzten Grafiken.
 
 ### Weitere Verzeichnisse
 Die übrigen Verzeichnisse wurden entweder systemseitig bei der Versionierung
 oder im Rahmen der Paket-Verwaltung erzeugt und genutzt.
-
-
-
-

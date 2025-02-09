@@ -371,14 +371,25 @@ Executive Summary zu erzeugen.</p>
 <h2>Anleitung</h2>
 <div id="wiederherstellen-der-umgebung" class="section level3">
 <h3>Wiederherstellen der Umgebung</h3>
-<p><strong>R Version 4.4 oder höher benötigt!</strong><br />
-Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
-notwendigen Pakete und Dependencies zu installieren:</p>
+<ol style="list-style-type: decimal">
+<li><p>Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt.
+<strong>R Version 4.4 oder höher benötigt!</strong></p></li>
+<li><p>Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
+notwendigen Pakete und Dependencies zu installieren:</p></li>
+</ol>
 <pre><code>renv::restore()</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Vorsicht, Schritt nur ausführen, wenn die Wiederherstellung
+scheiterte! Kann zu Fehlern führen.</strong> Sollten Sie keine aktuelle
+R Version bereitsstellen können, oder das Wiederherstellen der Umgebung
+einen Fehler produzieren, besteht mit folgendem R-Command die
+Möglichkeit die benötigten Packages direkt zu installieren. </li>
+</ol>
+<pre><code>source(&quot;R/env_hard_setup.R&quot;)</code></pre>
 </div>
 <div id="erzeugen-der-präsentation" class="section level3">
 <h3>Erzeugen der Präsentation</h3>
-<p>Um Speicherplatz zu sparen, muss die wurde darauf verzichtet die
+<p>Um Speicherplatz zu sparen, wurde bewusst darauf verzichtet die
 gerenderte Präsentation abzuspeichern. Zum Erzeugen der Präsentation,
 öffnen Sie wahlweise Presentation.qmd und klicken dort “Render” oder
 führen folgenden R-Command aus:</p>
@@ -404,7 +415,7 @@ nicht zwischengespeichert. Um trotzdem den Abgaberichtlinien genüge zu
 tun, liegen alle in der Präsentation genutzen Grafiken im Verzeichnis
 Figures/.  Sollten Sie diese neu erzeugen wollen, führen sie folgenden
 R-Command aus:</p>
-<pre><code>source(source_all.R)
+<pre><code>source(&quot;source_all.R&quot;)
 save.all()</code></pre>
 </div>
 <div id="data" class="section level3">
@@ -413,7 +424,7 @@ save.all()</code></pre>
 /raw, sowie die aufbereiteten Daten im Subverzeichnis /cleaned.<br />
 Sollten Sie die Daten in /cleaned neu erzeugen wollen, führen Sie
 folgenden R-Command aus:</p>
-<pre><code>source(source_all.R)
+<pre><code>source(&quot;source_all.R&quot;)
 DataPrep(method = &quot;save&quot;, colors = TRUE)</code></pre>
 </div>
 <div id="r" class="section level3">
