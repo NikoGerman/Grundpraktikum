@@ -1,4 +1,4 @@
-# set options so, packages get installed without aksing the user
+# set options so, packages get installed without asking the user
 options(install.packages.compile.from.source = "always")
 
 # needed packages
@@ -15,7 +15,8 @@ pkgs <- c("dplyr",
   "DiagrammeRsvg",
   "rsvg",
   "kableExtra",
-  "quarto")
+  "quarto",
+  "tinytex")
 
 # already installed packages
 installed <- rownames(installed.packages())

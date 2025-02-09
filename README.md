@@ -16,7 +16,7 @@ um sowohl Präsentation als auch Grafiken und Executive Summary zu erzeugen.
 
   1.  Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt.\
   **R Version 4.4 oder höher benötigt!**\
-  Auf Microsoft Betriebssystemen wird unter Umständen eine aktuelle Instalation von _Rtools_ benötigt.
+  Auf Microsoft Betriebssystemen wird unter Umständen eine aktuelle Installation von _Rtools_ benötigt.
   
   2.  Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
   notwendigen Pakete und Dependencies zu installieren:
@@ -31,10 +31,15 @@ um sowohl Präsentation als auch Grafiken und Executive Summary zu erzeugen.
   ```
   source("R/env_hard_setup.R")
   ```
+  4.  **Nur notwendig wenn Sie die Präsentation oder Executive Summary selbst erzeugen wollen:**\
+  Zum Rendern wird eine TeX Installation benötigt. Eine Möglichkeit um TeX zu installieren ist:
+  ```
+  tinytex::install_tinytex()
+  ```
+  
 
 ### Erzeugen der Präsentation
-Um Speicherplatz zu sparen, wurde bewusst darauf verzichtet die gerenderte
-Präsentation abzuspeichern. Zum Erzeugen der Präsentation, öffnen Sie wahlweise
+Zum Erzeugen der Präsentation, öffnen Sie wahlweise
 Presentation.qmd und klicken dort "Render" oder führen folgenden R-Command aus:
 ```
 quarto::quarto_render("Presentation.qmd")
@@ -57,7 +62,7 @@ Den Output finden Sie dann im File ExecutiveSummary.pdf.
 Beim Erzeugen der Präsentation werden die Grafiken direkt erzeugt und nicht
 zwischengespeichert. Um trotzdem den Abgaberichtlinien genüge zu tun, liegen
 alle in der Präsentation genutzen Grafiken im Verzeichnis Figures/.\ 
-Sollten Sie diese neu erzeugen wollen, führen sie folgenden R-Command aus:
+Zum Erzeugen dieser, führen Sie bitte folgenden R-Command aus:
 ```
 source("source_all.R")
 save.all()

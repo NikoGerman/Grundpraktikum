@@ -388,13 +388,18 @@ besteht mit folgendem R-Command die Möglichkeit die benötigten Packages
 direkt zu installieren. </li>
 </ol>
 <pre><code>source(&quot;R/env_hard_setup.R&quot;)</code></pre>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Nur notwendig wenn Sie die Präsentation oder Executive
+Summary selbst erzeugen wollen:</strong><br />
+Zum Rendern wird eine TeX Instalation benötigt. Eine Möglichkeit um TeX
+zu installieren ist:</li>
+</ol>
+<pre><code>tinytex::install_tinytex()</code></pre>
 </div>
 <div id="erzeugen-der-präsentation" class="section level3">
 <h3>Erzeugen der Präsentation</h3>
-<p>Um Speicherplatz zu sparen, wurde bewusst darauf verzichtet die
-gerenderte Präsentation abzuspeichern. Zum Erzeugen der Präsentation,
-öffnen Sie wahlweise Presentation.qmd und klicken dort “Render” oder
-führen folgenden R-Command aus:</p>
+<p>Zum Erzeugen der Präsentation, öffnen Sie wahlweise Presentation.qmd
+und klicken dort “Render” oder führen folgenden R-Command aus:</p>
 <pre><code>quarto::quarto_render(&quot;Presentation.qmd&quot;)</code></pre>
 <p>Die gerenderte Präsentation trägt dann den Namen Presentation.html,
 Presentation_held.pdf ist die Präsentation, welche vorgetragen wurde.
@@ -415,8 +420,8 @@ Erzeugen der Präsentation vor, bzw. führen folgenden R-Command aus:</p>
 <p>Beim Erzeugen der Präsentation werden die Grafiken direkt erzeugt und
 nicht zwischengespeichert. Um trotzdem den Abgaberichtlinien genüge zu
 tun, liegen alle in der Präsentation genutzen Grafiken im Verzeichnis
-Figures/.  Sollten Sie diese neu erzeugen wollen, führen sie folgenden
-R-Command aus:</p>
+Figures/.  Zum Erzeugen dieser, führen Sie bitte folgenden R-Command
+aus:</p>
 <pre><code>source(&quot;source_all.R&quot;)
 save.all()</code></pre>
 </div>

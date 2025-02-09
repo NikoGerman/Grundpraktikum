@@ -79,7 +79,7 @@ DataPrep(method = "save", colors = FALSE)
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|-----------------------------|-------------------------------------------|
+|----|----|
 | BIP pro Kopf | BIP pro Einwohner gerechnet, *inflationsbereinigt zu 2021* |
 | NNE pro Kopf | NNE pro Einwohner gerechnet, *inflationsbereinigt* |
 | Staatsverschuldung | Staatsverschuldung als Vielfaches des BIP, in % |
@@ -91,7 +91,7 @@ DataPrep(method = "save", colors = FALSE)
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|-----------------------------|-------------------------------------------|
+|----|----|
 | Zugang zu Elektrizität | Anteil der Bevölkerung mit zuverlässiger Elektrizitätsversorgung |
 | Bildungsquote | Anteil der Erwerbspersonen mit grundlegender Schulbildung |
 | HIV-Prävalenz | Prävalenz von HIV unter der 15-49 Jährigen |
