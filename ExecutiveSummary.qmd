@@ -9,8 +9,9 @@ format:
     classoption: [twocolumn]
     geometry:
       - top=10mm
-      - left=15mm
-      - right=15mm
+      - left=10mm
+      - right=10mm
+      - bottom=10mm
       - heightrounded
     mainfont: Times New Roman
     colorlinks: true
@@ -19,7 +20,7 @@ format:
 ---
 
 # Zusammenfassung
-Bei der Analyse des Worldbank Datensatzes konnten wir einige klare Zusammenhänge identifizieren. Andere Fragestellungen konnten wir dagegen nicht, oder nur teilweise beantworten. Nicht erfasste Variablen, wie beispielsweise die mehrheitliche Religionszugehörigkeit der Bevölkerung eines Landes, oder die Leistungsfähigkeit des Gesundheitssystems, könnten bei diesen Fragen neue Erklärungsansätze liefern.
+Bei der Analyse des Worldbank Datensatzes konnten wir einige klare Zusammenhänge identifizieren. Andere Fragestellungen konnten wir dagegen nicht, oder nur teilweise beantworten. Zusätzliche Länder, ein längerer Beobachtungszeitraum und weitere Variablen könnten bei diesen Fragen neue Erklärungsansätze liefern.
 
 # Fragestellungen
 Wir haben uns mit fünf Fragekomplexen beschäftigt:\
@@ -42,3 +43,8 @@ Im Einzelnen kamen wir zu den folgenden Ergebnissen:\
 **(iii)** Zwischen HIV-Prävalenz und dem Alkoholkonsum der erwachsenen Bevölkerung konnten wir keine Beziehung feststellen. Ein Effekt der Bildungsquote auf die HIV-Prävalenz war ebenfalls in den Daten nicht zu sehen.\ 
 **(iv)** Die Prävalenz des Tabakkonsums korreliert negativ mit dem Bruttoinlandsprodukt pro Kopf.\ 
 **(v)** Aus den Daten lässt sich nicht erschließen, ob es einen Zusammenhang zwischen dem Anteil der landwirtschaftlich genutzten Landesfläche und den CO2 Emissionen pro Kopf gibt.
+
+# Ausblick
+Grundsätzlich gibt es aus unserer Sicht zwei mögliche Ansätze um die Ergebnisse zu verbessern:\
+**(a)** Erhöhung der Datenmenge, durch Hinzunahme zuästzlicher Länder und/oder Betrachtung eines größeren Zeitraums. Ersteres könnte die Unsicherheit bei der Betrachtung aggregierter Werte auf Länderebene verringern, Zweiteres die Unsicherheit bei der Betrachtung von Zusammenhängen innerhalb eines Landes.\ 
+**(b)** Nicht erfasste Variablen, wie beispielsweise die mehrheitliche Religionszugehörigkeit der Bevölkerung eines Landes, oder die Leistungsfähigkeit des Gesundheitssystems, könnten neue Erklärungsansätze liefern.
