@@ -14,15 +14,16 @@ um sowohl Präsentation als auch Grafiken und Executive Summary zu erzeugen.
 
 ### Wiederherstellen der Umgebung
 
-  1.  Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt. 
-  **R Version 4.4 oder höher benötigt!**
+  1.  Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt.\
+  **R Version 4.4 oder höher benötigt!**\
+  Auf Microsoft Betriebssystemen wird unter Umständen eine aktuelle Instalation von _Rtools_ benötigt.
   
   2.  Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
   notwendigen Pakete und Dependencies zu installieren:
   ```
   renv::restore()
   ```
-  3.  **Vorsicht, Schritt nur ausführen, wenn die Wiederherstellung scheiterte! Kann zu Fehlern führen.**
+  3.  **Vorsicht, Schritt nur ausführen, wenn die Wiederherstellung scheiterte!**
   Sollten Sie keine aktuelle R Version bereitsstellen können, 
   oder das Wiederherstellen der Umgebung einen Fehler produzieren,
   besteht mit folgendem R-Command die Möglichkeit die benötigten Packages

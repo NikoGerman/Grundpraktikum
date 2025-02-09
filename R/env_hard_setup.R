@@ -1,3 +1,7 @@
+# set options so, packages get installed without aksing the user
+options(install.packages.compile.from.source = "always")
+
+# needed packages
 pkgs <- c("dplyr",
   "tidyr",
   "ggplot2",
@@ -9,16 +13,20 @@ pkgs <- c("dplyr",
   "readxl",
   "DiagrammeR",
   "DiagrammeRsvg",
-  "rsvg")
+  "rsvg",
+  "kableExtra",
+  "quarto")
 
+# already installed packages
 installed <- rownames(installed.packages())
 
+# install all
 cat("Versuche die benötigen Packages direkt zu installieren:")
 for (pkg in pkgs) {
   if(any(installed == pkg)) {
     next
   } else {
     cat("Package <", pkg, "> wird installiert...\n", sep = "")
-    install.packages(pkg)
+    install.packages(pkg, verbose = FALSE)
   }
 }

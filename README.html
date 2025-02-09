@@ -372,18 +372,20 @@ Executive Summary zu erzeugen.</p>
 <div id="wiederherstellen-der-umgebung" class="section level3">
 <h3>Wiederherstellen der Umgebung</h3>
 <ol style="list-style-type: decimal">
-<li><p>Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt.
-<strong>R Version 4.4 oder höher benötigt!</strong></p></li>
+<li><p>Öffnen Sie das vorliegende Verzeichnis als neues R-Projekt.<br />
+<strong>R Version 4.4 oder höher benötigt!</strong><br />
+Auf Microsoft Betriebssystemen wird unter Umständen eine aktuelle
+Instalation von <em>Rtools</em> benötigt.</p></li>
 <li><p>Bitte führen sie zunächst den nachfolgenden R-Command aus, um die
 notwendigen Pakete und Dependencies zu installieren:</p></li>
 </ol>
 <pre><code>renv::restore()</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><strong>Vorsicht, Schritt nur ausführen, wenn die Wiederherstellung
-scheiterte! Kann zu Fehlern führen.</strong> Sollten Sie keine aktuelle
-R Version bereitsstellen können, oder das Wiederherstellen der Umgebung
-einen Fehler produzieren, besteht mit folgendem R-Command die
-Möglichkeit die benötigten Packages direkt zu installieren. </li>
+scheiterte!</strong> Sollten Sie keine aktuelle R Version bereitsstellen
+können, oder das Wiederherstellen der Umgebung einen Fehler produzieren,
+besteht mit folgendem R-Command die Möglichkeit die benötigten Packages
+direkt zu installieren. </li>
 </ol>
 <pre><code>source(&quot;R/env_hard_setup.R&quot;)</code></pre>
 </div>
@@ -430,7 +432,7 @@ DataPrep(method = &quot;save&quot;, colors = TRUE)</code></pre>
 <div id="r" class="section level3">
 <h3>R</h3>
 <p>Das Verzeichnis R/ enthält alle .R Skripte mit Ausnahme von
-settings.R und source_all.R.<br />
+source_all.R.<br />
 Die Skripte sind in der Regel nach ihrer angedachten Funktionalität
 benannt.<br />
 In utils.R finden sich Funktionen, die in verschiedenen anderen Skripten

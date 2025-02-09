@@ -79,7 +79,7 @@ DataPrep(method = "save", colors = FALSE)
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|----------------------------|-------------------------------------------|
+|-----------------------------|-------------------------------------------|
 | BIP pro Kopf | BIP pro Einwohner gerechnet, *inflationsbereinigt zu 2021* |
 | NNE pro Kopf | NNE pro Einwohner gerechnet, *inflationsbereinigt* |
 | Staatsverschuldung | Staatsverschuldung als Vielfaches des BIP, in % |
@@ -91,7 +91,7 @@ DataPrep(method = "save", colors = FALSE)
 ### Betrachtete Merkmale
 
 | Merkmal | Beschreibung |
-|----------------------------|-------------------------------------------|
+|-----------------------------|-------------------------------------------|
 | Zugang zu Elektrizität | Anteil der Bevölkerung mit zuverlässiger Elektrizitätsversorgung |
 | Bildungsquote | Anteil der Erwerbspersonen mit grundlegender Schulbildung |
 | HIV-Prävalenz | Prävalenz von HIV unter der 15-49 Jährigen |
@@ -174,7 +174,6 @@ Q1_plots$plot2
 ```{r Elektrizität 3, fig.align='center'}
 knitr::kable(Q1_plots$Table1, format = "html", align = c("l", "r"))
 ```
-
 
 ------------------------------------------------------------------------
 
@@ -462,7 +461,9 @@ Q4_plots$plot2
 
 #### BIP pro Kopf korreliert negativ mit Tabakkonsum
 
-Bei den reicheren Volkswirtschaften[^1] existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
+Bei den reicheren Volkswirtschaften[^2] existiert der Trend sowohl übergreifend, also auch auf Ebene der Nationen.
+
+[^2]: gemäß Klassifikation durch die Weltbank von 2023
 
 ```{r Tabak 4, fig.align='center'}
 Q4_plots$plot3
@@ -540,9 +541,9 @@ Q5_plots$plot4
 
 #### Gesamtfläche hat keinen Einfluss
 
-In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^2] vor.
+In den vorliegenden Daten liegt kein Zusammenhang zwischen Landesgröße und Korrelationskoeffizient[^3] vor.
 
-[^2]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
+[^3]: bzgl. CO2 Emissionen pro Kopf und landwirtschaftlicher Nutzfläche
 
 ```{r Landwirtschaft 6, fig.align='center'}
 Q5_plots$plot5
@@ -597,17 +598,18 @@ spearman_examples(method = "return")
 ```
 
 ## Volkswirtschaftliche Gesamtrechnung
-```{r}
+
+```{r graph VGR}
 graph_VGR(method = "save")
 ```
 
-![](Figures/Appendix/graphVGR.png){fig-align="center" width=70%}
+![](Figures/Appendix/graphVGR.png){fig-align="center" width="70%"}
 
 ## Lineare Regression
+
 ### Parameterschätzung
 
-:::incremental
-
+::: incremental
 -   Die Trendlinien in den Graphen wurden durch **(einfache) Lineare Regression** erzeugt
 
 -   Die **Strukturgleichung** ist gegeben durch: $y_i = \beta_0 + \beta_1 \cdot x_i + \epsilon_i$, wobei $\epsilon_i \sim \mathcal{N}(0, \sigma^2)$ ist
@@ -615,24 +617,22 @@ graph_VGR(method = "save")
 -   Wir schätzen $\mathbf{\beta} = (\beta_0, \beta_1)^\top$ durch minimieren des **Kleinste-Quadrate (KQ) Problems** zu $$\mathbf{\hat{\beta}} = \operatorname*{arg\,min}_\mathbf{\beta} \sum_{i=1}^n (y_i - \beta_0 + x_i\,\beta_1)^2$$
 
 -   Die **Regressionsgerade** ist dann gegeben durch $\mathbf{\hat{y}} = \hat{\beta_0} + \mathbf{x}\,\hat{\beta_1}$
-
 :::
 
 ## Lineare Regression
+
 ### Konfidenzintervall
 
-:::incremental
+::: incremental
+-   Wir schätzen: $\hat{\sigma}^2 = \frac{1}{n - 2} \sum_{i=1}^n\hat{\epsilon}_i^2 = \frac{1}{n - 2} \sum_{i=1}^n(y_i - \hat{\beta_0} - \hat{\beta_1}\cdot x_i)^2$
 
-- Wir schätzen: $\hat{\sigma}^2 = \frac{1}{n - 2} \sum_{i=1}^n\hat{\epsilon}_i^2 = \frac{1}{n - 2} \sum_{i=1}^n(y_i - \hat{\beta_0} - \hat{\beta_1}\cdot x_i)^2$
+-   Weiterhin gilt: $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \sim t_{n-2}$, mit $\sigma_{y_i}^2 = \hat{\sigma}^2  \Biggl[\frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{i = 1}^n (x_i - \bar{x}^2)}\Biggr]$
 
-- Weiterhin gilt: $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \sim t_{n-2}$, mit $\sigma_{y_i}^2 = \hat{\sigma}^2  \Biggl[\frac{1}{n} + \frac{(x_i - \bar{x})^2}{\sum_{i = 1}^n (x_i - \bar{x}^2)}\Biggr]$
+-   Das **Konfidenzintervall von** $\hat{y}_i$ zum Niveau $\alpha$ ist dann: $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2), \hat{y}_i + \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2)\Biggr]$
 
-- Das **Konfidenzintervall von $\hat{y}_i$ zum Niveau $\alpha$** ist dann: $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2), \hat{y}_i + \hat{\sigma}_{y_i} \cdot t_{1-\frac{\alpha}{2}}(n-2)\Biggr]$
+-   Hierbei ist $t_{1-\frac{\alpha}{2}}(n-2)$ das $(1-\frac{\alpha}{2})$-Quantil der $t$-Verteilung mit $n-2$ Freiheitsgraden
 
-- Hierbei ist $t_{1-\frac{\alpha}{2}}(n-2)$ das $(1-\frac{\alpha}{2})$-Quantil der $t$-Verteilung mit $n-2$ Freiheitsgraden
-
-- Für großes $n$ gilt asymptotisch $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \overset{a}{\sim} \mathcal{N}(0,1)$ und damit $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}, \hat{y}_i + \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}\Biggr]$
-
+-   Für großes $n$ gilt asymptotisch $\frac{y_i - \hat{y}_i}{\sigma_{y_i}} \overset{a}{\sim} \mathcal{N}(0,1)$ und damit $\Biggl[\hat{y}_i - \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}, \hat{y}_i + \hat{\sigma}_{y_i} \cdot z_{1-\frac{\alpha}{2}}\Biggr]$
 :::
 
 ## Aggregierung
@@ -646,19 +646,12 @@ aggr_examples(readRDS("Data/cleaned/Worldbank.RDS"), method = "return")
 
 ## Klassifizierung durch Weltbank
 
-- Die Weltbank klassifiziert jährlich die betrachteten Länder nach dem Bruttonationaleinkommen pro Kopf in vier Kategorien
-      
-- In Frage vier haben wir diese Klassifizierung genutzt
+-   Die Weltbank klassifiziert jährlich die betrachteten Länder nach dem Bruttonationaleinkommen pro Kopf in vier Kategorien
 
-- Die Zuordnungen waren im Einzelnen:
+-   In Frage vier haben wir diese Klassifizierung genutzt
+
+-   Die Zuordnungen waren im Einzelnen:
+
 ```{r Klassifizierung, fig.align='center'}
 country_classification(data = readRDS("Data/cleaned/Worldbank.RDS"), method = "return")
-``` 
-
-
-
-
-
-
-
-
+```
